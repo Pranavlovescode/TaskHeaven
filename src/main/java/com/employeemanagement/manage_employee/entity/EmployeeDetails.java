@@ -20,8 +20,6 @@ public class EmployeeDetails {
     private String emp_role;
     private int age;
     private Date date_of_joining;
-    private Timestamp login_time;
-    private Timestamp logout_time;
 
     public String getName() {
         return emp_name;
@@ -95,20 +93,6 @@ public class EmployeeDetails {
         this.date_of_joining = date_of_joining;
     }
 
-    public Timestamp getLogin_time() {
-        return login_time;
-    }
-
-    public void setLogin_time(Timestamp login_time) {
-        this.login_time = login_time;
-    }
-
-    public Timestamp getLogout_time() {
-        return logout_time;
-    }
-
-    public void setLogout_time(Timestamp logout_time) {
-        this.logout_time = logout_time;
-    }
+   
 
 }

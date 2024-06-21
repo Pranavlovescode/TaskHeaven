@@ -23,8 +23,6 @@ public class ManageEmployeeController {
         Date date = new Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         employeeDetails.setDate_of_joining(date);
-        employeeDetails.setLogin_time(timestamp);
-        employeeDetails.setLogout_time(timestamp);
         databaseInfo.save(employeeDetails);
         return "Employee added successfully";
 
