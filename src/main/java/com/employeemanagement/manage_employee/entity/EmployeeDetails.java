@@ -93,6 +93,6 @@ public class EmployeeDetails {
         this.date_of_joining = date_of_joining;
     }
 
-   
+
 
 }

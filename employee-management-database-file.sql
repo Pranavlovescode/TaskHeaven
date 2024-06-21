@@ -30,7 +30,6 @@ create table if not exists manager
 	mng_pass varchar(100) not null,
 	mng_mobile_number varchar(20) not null,
 	mng_date_of_joining date not null,
-	mng_logout_time timestamp not null,
 	adm_id varchar(10),
 	constraint adm_id foreign key(adm_id) references admin_man(adm_id)  
 )

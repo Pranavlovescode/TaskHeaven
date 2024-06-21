@@ -1,7 +1,8 @@
 package com.employeemanagement.manage_employee.controller;
 
-import com.employeemanagement.manage_employee.entity.EmployeeDetails;
+import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
+import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,18 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/add-user")
-public class ManageEmployeeController {
+@RequestMapping("/add-manager")
+public class ManagerController {
+
     @Autowired
-    private EmployeeInfo databaseInfo;
+    private ManagerInfo managerInfo;
 
     @PostMapping
-    public String addEmployee(@RequestBody EmployeeDetails employeeDetails){
+    public String addManager(@RequestBody ManagerDetails managerDetails){
         Date date = new Date();
-        employeeDetails.setDate_of_joining(date);
-        databaseInfo.save(employeeDetails);
-        return "Employee added successfully";
-
+        managerDetails.setMng_date_of_joining(date);
+        managerInfo.save(managerDetails);
+        return "Manager added successfully";
     }
-
 }
