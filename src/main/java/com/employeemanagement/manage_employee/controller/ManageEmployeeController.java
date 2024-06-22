@@ -1,9 +1,6 @@
 package com.employeemanagement.manage_employee.controller;
 
-import com.employeemanagement.manage_employee.entity.AdminDetails;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
-import com.employeemanagement.manage_employee.entity.ManagerDetails;
-import com.employeemanagement.manage_employee.entity.WorkDetails;
 import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
@@ -12,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/add-employee")
@@ -40,5 +37,9 @@ public class ManageEmployeeController {
         return databaseInfo.findAll();
     }
 
+    @GetMapping("/{id}")
+    public EmployeeDetails getEmployeeById(@PathVariable("id") Long id){
+        return databaseInfo.findById(id).get();
+    }
 
 }

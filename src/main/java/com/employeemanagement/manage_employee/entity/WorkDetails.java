@@ -13,7 +13,7 @@ public class WorkDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_id_seq")
     @SequenceGenerator(name = "work_id_seq", sequenceName = "work_id_seq", allocationSize = 1)
-    private Long work_id;
+    private String work_id;
 
     private String work_name;
     private Timestamp alloted_time;
@@ -23,11 +23,11 @@ public class WorkDetails {
     @JoinColumn(name="mng_id")
     private ManagerDetails managerDetails;
 
-    public Long getWork_id() {
+    public String getWork_id() {
         return work_id;
     }
 
-    public void setWork_id(Long work_id) {
+    public void setWork_id(String work_id) {
         this.work_id = work_id;
     }
 

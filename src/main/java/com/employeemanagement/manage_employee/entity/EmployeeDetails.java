@@ -25,7 +25,7 @@ public class EmployeeDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp_id_seq")
     @SequenceGenerator(name = "emp_id_seq", sequenceName = "emp_id_seq", allocationSize = 1)
-    private Long emp_id;
+    private String emp_id;
     private String emp_name;
     private String address;
     private String email;
@@ -95,11 +95,11 @@ public class EmployeeDetails {
         this.emp_role = emp_role;
     }
 
-    public Long getEmp_id() {
+    public String getEmp_id() {
         return emp_id;
     }
 
-    public void setEmp_id(Long emp_id) {
+    public void setEmp_id(String emp_id) {
         this.emp_id = emp_id;
     }
 

@@ -10,7 +10,7 @@ public class ManagerDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mng_id_seq")
     @SequenceGenerator(name = "mng_id_seq", sequenceName = "mng_id_seq", allocationSize = 1)
-    private Long mng_id;
+    private String mng_id;
 
     @ManyToOne
     @JoinColumn(name = "adm_id",insertable = true, updatable = true, nullable = true, unique = true, referencedColumnName = "adm_id")
@@ -57,11 +57,11 @@ public class ManagerDetails {
         this.mng_name = mng_name;
     }
 
-    public Long getMng_id() {
+    public String getMng_id() {
         return mng_id;
     }
 
-    public void setMng_id(Long mng_id) {
+    public void setMng_id(String mng_id) {
         this.mng_id = mng_id;
     }
 

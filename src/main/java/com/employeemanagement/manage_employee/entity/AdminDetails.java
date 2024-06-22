@@ -12,7 +12,7 @@ public class AdminDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adm_id_seq")
     @SequenceGenerator(name = "adm_id_seq", sequenceName = "adm_id_seq", allocationSize = 1)
-    private Long adm_id;
+    private String adm_id;
 
     private String adm_name;
     private String adm_address;
@@ -78,11 +78,11 @@ public class AdminDetails {
         this.adm_name = adm_name;
     }
 
-    public Long getAdm_id() {
+    public String getAdm_id() {
         return adm_id;
     }
 
-    public void setAdm_id(Long adm_id) {
+    public void setAdm_id(String adm_id) {
         this.adm_id = adm_id;
     }
 }
