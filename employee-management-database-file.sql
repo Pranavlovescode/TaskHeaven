@@ -26,6 +26,7 @@ create table if not exists manager
 	mng_id varchar(10) not null primary key,
 	mng_name varchar(50) not null,
 	mng_age int not null,
+	mng_address varchar(500) not null,
 	mng_email varchar(50) not null unique,
 	mng_pass varchar(100) not null,
 	mng_mobile_number varchar(20) not null,
@@ -108,6 +109,8 @@ INSERT INTO admin_man (adm_id, adm_name, adm_age, adm_email, adm_pass, adm_mobil
 ('A003', 'Alice Johnson', 45, 'alice.johnson@example.com', 'password123', '555-1234', '2015-01-10', '123 Admin St', '2023-01-01 09:00:00', '2023-01-01 17:00:00'),
 ('A004', 'Bob Smith', 50, 'bob.smith@example.com', 'password456', '555-5678', '2010-06-25', '456 Admin Rd', '2023-01-01 09:00:00', '2023-01-01 17:00:00');
 
+select * from admin_man
+
 INSERT INTO manager (mng_id, mng_name, mng_age, mng_email, mng_pass, mng_mobile_number, mng_date_of_joining, mng_address, mng_login_time, mng_logout_time, adm_id) VALUES
 ('M001', 'Carol White', 40, 'carol.white@example.com', 'password789', '555-2345', '2012-03-15', '789 Manager Blvd', '2023-01-01 08:30:00', '2023-01-01 16:30:00', 'A001'),
 ('M002', 'David Brown', 38, 'david.brown@example.com', 'password101', '555-6789', '2013-07-22', '321 Manager Ln', '2023-01-01 08:30:00', '2023-01-01 16:30:00', 'A002');
@@ -118,6 +121,7 @@ select * from manager
 INSERT INTO work_info (work_id, work_name, alloted_time, completion_time, mng_id) VALUES
 ('W001', 'Project Alpha', '2023-01-10 09:00:00', '2023-01-20 17:00:00', 'M001'),
 ('W002', 'Project Beta', '2023-02-01 09:00:00', '2023-02-15 17:00:00', 'M002');
+
 select * from work_info
 
 	
@@ -128,8 +132,10 @@ INSERT INTO employee (emp_id, emp_name, age, email, emp_pass, mobile_number, dat
 ('E004', 'Emily Davis', 32, 'emily.davis@example.com', 'empPass4', '555-6543', '2019-03-05', 'Designer', '321 Employee Ln', '2023-06-01 09:00:00', '2023-06-01 17:00:00', 'W002', 'M002', 'A002');
 
 select * from employee
+	
+truncate table employee
 
-
+truncate table emp_login_table
 -- Sequence for emp_id
 CREATE SEQUENCE emp_id_seq START 1;
 
@@ -204,4 +210,11 @@ CREATE TRIGGER trigger_generate_adm_id
 BEFORE INSERT ON admin_man
 FOR EACH ROW
 EXECUTE FUNCTION generate_adm_id();
+
+truncate table manager,
+truncate table work_info
+	
+SELECT m.*, a.adm_id
+FROM manager m
+left JOIN admin_man a ON m.adm_id = a.adm_id;
 

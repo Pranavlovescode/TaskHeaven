@@ -2,12 +2,26 @@ package com.employeemanagement.manage_employee.entity;
 
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name="employee")
 public class EmployeeDetails {
+
+
+    @ManyToOne
+    @JoinColumn(name="mng_id")
+    private ManagerDetails managerDetails;
+
+    @ManyToOne
+    @JoinColumn(name="adm_id")
+    private AdminDetails adminDetails;
+
+    @ManyToOne
+    @JoinColumn(name="work_id")
+    private WorkDetails workDetails;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp_id_seq")
     @SequenceGenerator(name = "emp_id_seq", sequenceName = "emp_id_seq", allocationSize = 1)
@@ -23,6 +37,62 @@ public class EmployeeDetails {
 
     public String getName() {
         return emp_name;
+    }
+
+    public ManagerDetails getManagerDetails() {
+        return managerDetails;
+    }
+
+    public void setManagerDetails(ManagerDetails managerDetails) {
+        this.managerDetails = managerDetails;
+    }
+
+    public AdminDetails getAdminDetails() {
+        return adminDetails;
+    }
+
+    public void setAdminDetails(AdminDetails adminDetails) {
+        this.adminDetails = adminDetails;
+    }
+
+    public WorkDetails getWorkDetails() {
+        return workDetails;
+    }
+
+    public void setWorkDetails(WorkDetails workDetails) {
+        this.workDetails = workDetails;
+    }
+
+    public String getEmp_name() {
+        return emp_name;
+    }
+
+    public void setEmp_name(String emp_name) {
+        this.emp_name = emp_name;
+    }
+
+    public String getMobile_number() {
+        return mobile_number;
+    }
+
+    public void setMobile_number(String mobile_number) {
+        this.mobile_number = mobile_number;
+    }
+
+    public String getEmp_pass() {
+        return emp_pass;
+    }
+
+    public void setEmp_pass(String emp_pass) {
+        this.emp_pass = emp_pass;
+    }
+
+    public String getEmp_role() {
+        return emp_role;
+    }
+
+    public void setEmp_role(String emp_role) {
+        this.emp_role = emp_role;
     }
 
     public Long getEmp_id() {

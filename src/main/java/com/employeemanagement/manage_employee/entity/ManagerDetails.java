@@ -11,6 +11,12 @@ public class ManagerDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mng_id_seq")
     @SequenceGenerator(name = "mng_id_seq", sequenceName = "mng_id_seq", allocationSize = 1)
     private Long mng_id;
+
+    @ManyToOne
+    @JoinColumn(name = "adm_id",insertable = true, updatable = true, nullable = true, unique = true, referencedColumnName = "adm_id")
+    private AdminDetails adminDetails;
+
+
     private String mng_name;
     private int mng_age;
     private String mng_address;
@@ -21,6 +27,14 @@ public class ManagerDetails {
 
     public Date getMng_date_of_joining() {
         return mng_date_of_joining;
+    }
+
+    public AdminDetails getAdminDetails() {
+        return adminDetails;
+    }
+
+    public void setAdminDetails(AdminDetails adminDetails) {
+        this.adminDetails = adminDetails;
     }
 
     public void setMng_date_of_joining(Date mng_date_of_joining) {
