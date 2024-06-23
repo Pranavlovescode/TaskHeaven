@@ -10,8 +10,7 @@ import java.util.Date;
 @Table(name = "admin_man")
 public class AdminDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adm_id_seq")
-    @SequenceGenerator(name = "adm_id_seq", sequenceName = "adm_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String adm_id;
 
     private String adm_name;

@@ -10,21 +10,20 @@ import java.util.Optional;
 public class EmployeeDetails {
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="mng_id")
     private ManagerDetails managerDetails;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="adm_id")
     private AdminDetails adminDetails;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="work_id")
     private WorkDetails workDetails;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp_id_seq")
-    @SequenceGenerator(name = "emp_id_seq", sequenceName = "emp_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String emp_id;
     private String emp_name;
     private String address;
@@ -34,6 +33,7 @@ public class EmployeeDetails {
     private String emp_role;
     private int age;
     private Date date_of_joining;
+
 
     public String getName() {
         return emp_name;

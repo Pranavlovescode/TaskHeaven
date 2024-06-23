@@ -3,7 +3,7 @@ create database employeeManagement
 
 create table if not exists employee 
 (
-	emp_id varchar(10) not null primary key,
+	emp_id varchar(200) not null primary key,
 	emp_name varchar(50) not null,
 	age int not null,
 	email varchar(50) not null unique,
@@ -97,9 +97,10 @@ create table if not exists emp_login_table
 --     ALTER COLUMN mng_email SET DATA TYPE VARCHAR(50),
 --     ALTER COLUMN mng_email SET NOT NULL;
 
--- ALTER TABLE employee
---     ALTER COLUMN email SET DATA TYPE VARCHAR(50),
---     ALTER COLUMN email SET NOT NULL;
+ALTER TABLE manager
+    ALTER COLUMN mng_id SET DATA TYPE VARCHAR(200),
+	alter column mng_id set not null
+
 
 -- ALTER TABLE employee
 --     ALTER COLUMN emp_role SET DATA TYPE VARCHAR(50),

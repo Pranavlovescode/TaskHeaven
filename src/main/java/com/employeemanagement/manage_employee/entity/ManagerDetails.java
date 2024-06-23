@@ -2,18 +2,19 @@ package com.employeemanagement.manage_employee.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name="manager")
+@Table(name = "manager")
 public class ManagerDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mng_id_seq")
-    @SequenceGenerator(name = "mng_id_seq", sequenceName = "mng_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String mng_id;
 
     @ManyToOne
-    @JoinColumn(name = "adm_id",insertable = true, updatable = true, nullable = true, unique = true, referencedColumnName = "adm_id")
+    @JoinColumn(name = "adm_id", insertable = true, updatable = true, nullable = true, unique = true, referencedColumnName = "adm_id")
     private AdminDetails adminDetails;
 
 
@@ -25,8 +26,19 @@ public class ManagerDetails {
     private String mng_pass;
     private Date mng_date_of_joining;
 
+    @OneToMany
+    List<EmployeeDetails> employeeDetails = new ArrayList<>();
+
     public Date getMng_date_of_joining() {
         return mng_date_of_joining;
+    }
+
+    public List<EmployeeDetails> getEmployeeDetails() {
+        return employeeDetails;
+    }
+
+    public void setEmployeeDetails(List<EmployeeDetails> employeeDetails) {
+        this.employeeDetails = employeeDetails;
     }
 
     public AdminDetails getAdminDetails() {
