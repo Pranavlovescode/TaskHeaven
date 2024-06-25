@@ -1,8 +1,10 @@
 package com.employeemanagement.manage_employee.controller;
 
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
+import com.employeemanagement.manage_employee.entity.AdminDetails;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
+import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import lombok.extern.flogger.Flogger;
@@ -23,6 +25,8 @@ public class ManagerController {
     private ManagerInfo managerInfo;
     @Autowired
     private EmployeeInfo employeeInfo;
+    @Autowired
+    private AdminInfo adminInfo;
 
     @PostMapping
     public String addManager(@RequestBody ManagerDetails managerDetails) {
@@ -62,19 +66,9 @@ public class ManagerController {
             emp_list.get(i).setManagerDetails(mng);
             employeeInfo.save(emp_list.get(i));
         }
-//        emp_list.add(emp5);
-//        mng.setEmployeeDetails(emp_list);
-//        managerInfo.save(mng);
-//    emp1.setManagerDetails(mng);
+
         logger.info("Employees added to manager");
         return "Employees added to manager";
     }
 
-//    @GetMapping
-//    public String getAllEmployeeUnderManager(){
-//        ManagerDetails mng_id = managerInfo.findById("55d81210-0259-4d55-a955-6bf78666eccc").get();
-//
-//
-//        return "No employee under this manager";
-//    }
 }

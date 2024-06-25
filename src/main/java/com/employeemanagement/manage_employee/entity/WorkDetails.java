@@ -11,17 +11,26 @@ import java.sql.Timestamp;
 public class WorkDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_id_seq")
-    @SequenceGenerator(name = "work_id_seq", sequenceName = "work_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String work_id;
-
     private String work_name;
+    private String work_description;
     private Timestamp alloted_time;
     private Timestamp completion_time;
 
-    @ManyToOne
+
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="mng_id")
     private ManagerDetails managerDetails;
+
+    public String getWork_description() {
+        return work_description;
+    }
+
+    public void setWork_description(String work_description) {
+        this.work_description = work_description;
+    }
 
     public String getWork_id() {
         return work_id;
