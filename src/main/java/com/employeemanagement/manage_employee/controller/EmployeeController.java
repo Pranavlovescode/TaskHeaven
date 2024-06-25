@@ -1,5 +1,6 @@
 package com.employeemanagement.manage_employee.controller;
 
+import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.repository.AdminInfo;
@@ -10,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 
 @RestController
 @RequestMapping("/add-employee")
 public class EmployeeController {
+    Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
     @Autowired
     private EmployeeInfo employeeInfo;
     @Autowired
@@ -41,8 +44,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public EmployeeDetails getEmployeeById(@PathVariable("id") String id) {
-        return employeeInfo.findById(id).get();
+    public ManagerDetails getEmployeeById(@PathVariable("id") String id) {
+
+        EmployeeDetails emp = employeeInfo.findById(id).get();
+        logger.info("Manager Details fetched Successfully");
+        return  emp.getManagerDetails();
+
     }
 
     @PutMapping("/{mng_id}/{emp_id}")
@@ -55,9 +62,12 @@ public class EmployeeController {
     }
 
 
+
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable("id") String id) {
         employeeInfo.deleteById(id);
+
+        logger.info("Employee Deleted Successfully");
         return "Employee deleted";
     }
 

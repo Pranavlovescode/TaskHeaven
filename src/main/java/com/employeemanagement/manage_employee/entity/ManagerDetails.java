@@ -26,20 +26,13 @@ public class ManagerDetails {
     private String mng_pass;
     private Date mng_date_of_joining;
 
-    @OneToMany
-    List<EmployeeDetails> employeeDetails = new ArrayList<>();
+
 
     public Date getMng_date_of_joining() {
         return mng_date_of_joining;
     }
 
-    public List<EmployeeDetails> getEmployeeDetails() {
-        return employeeDetails;
-    }
 
-    public void setEmployeeDetails(List<EmployeeDetails> employeeDetails) {
-        this.employeeDetails = employeeDetails;
-    }
 
     public AdminDetails getAdminDetails() {
         return adminDetails;

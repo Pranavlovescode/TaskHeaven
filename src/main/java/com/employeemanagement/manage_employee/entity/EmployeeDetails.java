@@ -10,15 +10,15 @@ import java.util.Optional;
 public class EmployeeDetails {
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="mng_id")
     private ManagerDetails managerDetails;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="adm_id")
     private AdminDetails adminDetails;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="work_id")
     private WorkDetails workDetails;
 
