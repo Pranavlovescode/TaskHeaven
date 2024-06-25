@@ -1,6 +1,4 @@
 package com.employeemanagement.manage_employee.controller;
-
-
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.AdminDetails;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
@@ -10,7 +8,6 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,11 +37,11 @@ public class AdminController {
     @PutMapping("/{adm_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
     public String addEmployeeToAdmin(@PathVariable("adm_id") String mng_id, @PathVariable("emp1_id") String emp1_id, @PathVariable("emp2_id") String emp2_id, @PathVariable("emp3_id") String emp3_id, @PathVariable("emp4_id") String emp4_id, @PathVariable("emp5_id") String emp5_id) {
         AdminDetails adm = adminInfo.findById(mng_id).get();
-        EmployeeDetails emp1 = employeeInfo.findById(emp1_id).get();
-        EmployeeDetails emp2 = employeeInfo.findById(emp2_id).get();
-        EmployeeDetails emp3 = employeeInfo.findById(emp3_id).get();
-        EmployeeDetails emp4 = employeeInfo.findById(emp4_id).get();
-        EmployeeDetails emp5 = employeeInfo.findById(emp5_id).get();
+        EmployeeDetails emp1 = employeeInfo.findById(emp1_id).isPresent()? employeeInfo.findById(emp1_id).get():null;
+        EmployeeDetails emp2 = employeeInfo.findById(emp2_id).isPresent()? employeeInfo.findById(emp2_id).get():null;
+        EmployeeDetails emp3 = employeeInfo.findById(emp3_id).isPresent()? employeeInfo.findById(emp3_id).get():null;
+        EmployeeDetails emp4 = employeeInfo.findById(emp4_id).isPresent()? employeeInfo.findById(emp4_id).get():null;
+        EmployeeDetails emp5 = employeeInfo.findById(emp5_id).isPresent()? employeeInfo.findById(emp5_id).get():null;
         List<EmployeeDetails> emp_list = new ArrayList<>();
         emp_list.add(emp1);
         emp_list.add(emp2);
@@ -63,7 +60,7 @@ public class AdminController {
 //    Adding list of manager to a admin using ids
     @PutMapping("/{adm_id}/{mng1_id}")
     public String addManagerToAdmin(@PathVariable("adm_id") String adm_id, @PathVariable("mng1_id") String mng1_id) {
-        AdminDetails adm = adminInfo.findById(adm_id).get();
+        AdminDetails adm = adminInfo.findById(adm_id).isPresent() ? adminInfo.findById(adm_id).get() : null;
         ManagerDetails mng1 = managerInfo.findById(mng1_id).get();
         List<ManagerDetails> mng_list = new ArrayList<>();
         mng_list.add(mng1);
@@ -79,7 +76,7 @@ public class AdminController {
 //    Fetching the manager using admin id
     @GetMapping("/{id}")
     public ManagerDetails getManagerUnderAdmin(@PathVariable("id") String id) {
-        ManagerDetails mng = managerInfo.findById(id).get();
+        ManagerDetails mng = managerInfo.findById(id).isPresent() ? managerInfo.findById(id).get() : null;
         logger.info("Manager Details fetched Successfully");
         return  mng;
     }
