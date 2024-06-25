@@ -31,8 +31,6 @@ public class EmployeeController {
     public EmployeeDetails addEmployee(@RequestBody EmployeeDetails employeeDetails) {
         Date date = new Date();
         employeeDetails.setDate_of_joining(date);
-//        employeeDetails.setManagerDetails(manager.findById("063cc2ce-5e38-4019-8775-0e72addb3983").get());
-//        employeeDetails.setAdminDetails(admin.findById("646d187f-3b6c-4274-94d7-27154d3bba9c").get());
         employeeInfo.save(employeeDetails);
         return employeeDetails;
 
@@ -44,11 +42,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ManagerDetails getEmployeeById(@PathVariable("id") String id) {
+    public EmployeeDetails getEmployeeById(@PathVariable("id") String id) {
 
         EmployeeDetails emp = employeeInfo.findById(id).get();
         logger.info("Manager Details fetched Successfully");
-        return  emp.getManagerDetails();
+        return  emp;
 
     }
 
@@ -60,8 +58,6 @@ public class EmployeeController {
         employeeInfo.save(employee);
         return employee;
     }
-
-
 
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable("id") String id) {

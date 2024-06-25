@@ -12,5 +12,6 @@ import java.util.logging.Logger;
 public class LoginTimeController {
     Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
 
-    
+
+
 }
