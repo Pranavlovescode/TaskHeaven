@@ -27,6 +27,7 @@ public class EmployeeController {
     @Autowired
     private WorkInfo work;
 
+//    Adding a new employee to the database
     @PostMapping
     public EmployeeDetails addEmployee(@RequestBody EmployeeDetails employeeDetails) {
         Date date = new Date();
@@ -35,12 +36,14 @@ public class EmployeeController {
         return employeeDetails;
 
     }
-
+//    Fetching all the employees from the database
     @GetMapping
     public Iterable<EmployeeDetails> getEmployee() {
         return employeeInfo.findAll();
     }
 
+
+//    Fetching a manager details using employee id (checking if manager exists for a given employee id)
     @GetMapping("/{id}")
     public EmployeeDetails getEmployeeById(@PathVariable("id") String id) {
 
@@ -50,6 +53,7 @@ public class EmployeeController {
 
     }
 
+//    Adding a manager to an employee using manager id and employee id
     @PutMapping("/{mng_id}/{emp_id}")
     public EmployeeDetails addManagerToEmployee( @PathVariable("mng_id") String mngid,@PathVariable("emp_id") String empid) {
         ManagerDetails mng = manager.findById(mngid).get();
@@ -59,6 +63,7 @@ public class EmployeeController {
         return employee;
     }
 
+//   Deleting an employee using employee id
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable("id") String id) {
         employeeInfo.deleteById(id);

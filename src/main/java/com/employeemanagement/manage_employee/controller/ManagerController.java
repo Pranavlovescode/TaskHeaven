@@ -28,16 +28,16 @@ public class ManagerController {
     @Autowired
     private AdminInfo adminInfo;
 
+//    Adding a new manager to the database
     @PostMapping
     public String addManager(@RequestBody ManagerDetails managerDetails) {
         Date date = new Date();
         managerDetails.setMng_date_of_joining(date);
-//        List<EmployeeDetails> emp_list = new ArrayList<>();
-//        managerDetails.setEmployeeDetails(emp_list);
         managerInfo.save(managerDetails);
         return "Manager added successfully";
     }
 
+//    Checking if employee exists under a manager or not
     @GetMapping("/{id}")
     public String getEmployeeUnderManager(@PathVariable("id") String id) {
         Optional<EmployeeDetails> emp = employeeInfo.findById(id);
@@ -48,6 +48,8 @@ public class ManagerController {
 
     }
 
+
+//    Adding employees to a manager using list of employee ids
     @PutMapping("/{mng_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
     public String addEmployeeToManager(@PathVariable("mng_id") String mng_id, @PathVariable("emp1_id") String emp1_id, @PathVariable("emp2_id") String emp2_id, @PathVariable("emp3_id") String emp3_id, @PathVariable("emp4_id") String emp4_id, @PathVariable("emp5_id") String emp5_id) {
         ManagerDetails mng = managerInfo.findById(mng_id).get();

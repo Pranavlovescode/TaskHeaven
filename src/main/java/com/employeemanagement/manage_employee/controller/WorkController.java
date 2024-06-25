@@ -26,6 +26,8 @@ public class WorkController {
     @Autowired
     private EmployeeInfo employee;
 
+
+//    Adding work to the database along with reference to manager and employee
     @PostMapping("/{mng_id}/{emp_id}")
     public String addWork(@RequestBody WorkDetails workDetails, @PathVariable("mng_id") String mng_id,@PathVariable("emp_id") String emp_id){
         Date date = new Date();
