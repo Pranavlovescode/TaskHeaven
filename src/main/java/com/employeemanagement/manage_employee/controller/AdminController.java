@@ -1,4 +1,5 @@
 package com.employeemanagement.manage_employee.controller;
+
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.AdminDetails;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
@@ -7,6 +8,7 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +31,9 @@ public class AdminController {
     @PostMapping
     public String addAdmin(@RequestBody AdminDetails adminDetails){
         Date date = new Date();
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String password = bcrypt.encode(adminDetails.getPassword());
+        adminDetails.setPassword(password);
         adminDetails.setDate_of_joining(date);
         adminInfo.save(adminDetails);
         return "Admin added successfully";
