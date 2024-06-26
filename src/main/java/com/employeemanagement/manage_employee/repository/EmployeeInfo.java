@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 
 public interface EmployeeInfo extends CrudRepository<EmployeeDetails, String> {
-
+    EmployeeDetails findByEmail(String email);
+    EmployeeDetails findByPassword(String password);
 }

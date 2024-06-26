@@ -2,10 +2,14 @@ package com.employeemanagement.manage_employee.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.processing.Generated;
 import java.sql.Timestamp;
 
+@Getter
+@Setter
 @Entity
 @Table(name="work_info")
 public class WorkDetails {

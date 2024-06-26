@@ -32,7 +32,7 @@ public class ManagerController {
     @PostMapping
     public String addManager(@RequestBody ManagerDetails managerDetails) {
         Date date = new Date();
-        managerDetails.setMng_date_of_joining(date);
+        managerDetails.setDate_of_joining(date);
         managerInfo.save(managerDetails);
         return "Manager added successfully";
     }
@@ -42,7 +42,7 @@ public class ManagerController {
     public String getEmployeeUnderManager(@PathVariable("id") String id) {
         Optional<EmployeeDetails> emp = employeeInfo.findById(id);
         if (emp.isPresent()) {
-            return "Employee under manager: " + emp.get().getEmp_name();
+            return "Employee under manager: " + emp.get().getName();
         }
         return "No employee under this manager";
 

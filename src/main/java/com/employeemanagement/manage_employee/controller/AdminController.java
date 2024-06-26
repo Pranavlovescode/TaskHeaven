@@ -29,7 +29,7 @@ public class AdminController {
     @PostMapping
     public String addAdmin(@RequestBody AdminDetails adminDetails){
         Date date = new Date();
-        adminDetails.setAdm_date_of_joining(date);
+        adminDetails.setDate_of_joining(date);
         adminInfo.save(adminDetails);
         return "Admin added successfully";
     }

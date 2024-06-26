@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 
 public interface ManagerInfo extends CrudRepository<ManagerDetails, String> {
+    ManagerDetails findByMngemail(String mng_email);
+    ManagerDetails findByPassword(String password);
 }
