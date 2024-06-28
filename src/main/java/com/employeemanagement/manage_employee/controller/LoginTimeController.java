@@ -8,13 +8,16 @@ import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.logging.Logger;
 
@@ -23,6 +26,9 @@ import java.util.logging.Logger;
 public class LoginTimeController {
 
     private final Logger logger = Logger.getLogger(LoginTimeController.class.getName());
+
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private EmployeeInfo employeeInfo;
@@ -36,7 +42,8 @@ public class LoginTimeController {
     @Autowired
     private LoginTimeInfo loginTimeInfo;
 
-    private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder bcrypt;
 
     @PostMapping("/auth/login")
     public ResponseEntity<String> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest) {
@@ -44,38 +51,55 @@ public class LoginTimeController {
         AdminDetails adminDetails = adminInfo.findByAdmemail(loginRequest.getEmail());
         ManagerDetails managerDetails = managerInfo.findByMngemail(loginRequest.getEmail());
         LoginTimeDetails loginTimeDetails = new LoginTimeDetails();
+
         System.out.println("Employee Details: " + employeeDetails);
         System.out.println("Admin Details: " + adminDetails);
         System.out.println("Manager Details: " + managerDetails);
-        if (employeeDetails != null && bcrypt.matches(loginRequest.getPassword(), employeeInfo.findByEmail(loginRequest.getEmail()).getPassword())) {
-            loginTimeDetails.setEmployeeDetails(employeeDetails);
-            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
+
+        if (employeeDetails != null && bcrypt.matches(loginRequest.getPassword(), employeeDetails.getPassword())) {
             loginTimeDetails.setEmail(employeeDetails.getEmail());
+            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeDetails.setRole("EMPLOYEE");
             loginTimeInfo.save(loginTimeDetails);
+
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             logger.info("Employee Logged in Successfully!!!");
             return ResponseEntity.ok("Employee Logged in Successfully!!!");
         }
 
-        if (adminDetails != null && bcrypt.matches(loginRequest.getPassword(), adminInfo.findByAdmemail(loginRequest.getEmail()).getPassword())) {
-            loginTimeDetails.setAdminDetails(adminDetails);
-            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
+        if (adminDetails != null && bcrypt.matches(loginRequest.getPassword(), adminDetails.getPassword())) {
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
-            loginTimeDetails.setPassword(bcrypt.encode(adminDetails.getPassword()));
+            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("ADMIN");
+            loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeInfo.save(loginTimeDetails);
+//
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             logger.info("Admin Logged in Successfully!!!");
             return ResponseEntity.ok("Admin Logged in Successfully!!!");
         }
 
-        if (managerDetails != null && bcrypt.matches(loginRequest.getPassword(),managerInfo.findByMngemail(loginRequest.getEmail()).getPassword())) {
-            loginTimeDetails.setManagerDetails(managerDetails);
-            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
+        if (managerDetails != null && bcrypt.matches(loginRequest.getPassword(), managerDetails.getPassword())) {
             loginTimeDetails.setEmail(managerDetails.getMngemail());
-            loginTimeDetails.setPassword(bcrypt.encode(managerDetails.getPassword()));
+            loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("MANAGER");
+            loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeInfo.save(loginTimeDetails);
+
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             logger.info("Manager Logged in Successfully!!!");
             return ResponseEntity.ok("Manager Logged in Successfully!!!");
         }
@@ -83,6 +107,4 @@ public class LoginTimeController {
         logger.warning("Login failed for email: " + loginRequest.getEmail());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
-
-
 }

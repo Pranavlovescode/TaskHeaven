@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,8 +39,10 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/login").authenticated()
                                 .requestMatchers("/add-employee/register","/add-manager/register", "/add-admin/register").permitAll()
                                 .requestMatchers("/work-time/login-time-adm").hasRole("ADMIN")
+
                                 .anyRequest().authenticated()
                 )
+                .userDetailsService(customUserDetailsEmployee)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(formLogin->formLogin
                         .loginPage("/login")
@@ -49,13 +52,18 @@ public class SecurityConfig {
 
         return http.build();
     }
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(bCryptPasswordEncoder());
-        return authenticationManagerBuilder.build();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+//        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(bCryptPasswordEncoder());
+//        return authenticationManagerBuilder.build();
+//    }
 
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{
+//        return configuration.getAuthenticationManager();
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
