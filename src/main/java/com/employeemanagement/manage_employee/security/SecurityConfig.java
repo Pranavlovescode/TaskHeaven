@@ -35,12 +35,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/work-time/login-time-emp")
-                                .hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
-                                .requestMatchers("/work-time/login-time-mng")
-                                .hasAnyRole("MANAGER", "ADMIN")
-                                .requestMatchers("/work-time/login-time-adm")
-                                .hasRole("ADMIN")
+                                .requestMatchers("/api/auth/login").authenticated()
+                                .requestMatchers("/add-employee/register","/add-manager/register", "/add-admin/register").permitAll()
+                                .requestMatchers("/work-time/login-time-adm").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
