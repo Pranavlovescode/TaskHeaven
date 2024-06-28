@@ -8,6 +8,7 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.WorkInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -28,9 +29,12 @@ public class EmployeeController {
     private WorkInfo work;
 
 //    Adding a new employee to the database
-    @PostMapping
+    @PostMapping("/register")
     public EmployeeDetails addEmployee(@RequestBody EmployeeDetails employeeDetails) {
         Date date = new Date();
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String emp_password = bcrypt.encode(employeeDetails.getPassword());
+        employeeDetails.setPassword(emp_password);
         employeeDetails.setDate_of_joining(date);
         employeeInfo.save(employeeDetails);
         return employeeDetails;

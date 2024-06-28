@@ -16,6 +16,11 @@ public class LoginTimeDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String time_id;
+    @Column(unique = true,nullable=false)
+    private  String email;
+    @Column(nullable = false)
+    private String password;
+    private String role;
     private Timestamp login_time;
     private Timestamp logout_time;
 

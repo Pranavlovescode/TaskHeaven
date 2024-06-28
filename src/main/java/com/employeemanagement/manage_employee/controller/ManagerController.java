@@ -9,6 +9,7 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import lombok.extern.flogger.Flogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,9 +30,12 @@ public class ManagerController {
     private AdminInfo adminInfo;
 
 //    Adding a new manager to the database
-    @PostMapping
+    @PostMapping("/register")
     public String addManager(@RequestBody ManagerDetails managerDetails) {
         Date date = new Date();
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String mng_password = bcrypt.encode(managerDetails.getPassword());
+        managerDetails.setPassword(mng_password);
         managerDetails.setDate_of_joining(date);
         managerInfo.save(managerDetails);
         return "Manager added successfully";

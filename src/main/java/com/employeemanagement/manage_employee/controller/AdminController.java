@@ -28,7 +28,7 @@ public class AdminController {
 
 
 //    Adding a new admin to the database
-    @PostMapping
+    @PostMapping("/register")
     public String addAdmin(@RequestBody AdminDetails adminDetails){
         Date date = new Date();
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
@@ -41,7 +41,7 @@ public class AdminController {
 //    Adding employees to an admin using list of employee ids
     @PutMapping("/{adm_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
     public String addEmployeeToAdmin(@PathVariable("adm_id") String mng_id, @PathVariable("emp1_id") String emp1_id, @PathVariable("emp2_id") String emp2_id, @PathVariable("emp3_id") String emp3_id, @PathVariable("emp4_id") String emp4_id, @PathVariable("emp5_id") String emp5_id) {
-        AdminDetails adm = adminInfo.findById(mng_id).get();
+        AdminDetails adm = adminInfo.findById(mng_id).isPresent() ? adminInfo.findById(mng_id).get() : null;
         EmployeeDetails emp1 = employeeInfo.findById(emp1_id).isPresent()? employeeInfo.findById(emp1_id).get():null;
         EmployeeDetails emp2 = employeeInfo.findById(emp2_id).isPresent()? employeeInfo.findById(emp2_id).get():null;
         EmployeeDetails emp3 = employeeInfo.findById(emp3_id).isPresent()? employeeInfo.findById(emp3_id).get():null;
@@ -66,7 +66,7 @@ public class AdminController {
     @PutMapping("/{adm_id}/{mng1_id}")
     public String addManagerToAdmin(@PathVariable("adm_id") String adm_id, @PathVariable("mng1_id") String mng1_id) {
         AdminDetails adm = adminInfo.findById(adm_id).isPresent() ? adminInfo.findById(adm_id).get() : null;
-        ManagerDetails mng1 = managerInfo.findById(mng1_id).get();
+        ManagerDetails mng1 = managerInfo.findById(mng1_id).isPresent() ? managerInfo.findById(mng1_id).get() : null;
         List<ManagerDetails> mng_list = new ArrayList<>();
         mng_list.add(mng1);
         for (int i = 0; i <= mng_list.indexOf(mng1); i++) {

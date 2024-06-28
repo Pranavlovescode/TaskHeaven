@@ -1,9 +1,21 @@
 package com.employeemanagement.manage_employee.security;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -11,14 +23,55 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf().disable()
-                .authorizeHttpRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
-        return httpSecurity.build();
+    private  CustomUserDetailsEmployee customUserDetailsEmployee;
+
+    public SecurityConfig(CustomUserDetailsEmployee customUserDetailsEmployee) {
+        this.customUserDetailsEmployee = customUserDetailsEmployee;
     }
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/work-time/login-time-emp")
+                                .hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                                .requestMatchers("/work-time/login-time-mng")
+                                .hasAnyRole("MANAGER", "ADMIN")
+                                .requestMatchers("/work-time/login-time-adm")
+                                .hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(formLogin->formLogin
+                        .loginPage("/login")
+                        .permitAll()
+                ).csrf(AbstractHttpConfigurer::disable);
+
+
+        return http.build();
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(bCryptPasswordEncoder());
+        return authenticationManagerBuilder.build();
+    }
+
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsEmployee;
+    }
+
+
+
+
 }
