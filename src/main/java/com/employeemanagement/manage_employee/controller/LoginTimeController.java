@@ -73,6 +73,15 @@ public class LoginTimeController {
         System.out.println("Manager Details: " + managerDetails);
 
         if (employeeDetails != null && bcrypt.matches(loginRequest.getPassword(), employeeDetails.getPassword())) {
+
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            Creating a jwt token
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
+
+
             loginTimeDetails.setEmail(employeeDetails.getEmail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
@@ -84,17 +93,21 @@ public class LoginTimeController {
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            Authentication authentication = authenticationManager.authenticate(new
-                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            Creating a jwt token
-            String jwtToken = jwt.generateToken(loginRequest.getEmail());
 
             logger.info("Employee Logged in Successfully!!!");
             return new ResponseEntity<>(jwtToken,HttpStatus.OK);
         }
 
         if (adminDetails != null && bcrypt.matches(loginRequest.getPassword(), adminDetails.getPassword())) {
+
+
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
+
+
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("ADMIN");
@@ -106,15 +119,21 @@ public class LoginTimeController {
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            Authentication authentication = authenticationManager.authenticate(new
-                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
             logger.info("Admin Logged in Successfully!!!");
             return new ResponseEntity<>((jwtToken),HttpStatus.OK);
         }
 
         if (managerDetails != null && bcrypt.matches(loginRequest.getPassword(), managerDetails.getPassword())) {
+
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
+
+
+
             loginTimeDetails.setEmail(managerDetails.getMngemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("MANAGER");
@@ -125,10 +144,7 @@ public class LoginTimeController {
 //                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
-            Authentication authentication = authenticationManager.authenticate(new
-                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
             logger.info("Manager Logged in Successfully!!!");
             return new ResponseEntity<>(jwtToken,HttpStatus.OK);
         }

@@ -39,20 +39,29 @@ public class CustomUserDetailsEmployee implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         EmployeeDetails emp = employeeInfo.findByEmail(username);
         if (emp != null) {
-            return new User(emp.getEmail(), emp.getPassword(),
-                    Collections.singleton(new SimpleGrantedAuthority("EMPLOYEE")));
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(emp.getEmail())
+                    .password(emp.getPassword())
+                    .roles("EMPLOYEE")
+                    .build();
         }
 
         ManagerDetails mng = managerInfo.findByMngemail(username);
         if (mng != null) {
-            return new User(mng.getMngemail(), mng.getPassword(),
-                    Collections.singleton(new SimpleGrantedAuthority("MANAGER")));
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(mng.getMngemail())
+                    .password(mng.getPassword())
+                    .roles("MANAGER")
+                    .build();
         }
 
         AdminDetails adm = adminInfo.findByAdmemail(username);
         if (adm != null) {
-            return new User(adm.getAdmemail(), adm.getPassword(),
-                    Collections.singleton(new SimpleGrantedAuthority("ADMIN")));
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(adm.getAdmemail())
+                    .password(adm.getPassword())
+                    .roles("ADMIN")
+                    .build();
         }
 
         throw new UsernameNotFoundException("User not found");
