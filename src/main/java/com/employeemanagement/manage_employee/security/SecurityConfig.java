@@ -1,33 +1,33 @@
 package com.employeemanagement.manage_employee.security;
 
-
+import com.employeemanagement.manage_employee.filters.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
 
-    private  CustomUserDetailsEmployee customUserDetailsEmployee;
+    private final CustomUserDetailsEmployee customUserDetailsEmployee;
 
-    public SecurityConfig(CustomUserDetailsEmployee customUserDetailsEmployee) {
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(CustomUserDetailsEmployee customUserDetailsEmployee, JwtFilter jwtFilter) {
         this.customUserDetailsEmployee = customUserDetailsEmployee;
+        this.jwtFilter = jwtFilter;
     }
 
 
@@ -36,18 +36,15 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/auth/login").authenticated()
-                                .requestMatchers("/add-employee/register","/add-manager/register", "/add-admin/register").permitAll()
-                                .requestMatchers("/work-time/login-time-adm").hasRole("ADMIN")
-
+                                .requestMatchers("/add-employee/register", "/add-manager/register", "/add-admin/register").authenticated()
+                                .requestMatchers("/api/auth/login").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .userDetailsService(customUserDetailsEmployee)
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(formLogin->formLogin
-                        .loginPage("/login")
-                        .permitAll()
-                ).csrf(AbstractHttpConfigurer::disable);
+                .formLogin(login->
+                        login.loginPage("http://localhost:3000/login")
+                                .permitAll())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable);
 
 
         return http.build();
@@ -71,12 +68,16 @@ public class SecurityConfig {
     }
 
 
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return customUserDetailsEmployee;
+//    }
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        return customUserDetailsEmployee;
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
-
-
 
 
 }

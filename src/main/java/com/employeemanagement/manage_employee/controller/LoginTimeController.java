@@ -5,6 +5,7 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.LoginTimeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
+import com.employeemanagement.manage_employee.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,23 +28,38 @@ public class LoginTimeController {
 
     private final Logger logger = Logger.getLogger(LoginTimeController.class.getName());
 
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private EmployeeInfo employeeInfo;
+    private final EmployeeInfo employeeInfo;
 
-    @Autowired
-    private ManagerInfo managerInfo;
+    private final ManagerInfo managerInfo;
 
-    @Autowired
-    private AdminInfo adminInfo;
+    private final AdminInfo adminInfo;
 
-    @Autowired
-    private LoginTimeInfo loginTimeInfo;
+    private final LoginTimeInfo loginTimeInfo;
 
-    @Autowired
-    private BCryptPasswordEncoder bcrypt;
+    private final BCryptPasswordEncoder bcrypt;
+
+    private final JwtUtils jwt;
+
+
+
+    public LoginTimeController(AuthenticationManager authenticationManager,
+                               EmployeeInfo employeeInfo,
+                               ManagerInfo managerInfo,
+                               AdminInfo adminInfo,
+                               LoginTimeInfo loginTimeInfo,
+                               BCryptPasswordEncoder bcrypt, JwtUtils jwt) {
+        this.authenticationManager = authenticationManager;
+        this.employeeInfo = employeeInfo;
+        this.managerInfo = managerInfo;
+        this.adminInfo = adminInfo;
+        this.loginTimeInfo = loginTimeInfo;
+        this.bcrypt = bcrypt;
+        this.jwt = jwt;
+    }
+
+
 
     @PostMapping("/auth/login")
     public ResponseEntity<String> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest) {
@@ -68,8 +84,14 @@ public class LoginTimeController {
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            Creating a jwt token
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
+
             logger.info("Employee Logged in Successfully!!!");
-            return ResponseEntity.ok("Employee Logged in Successfully!!!");
+            return new ResponseEntity<>(jwtToken,HttpStatus.OK);
         }
 
         if (adminDetails != null && bcrypt.matches(loginRequest.getPassword(), adminDetails.getPassword())) {
@@ -84,8 +106,12 @@ public class LoginTimeController {
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
             logger.info("Admin Logged in Successfully!!!");
-            return ResponseEntity.ok("Admin Logged in Successfully!!!");
+            return new ResponseEntity<>((jwtToken),HttpStatus.OK);
         }
 
         if (managerDetails != null && bcrypt.matches(loginRequest.getPassword(), managerDetails.getPassword())) {
@@ -99,12 +125,15 @@ public class LoginTimeController {
 //                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
 //            );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
-
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwtToken = jwt.generateToken(loginRequest.getEmail());
             logger.info("Manager Logged in Successfully!!!");
-            return ResponseEntity.ok("Manager Logged in Successfully!!!");
+            return new ResponseEntity<>(jwtToken,HttpStatus.OK);
         }
 
         logger.warning("Login failed for email: " + loginRequest.getEmail());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }
