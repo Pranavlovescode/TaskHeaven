@@ -5,6 +5,9 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.LoginTimeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
+import com.employeemanagement.manage_employee.response.AdminResponse;
+import com.employeemanagement.manage_employee.response.EmployeeResponse;
+import com.employeemanagement.manage_employee.response.ManagerResponse;
 import com.employeemanagement.manage_employee.utils.JwtUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,7 +66,7 @@ public class LoginTimeController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<String> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         EmployeeDetails employeeDetails = employeeInfo.findByEmail(loginRequest.getEmail());
         AdminDetails adminDetails = adminInfo.findByAdmemail(loginRequest.getEmail());
         ManagerDetails managerDetails = managerInfo.findByMngemail(loginRequest.getEmail());
@@ -81,6 +84,7 @@ public class LoginTimeController {
 //            Creating a jwt token
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
             Cookie jwtCookie = jwt.createCookie(jwtToken);
+            // Adding jwt token to the response
             response.addCookie(jwtCookie);
             response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(employeeDetails.getEmail());
@@ -88,8 +92,9 @@ public class LoginTimeController {
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeDetails.setRole("EMPLOYEE");
             loginTimeInfo.save(loginTimeDetails);
+            EmployeeResponse empResponse = new EmployeeResponse(jwtToken,employeeDetails);
             logger.info("Employee Logged in Successfully!!!");
-            return new ResponseEntity<>(jwtToken,HttpStatus.OK);
+            return new ResponseEntity<>(empResponse,HttpStatus.OK);
         }
 
         if (adminDetails != null && bcrypt.matches(loginRequest.getPassword(), adminDetails.getPassword())) {
@@ -98,15 +103,22 @@ public class LoginTimeController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
             Cookie jwtCookie = jwt.createCookie(jwtToken);
+
+            // Adding jwt token to the response
             response.addCookie(jwtCookie);
             response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("ADMIN");
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
+
+
+            // Giving custom response to the user
+            AdminResponse admResponse = new AdminResponse(jwtToken,adminDetails);
+
             loginTimeInfo.save(loginTimeDetails);
             logger.info("Admin Logged in Successfully!!!");
-            return new ResponseEntity<>((jwtToken),HttpStatus.OK);
+            return new ResponseEntity<>(admResponse,HttpStatus.OK);
         }
 
         if (managerDetails != null && bcrypt.matches(loginRequest.getPassword(), managerDetails.getPassword())) {
@@ -115,6 +127,8 @@ public class LoginTimeController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
             Cookie jwtCookie = jwt.createCookie(jwtToken);
+
+            // Adding jwt token to the response
             response.addCookie(jwtCookie);
             response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(managerDetails.getMngemail());
@@ -122,8 +136,12 @@ public class LoginTimeController {
             loginTimeDetails.setRole("MANAGER");
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeInfo.save(loginTimeDetails);
+
+
+            //Giving custom response to the user
+            ManagerResponse mngResponse = new ManagerResponse(jwtToken,managerDetails);
             logger.info("Manager Logged in Successfully!!!");
-            return new ResponseEntity<>(jwtToken,HttpStatus.OK);
+            return new ResponseEntity<>(mngResponse,HttpStatus.OK);
         }
         logger.warning("Login failed for email: " + loginRequest.getEmail());
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
