@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/add-admin")
 public class AdminController {
