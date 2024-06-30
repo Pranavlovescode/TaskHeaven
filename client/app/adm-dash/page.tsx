@@ -8,7 +8,7 @@ const Page = () => {
     const navigate = useRouter();
     const logoutUser =()=>{
         localStorage.removeItem('user');
-        // navigate.push('/');
+        navigate.push('/');
     }
     return (
         <div>

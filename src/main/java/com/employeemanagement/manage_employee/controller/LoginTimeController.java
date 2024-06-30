@@ -11,7 +11,6 @@ import com.employeemanagement.manage_employee.response.ManagerResponse;
 import com.employeemanagement.manage_employee.utils.JwtUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 
@@ -48,6 +47,7 @@ public class LoginTimeController {
 
 
 
+
     public LoginTimeController(AuthenticationManager authenticationManager,
                                EmployeeInfo employeeInfo,
                                ManagerInfo managerInfo,
@@ -61,12 +61,14 @@ public class LoginTimeController {
         this.loginTimeInfo = loginTimeInfo;
         this.bcrypt = bcrypt;
         this.jwt = jwt;
+
     }
 
 
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+
         EmployeeDetails employeeDetails = employeeInfo.findByEmail(loginRequest.getEmail());
         AdminDetails adminDetails = adminInfo.findByAdmemail(loginRequest.getEmail());
         ManagerDetails managerDetails = managerInfo.findByMngemail(loginRequest.getEmail());
@@ -146,4 +148,26 @@ public class LoginTimeController {
         logger.warning("Login failed for email: " + loginRequest.getEmail());
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
+
+//    public ResponseEntity<?> createLogoutTimeEmployee(@RequestBody LogoutTimeEntry logoutTimeEntry, HttpServletResponse response) {
+//        EmployeeDetails employeeDetails = employeeInfo.findByEmail(logoutTimeEntry.getEmail());
+//        AdminDetails adminDetails = adminInfo.findByAdmemail(logoutTimeEntry.getEmail());
+//        ManagerDetails managerDetails = managerInfo.findByMngemail(logoutTimeEntry.getEmail());
+//
+//        System.out.println("Employee Details: " + employeeDetails);
+//        System.out.println("Admin Details: " + adminDetails);
+//        System.out.println("Manager Details: " + managerDetails);
+//
+//        LoginTimeDetails loginTimeDetails = loginTimeInfo.findByEmail(logoutTimeEntry.getEmail());
+//
+//        if (loginTimeDetails != null) {
+//            loginTimeDetails.setLogout_time(logoutTimeEntry.getLogout_time());
+//            loginTimeInfo.save(loginTimeDetails);
+//            logger.info(loginTimeDetails.getRole() + " Logged out Successfully!!!");
+//            return new ResponseEntity<>(loginTimeDetails.getRole() + " Logged out Successfully!!!",HttpStatus.OK);
+//        }
+//        logger.warning("Logout failed for email: " + logoutTimeEntry.getEmail());
+//        return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
+//    }
 }
+
