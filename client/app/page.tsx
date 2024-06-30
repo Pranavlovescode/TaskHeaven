@@ -18,16 +18,21 @@ export default function Home() {
     const navigate = useRouter();
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const response = await axios.post('http://localhost:8080/api/auth/login', formInput, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        console.log(response.data);
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        console.log(localStorage.getItem('token'));
-        // navigate.push('/adm-dash');
+        try {
+            const response = await axios.post('http://localhost:8080/api/auth/login', formInput, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log(response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
+            // Debugging purpose
+            // console.log("User data is as follows",JSON.parse(localStorage.getItem('user')!));
+            navigate.push('/adm-dash');
+        }
+        catch (e){
+            console.log(e);
+        }
     }
     return (
         <main>

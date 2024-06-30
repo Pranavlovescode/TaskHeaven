@@ -1,9 +1,15 @@
 "use client"
 
 import React, {useEffect, useState} from 'react';
+import {useRouter} from "next/navigation";
 
 const Page = () => {
-    const token = localStorage.getItem('token');
+    const token = JSON.parse(localStorage.getItem('user')!);
+    const navigate = useRouter();
+    const logoutUser =()=>{
+        localStorage.removeItem('user');
+        // navigate.push('/');
+    }
     return (
         <div>
             {token ? (
@@ -223,9 +229,9 @@ const Page = () => {
                                     id="dropdown">
                                     <div className="py-3 px-4">
                                 <span
-                                    className="block text-sm font-semibold text-gray-900 dark:text-white">Neil sims</span>
+                                    className="block text-sm font-semibold text-gray-900 dark:text-white">{token.adminDetails.name}</span>
                                         <span
-                                            className="block text-sm text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                                            className="block text-sm text-gray-500 truncate dark:text-gray-400">{token.adminDetails.admemail}</span>
                                     </div>
                                     <ul className="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
                                         <li>
@@ -285,9 +291,9 @@ const Page = () => {
                                     </ul>
                                     <ul className="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
                                         <li>
-                                            <a href="#"
+                                            <button onClick={logoutUser}
                                                className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign
-                                                out</a>
+                                                out</button>
                                         </li>
                                     </ul>
                                 </div>
