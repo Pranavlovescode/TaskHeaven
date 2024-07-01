@@ -1,15 +1,14 @@
 package com.employeemanagement.manage_employee.utils;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtUtils {
@@ -71,5 +70,32 @@ public class JwtUtils {
         return jwtCookie;
     }
 
+    public void deleteCookie(Cookie cookie){
+        cookie.setMaxAge(0);
+    }
+
+    public Cookie getCookie(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
+    Set<String> blackList = new HashSet<>();
+
+    public void addBlackListToken(String token){
+        // Add token to blacklist
+        blackList.add(token);
+    }
+
+    public boolean isBlackListed(String token){
+        // Check if token is blacklisted
+        return blackList.contains(token);
+    }
 
 }

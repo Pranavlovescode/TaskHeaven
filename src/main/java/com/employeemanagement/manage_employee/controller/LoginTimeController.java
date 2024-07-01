@@ -10,6 +10,7 @@ import com.employeemanagement.manage_employee.response.EmployeeResponse;
 import com.employeemanagement.manage_employee.response.ManagerResponse;
 import com.employeemanagement.manage_employee.utils.JwtUtils;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,13 +89,13 @@ public class LoginTimeController {
             Cookie jwtCookie = jwt.createCookie(jwtToken);
             // Adding jwt token to the response
             response.addCookie(jwtCookie);
-            response.setHeader("jwt-cookie", jwtToken);
+//            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(employeeDetails.getEmail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeDetails.setRole("EMPLOYEE");
             loginTimeInfo.save(loginTimeDetails);
-            EmployeeResponse empResponse = new EmployeeResponse(jwtToken,employeeDetails);
+            EmployeeResponse empResponse = new EmployeeResponse(jwtToken,employeeDetails,loginTimeDetails);
             logger.info("Employee Logged in Successfully!!!");
             return new ResponseEntity<>(empResponse,HttpStatus.OK);
         }
@@ -108,7 +109,7 @@ public class LoginTimeController {
 
             // Adding jwt token to the response
             response.addCookie(jwtCookie);
-            response.setHeader("jwt-cookie", jwtToken);
+//            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("ADMIN");
@@ -116,9 +117,9 @@ public class LoginTimeController {
 
 
             // Giving custom response to the user
-            AdminResponse admResponse = new AdminResponse(jwtToken,adminDetails);
 
             loginTimeInfo.save(loginTimeDetails);
+            AdminResponse admResponse = new AdminResponse(jwtToken,adminDetails,loginTimeDetails);
             logger.info("Admin Logged in Successfully!!!");
             return new ResponseEntity<>(admResponse,HttpStatus.OK);
         }
@@ -132,7 +133,7 @@ public class LoginTimeController {
 
             // Adding jwt token to the response
             response.addCookie(jwtCookie);
-            response.setHeader("jwt-cookie", jwtToken);
+//            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(managerDetails.getMngemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setRole("MANAGER");
@@ -141,7 +142,7 @@ public class LoginTimeController {
 
 
             //Giving custom response to the user
-            ManagerResponse mngResponse = new ManagerResponse(jwtToken,managerDetails);
+            ManagerResponse mngResponse = new ManagerResponse(jwtToken,managerDetails,loginTimeDetails);
             logger.info("Manager Logged in Successfully!!!");
             return new ResponseEntity<>(mngResponse,HttpStatus.OK);
         }
@@ -169,5 +170,26 @@ public class LoginTimeController {
 //        logger.warning("Logout failed for email: " + logoutTimeEntry.getEmail());
 //        return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
 //    }
+
+
+    @PutMapping("auth/logout/{time_id}")
+    public ResponseEntity<?> createLogoutTime (HttpServletRequest request,
+                                               @PathVariable String time_id){
+//        EmployeeDetails employeeDetails = employeeInfo.findByEmail(logoutTimeEntry.getEmail());
+//        ManagerDetails managerDetails = managerInfo.findByMngemail(logoutTimeEntry.getEmail());
+//        AdminDetails adminDetails = adminInfo.findByAdmemail(logoutTimeEntry.getEmail());
+        LoginTimeDetails loginTimeDetails = loginTimeInfo.findById(time_id).get();
+
+        if (loginTimeDetails != null) {
+            loginTimeDetails.setLogout_time(new Timestamp(System.currentTimeMillis()));
+            loginTimeInfo.save(loginTimeDetails);
+            Cookie cookie = jwt.getCookie(request, "jwt");
+
+            jwt.deleteCookie(cookie);
+            jwt.addBlackListToken(cookie.getValue());
+            return new ResponseEntity<>("Employee Logged out Successfully!!!",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Something went wrong in logging out", HttpStatus.UNAUTHORIZED);
+    }
 }
 
