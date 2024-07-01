@@ -1,7 +1,10 @@
 package com.employeemanagement.manage_employee.utils;
 
+import com.employeemanagement.manage_employee.entity.TokenStorage;
+import com.employeemanagement.manage_employee.repository.TokenStorageInfo;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +16,11 @@ import java.util.*;
 @Component
 public class JwtUtils {
 
+    @Autowired
+    private TokenStorageInfo tokenStorageInfo;
+
     private final String SECRET_KEY = "TaK+HaV^uvCHEFsEVfypW#7g9^k*Z8$V";
+
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -86,16 +93,19 @@ public class JwtUtils {
         return null;
     }
 
-    Set<String> blackList = new HashSet<>();
+
 
     public void addBlackListToken(String token){
-        // Add token to blacklist
-        blackList.add(token);
+        // Add token to database
+        TokenStorage tokenStorage = new TokenStorage();
+        tokenStorage.setToken(token);
+        tokenStorageInfo.save(tokenStorage);
     }
 
     public boolean isBlackListed(String token){
         // Check if token is blacklisted
-        return blackList.contains(token);
+        TokenStorage tokenStorage = tokenStorageInfo.findByToken(token);
+        return tokenStorage != null;
     }
 
 }
