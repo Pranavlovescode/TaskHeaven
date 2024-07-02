@@ -35,4 +35,3 @@ build/
 # Environment varibles
 .env
 
-/client
