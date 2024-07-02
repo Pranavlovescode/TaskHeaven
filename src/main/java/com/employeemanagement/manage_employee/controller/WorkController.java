@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/add-work")
 public class WorkController {
