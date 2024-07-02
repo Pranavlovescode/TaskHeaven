@@ -9,6 +9,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class LogoutTimeEntry {
-    private Timestamp logout_time;
     private String email;
+    private String token;
 }

@@ -2,21 +2,38 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
+import axios, {AxiosResponse} from "axios";
 
+type LogoutData = {
+    email: string;
+}
 const Page = () => {
     const token = JSON.parse(localStorage.getItem('user')!);
     const navigate = useRouter();
-    const [toggle, setToggle] = useState(false)
-    const [toggleFeature, setToggleFeature] = useState(false)
+    const [toggle, setToggle] = useState<boolean>(false)
+    const [toggleFeature, setToggleFeature] = useState<boolean>(false)
+    const [logoutData, setLogoutData] = useState<LogoutData>({
+        email: ""
+    })
     const handleToggle = () => {
         setToggle(!toggle)
         // alert(toggle)
     }
-    const ToggleFeature=()=>{
+    const ToggleFeature = () => {
         setToggleFeature(!toggleFeature);
     }
-    const logoutUser = () => {
+    const logoutUser = async () => {
         localStorage.removeItem('user');
+        const response:AxiosResponse = await axios.put(`http://localhost:8080/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`, {
+            email: token.adminDetails.admemail
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
+            }
+        })
+        const data = await response.data;
+        console.log(data);
         navigate.push('/');
     }
     return (

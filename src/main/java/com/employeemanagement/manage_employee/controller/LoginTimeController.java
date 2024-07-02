@@ -172,21 +172,20 @@ public class LoginTimeController {
 //    }
 
 
-    @PutMapping("auth/logout/{time_id}")
+    @PutMapping("auth/logout/{time_id}/{token}")
     public ResponseEntity<?> createLogoutTime (HttpServletRequest request,
-                                               @PathVariable String time_id){
-//        EmployeeDetails employeeDetails = employeeInfo.findByEmail(logoutTimeEntry.getEmail());
-//        ManagerDetails managerDetails = managerInfo.findByMngemail(logoutTimeEntry.getEmail());
-//        AdminDetails adminDetails = adminInfo.findByAdmemail(logoutTimeEntry.getEmail());
+                                               @PathVariable String time_id,
+                                               @PathVariable String token){
+
         LoginTimeDetails loginTimeDetails = loginTimeInfo.findById(time_id).get();
 
         if (loginTimeDetails != null) {
             loginTimeDetails.setLogout_time(new Timestamp(System.currentTimeMillis()));
             loginTimeInfo.save(loginTimeDetails);
-            Cookie cookie = jwt.getCookie(request, "jwt");
-
-            jwt.deleteCookie(cookie);
-            jwt.addBlackListToken(cookie.getValue());
+//            Cookie cookie = jwt.getCookie(request, "jwt");
+//
+//            jwt.deleteCookie(cookie);
+            jwt.addBlackListToken(token);
             return new ResponseEntity<>("Employee Logged out Successfully!!!",HttpStatus.OK);
         }
         return new ResponseEntity<>("Something went wrong in logging out", HttpStatus.UNAUTHORIZED);
