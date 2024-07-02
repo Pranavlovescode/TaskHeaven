@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/api")
 public class LoginTimeController {

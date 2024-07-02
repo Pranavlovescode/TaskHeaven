@@ -21,7 +21,8 @@ export default function Home() {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', formInput, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
                 }
             });
             const user= response.data;
