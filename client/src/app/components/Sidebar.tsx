@@ -5,481 +5,110 @@ import React, { useState } from "react";
 function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
   const [sidebarPageDropdown, setSidebarPageDropdown] =
     useState<boolean>(false);
-  const [toggleSidebarSales, setToggleSidebarSales] = useState<boolean>(false);
 
   return (
-    <div className={"mt-14 absolute bg-gray-200"}>
+    <div className={"mt-14 absolute bg-gray-200 hidden md:flex"}>
       <div
-        className={`fixed bg-gray-200 h-screen md:py-5 md:px-3 transition border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700  ${toggleSidebar ? "w-64 overflow-y-scroll duration-500" : "md:w-16 w-0 duration-500"}`}
+        className={`${toggleSidebar ? "w-64 h-full overflow-y-auto list-none p-2 py-2" : "w-16 list-none"} duration-500`}
       >
-        <ul className="space-y-2">
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-            >
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-              </svg>
-              <span className={` ${toggleSidebar ? "ml-3" : "hidden"}`}>
-                Overview
-              </span>
-            </a>
-          </li>
-          <li>
-            <button
-              onClick={() => setSidebarPageDropdown(!sidebarPageDropdown)}
-              type="button"
-              className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              aria-controls="dropdown-pages"
-              data-collapse-toggle="dropdown-pages"
-            >
-              <svg
-                aria-hidden="true"
-                className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span
-                className={`${toggleSidebar ? "flex-1 ml-3 text-left whitespace-nowrap" : "hidden"}`}
-              >
-                Pages
-              </span>
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            {sidebarPageDropdown && (
-              <ul id="dropdown-pages" className="py-2 space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Kanban
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Calendar
-                  </a>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <button
-              onClick={() => setToggleSidebarSales(!toggleSidebarSales)}
-              type="button"
-              className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              aria-controls="dropdown-sales"
-              data-collapse-toggle="dropdown-sales"
-            >
-              <svg
-                aria-hidden="true"
-                className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span
-                className={`${toggleSidebar ? "flex-1 ml-3 text-left whitespace-nowrap" : "hidden"}`}
-              >
-                Sales
-              </span>
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            {toggleSidebarSales && (
-              <ul id="dropdown-sales" className="py-2 space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Products
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Billing
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Invoice
-                  </a>
-                </li>
-              </ul>
-            )}
-          </li>
-        </ul>
-        <ul className="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-            >
-              <svg
-                aria-hidden="true"
-                className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                <path
-                  fillRule="evenodd"
-                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className={`${toggleSidebar ? "ml-3" : "hidden"}`}>
-                Docs
-              </span>
-            </a>
-          </li>
-          {/*<li>*/}
-          {/*  <a*/}
-          {/*    href="#"*/}
-          {/*    className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"*/}
-          {/*  >*/}
-          {/*    <svg*/}
-          {/*      aria-hidden="true"*/}
-          {/*      className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"*/}
-          {/*      fill="currentColor"*/}
-          {/*      viewBox="0 0 20 20"*/}
-          {/*      xmlns="http://www.w3.org/2000/svg"*/}
-          {/*    >*/}
-          {/*      <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />*/}
-          {/*    </svg>*/}
-          {/*    <span className="ml-3">Components</span>*/}
-          {/*  </a>*/}
-          {/*</li>*/}
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-            >
-              <svg
-                aria-hidden="true"
-                className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className={`${toggleSidebar ? "ml-3" : "hidden"}`}>
-                Help
-              </span>
-            </a>
-          </li>
-        </ul>
-        <div className="absolute left-0 bottom-0 justify-center p-4 space-x-4 w-full lg:flex dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
+        <li className={"px-2"}>
           <a
             href="#"
-            className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+            className={
+              "flex items-center my-3 text-gray-700 bg-gray-200 p-2 px-2 justify-evenly group hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg"
+            }
           >
             <svg
-              aria-hidden="true"
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+              viewBox="0 -0.5 25 25"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className={"w-6 h-6 group-hover:fill-gray-700 fill-gray-500"}
             >
-              <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-            </svg>
-          </a>
-          <a
-            href="#"
-            data-tooltip-target="tooltip-settings"
-            className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600"
-          >
-            <svg
-              aria-hidden="true"
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                clipRule="evenodd"
+              <g id="SVGRepo_bgCarrier" />
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
-            </svg>
-          </a>
-          <div
-            id="tooltip-settings"
-            role="tooltip"
-            className="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip"
-          >
-            Settings page
-            <div className="tooltip-arrow" data-popper-arrow="" />
-          </div>
-          <button
-            type="button"
-            data-dropdown-toggle="language-dropdown"
-            className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600"
-          >
-            <svg
-              aria-hidden="true"
-              className="h-5 w-5 rounded-full mt-0.5"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              viewBox="0 0 3900 3900"
-            >
-              <path fill="#b22234" d="M0 0h7410v3900H0z" />
-              <path
-                d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0"
-                stroke="#fff"
-                strokeWidth={300}
-              />
-              <path fill="#3c3b6e" d="M0 0h2964v2100H0z" />
-              <g fill="#fff">
-                <g id="d">
-                  <g id="c">
-                    <g id="e">
-                      <g id="b">
-                        <path
-                          id="a"
-                          d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"
-                        />
-                        <use xlinkHref="#a" y={420} />
-                        <use xlinkHref="#a" y={840} />
-                        <use xlinkHref="#a" y={1260} />
-                      </g>
-                      <use xlinkHref="#a" y={1680} />
-                    </g>
-                    <use xlinkHref="#b" x={247} y={210} />
-                  </g>
-                  <use xlinkHref="#c" x={494} />
-                </g>
-                <use xlinkHref="#d" x={988} />
-                <use xlinkHref="#c" x={1976} />
-                <use xlinkHref="#e" x={2470} />
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M9.918 10.0005H7.082C6.66587 9.99708 6.26541 10.1591 5.96873 10.4509C5.67204 10.7427 5.50343 11.1404 5.5 11.5565V17.4455C5.5077 18.3117 6.21584 19.0078 7.082 19.0005H9.918C10.3341 19.004 10.7346 18.842 11.0313 18.5502C11.328 18.2584 11.4966 17.8607 11.5 17.4445V11.5565C11.4966 11.1404 11.328 10.7427 11.0313 10.4509C10.7346 10.1591 10.3341 9.99708 9.918 10.0005Z"
+                  stroke="gray"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M9.918 4.0006H7.082C6.23326 3.97706 5.52559 4.64492 5.5 5.4936V6.5076C5.52559 7.35629 6.23326 8.02415 7.082 8.0006H9.918C10.7667 8.02415 11.4744 7.35629 11.5 6.5076V5.4936C11.4744 4.64492 10.7667 3.97706 9.918 4.0006Z"
+                  stroke="gray"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M15.082 13.0007H17.917C18.3333 13.0044 18.734 12.8425 19.0309 12.5507C19.3278 12.2588 19.4966 11.861 19.5 11.4447V5.55666C19.4966 5.14054 19.328 4.74282 19.0313 4.45101C18.7346 4.1592 18.3341 3.9972 17.918 4.00066H15.082C14.6659 3.9972 14.2654 4.1592 13.9687 4.45101C13.672 4.74282 13.5034 5.14054 13.5 5.55666V11.4447C13.5034 11.8608 13.672 12.2585 13.9687 12.5503C14.2654 12.8421 14.6659 13.0041 15.082 13.0007Z"
+                  stroke="gray"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M15.082 19.0006H17.917C18.7661 19.0247 19.4744 18.3567 19.5 17.5076V16.4936C19.4744 15.6449 18.7667 14.9771 17.918 15.0006H15.082C14.2333 14.9771 13.5256 15.6449 13.5 16.4936V17.5066C13.525 18.3557 14.2329 19.0241 15.082 19.0006Z"
+                  stroke="gray"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </g>
             </svg>
-          </button>
-          {/* Dropdown */}
-          <div
-            className="hidden z-50 my-4 text-base list-none rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
-            id="language-dropdown"
+            {toggleSidebar ? (
+              <span className="mx-4 font-medium">Dashboard</span>
+            ) : null}
+          </a>
+        </li>
+        <li className={"px-2"}>
+          <a
+            href="#"
+            className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
           >
-            <ul className="py-1" role="none">
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600"
-                  role="menuitem"
-                >
-                  <div className="inline-flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      className="h-3.5 w-3.5 rounded-full mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-us"
-                      viewBox="0 0 512 512"
-                    >
-                      <g fillRule="evenodd">
-                        <g strokeWidth="1pt">
-                          <path
-                            fill="#bd3d44"
-                            d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                            transform="scale(3.9385)"
-                          />
-                          <path
-                            fill="#fff"
-                            d="M0 10h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                            transform="scale(3.9385)"
-                          />
-                        </g>
-                        <path
-                          fill="#192f5d"
-                          d="M0 0h98.8v70H0z"
-                          transform="scale(3.9385)"
-                        />
-                        <path
-                          fill="#fff"
-                          d="M8.2 3l1 2.8H12L9.7 7.5l.9 2.7-2.4-1.7L6 10.2l.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7L74 8.5l-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 7.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 24.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 21.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 38.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 35.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 52.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 49.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 66.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 63.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9z"
-                          transform="scale(3.9385)"
-                        />
-                      </g>
-                    </svg>
-                    English (US)
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-600"
-                  role="menuitem"
-                >
-                  <div className="inline-flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      className="h-3.5 w-3.5 rounded-full mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-de"
-                      viewBox="0 0 512 512"
-                    >
-                      <path fill="#ffce00" d="M0 341.3h512V512H0z" />
-                      <path d="M0 0h512v170.7H0z" />
-                      <path fill="#d00" d="M0 170.7h512v170.6H0z" />
-                    </svg>
-                    Deutsch
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-600"
-                  role="menuitem"
-                >
-                  <div className="inline-flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      className="h-3.5 w-3.5 rounded-full mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="flag-icon-css-it"
-                      viewBox="0 0 512 512"
-                    >
-                      <g fillRule="evenodd" strokeWidth="1pt">
-                        <path fill="#fff" d="M0 0h512v512H0z" />
-                        <path fill="#009246" d="M0 0h170.7v512H0z" />
-                        <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />
-                      </g>
-                    </svg>
-                    Italiano
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600"
-                  role="menuitem"
-                >
-                  <div className="inline-flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      className="h-3.5 w-3.5 rounded-full mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                      id="flag-icon-css-cn"
-                      viewBox="0 0 512 512"
-                    >
-                      <defs>
-                        <path
-                          id="a"
-                          fill="#ffde00"
-                          d="M1-.3L-.7.8 0-1 .6.8-1-.3z"
-                        />
-                      </defs>
-                      <path fill="#de2910" d="M0 0h512v512H0z" />
-                      <use
-                        width={30}
-                        height={20}
-                        transform="matrix(76.8 0 0 76.8 128 128)"
-                        xlinkHref="#a"
-                      />
-                      <use
-                        width={30}
-                        height={20}
-                        transform="rotate(-121 142.6 -47) scale(25.5827)"
-                        xlinkHref="#a"
-                      />
-                      <use
-                        width={30}
-                        height={20}
-                        transform="rotate(-98.1 198 -82) scale(25.6)"
-                        xlinkHref="#a"
-                      />
-                      <use
-                        width={30}
-                        height={20}
-                        transform="rotate(-74 272.4 -114) scale(25.6137)"
-                        xlinkHref="#a"
-                      />
-                      <use
-                        width={30}
-                        height={20}
-                        transform="matrix(16 -19.968 19.968 16 256 230.4)"
-                        xlinkHref="#a"
-                      />
-                    </svg>
-                    中文 (繁體)
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+            <svg
+              className="mb-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400 group-hover:fill-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="gray"
+              viewBox="0 0 20 19"
+            >
+              <path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z" />
+              <path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z" />
+            </svg>
+            {toggleSidebar ? (
+              <span className="px-4 font-medium">Employees</span>
+            ) : null}
+          </a>
+        </li>
+        <li className={"px-2"}>
+          <a
+            href="#"
+            className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
+          >
+            <svg
+              className="mb-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400 group-hover:fill-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="gray"
+              viewBox="0 0 20 20"
+            >
+              <path d="M18 7.5h-.423l-.452-1.09.3-.3a1.5 1.5 0 0 0 0-2.121L16.01 2.575a1.5 1.5 0 0 0-2.121 0l-.3.3-1.089-.452V2A1.5 1.5 0 0 0 11 .5H9A1.5 1.5 0 0 0 7.5 2v.423l-1.09.452-.3-.3a1.5 1.5 0 0 0-2.121 0L2.576 3.99a1.5 1.5 0 0 0 0 2.121l.3.3L2.423 7.5H2A1.5 1.5 0 0 0 .5 9v2A1.5 1.5 0 0 0 2 12.5h.423l.452 1.09-.3.3a1.5 1.5 0 0 0 0 2.121l1.415 1.413a1.5 1.5 0 0 0 2.121 0l.3-.3 1.09.452V18A1.5 1.5 0 0 0 9 19.5h2a1.5 1.5 0 0 0 1.5-1.5v-.423l1.09-.452.3.3a1.5 1.5 0 0 0 2.121 0l1.415-1.414a1.5 1.5 0 0 0 0-2.121l-.3-.3.452-1.09H18a1.5 1.5 0 0 0 1.5-1.5V9A1.5 1.5 0 0 0 18 7.5Zm-8 6a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
+            </svg>
+            {toggleSidebar ? (
+              <span className="px-7 font-medium">Settings</span>
+            ) : null}
+          </a>
+        </li>
       </div>
     </div>
   );
