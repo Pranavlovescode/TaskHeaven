@@ -4,13 +4,17 @@ import React from "react";
 
 function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
   return (
-    <div className={"mt-14 absolute bg-gray-200 hidden md:flex md:flex-col"}>
+    <div
+      className={
+        "mt-14 absolute bg-gray-200 hidden md:h-full md:fixed md:flex md:flex-col"
+      }
+    >
       <div
-        className={`${toggleSidebar ? "w-64 h-full list-none p-2 py-2" : "w-16 list-none"} duration-500`}
+        className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 h-screen list-none`}
       >
         <li className={"px-2"}>
           <a
-            href="#"
+            href="/adm-dash"
             className={
               "flex items-center my-3 text-gray-700 bg-gray-200 p-2 px-2 justify-evenly group hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg"
             }
@@ -107,7 +111,68 @@ function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
           </a>
         </li>
       </div>
-      <div className={"items-end"}>This is the bottom of the sidebar</div>
+      <div
+        className={`${toggleSidebar ? "flex-row m-2" : "flex-col py-2"} fixed bottom-0 
+          items-end flex duration-700 list-none justify-center ease-in-out`}
+      >
+        <li className={`${toggleSidebar ? null : "py-2"} p-2`}>
+          <a
+            href="#"
+            className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
+          >
+            <svg
+              className="w-5 h-5 mt-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400 group-hover:fill-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="gray"
+              viewBox="0 0 20 20"
+            >
+              <path d="M18 7.5h-.423l-.452-1.09.3-.3a1.5 1.5 0 0 0 0-2.121L16.01 2.575a1.5 1.5 0 0 0-2.121 0l-.3.3-1.089-.452V2A1.5 1.5 0 0 0 11 .5H9A1.5 1.5 0 0 0 7.5 2v.423l-1.09.452-.3-.3a1.5 1.5 0 0 0-2.121 0L2.576 3.99a1.5 1.5 0 0 0 0 2.121l.3.3L2.423 7.5H2A1.5 1.5 0 0 0 .5 9v2A1.5 1.5 0 0 0 2 12.5h.423l.452 1.09-.3.3a1.5 1.5 0 0 0 0 2.121l1.415 1.413a1.5 1.5 0 0 0 2.121 0l.3-.3 1.09.452V18A1.5 1.5 0 0 0 9 19.5h2a1.5 1.5 0 0 0 1.5-1.5v-.423l1.09-.452.3.3a1.5 1.5 0 0 0 2.121 0l1.415-1.414a1.5 1.5 0 0 0 0-2.121l-.3-.3.452-1.09H18a1.5 1.5 0 0 0 1.5-1.5V9A1.5 1.5 0 0 0 18 7.5Zm-8 6a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
+            </svg>
+            {/* {toggleSidebar ? (
+              <span className="px-7 font-medium">Settings</span>
+            ) : null} */}
+          </a>
+        </li>
+        <li className={`${toggleSidebar ? null : "py-2"} p-2`}>
+          <a
+            href="#"
+            className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
+          >
+            <svg
+              className="w-5 h-5 mt-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400 group-hover:fill-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="gray"
+              viewBox="0 0 20 20"
+            >
+              <path d="M18 7.5h-.423l-.452-1.09.3-.3a1.5 1.5 0 0 0 0-2.121L16.01 2.575a1.5 1.5 0 0 0-2.121 0l-.3.3-1.089-.452V2A1.5 1.5 0 0 0 11 .5H9A1.5 1.5 0 0 0 7.5 2v.423l-1.09.452-.3-.3a1.5 1.5 0 0 0-2.121 0L2.576 3.99a1.5 1.5 0 0 0 0 2.121l.3.3L2.423 7.5H2A1.5 1.5 0 0 0 .5 9v2A1.5 1.5 0 0 0 2 12.5h.423l.452 1.09-.3.3a1.5 1.5 0 0 0 0 2.121l1.415 1.413a1.5 1.5 0 0 0 2.121 0l.3-.3 1.09.452V18A1.5 1.5 0 0 0 9 19.5h2a1.5 1.5 0 0 0 1.5-1.5v-.423l1.09-.452.3.3a1.5 1.5 0 0 0 2.121 0l1.415-1.414a1.5 1.5 0 0 0 0-2.121l-.3-.3.452-1.09H18a1.5 1.5 0 0 0 1.5-1.5V9A1.5 1.5 0 0 0 18 7.5Zm-8 6a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
+            </svg>
+            {/* {toggleSidebar ? (
+              <span className="px-7 font-medium">Settings</span>
+            ) : null} */}
+          </a>
+        </li>
+        <li className={`${toggleSidebar ? null : "py-2"} p-2`}>
+          <a
+            href="#"
+            className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
+          >
+            <svg
+              className="w-5 h-5 mt-1 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400 group-hover:fill-gray-700"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="gray"
+              viewBox="0 0 20 20"
+            >
+              <path d="M18 7.5h-.423l-.452-1.09.3-.3a1.5 1.5 0 0 0 0-2.121L16.01 2.575a1.5 1.5 0 0 0-2.121 0l-.3.3-1.089-.452V2A1.5 1.5 0 0 0 11 .5H9A1.5 1.5 0 0 0 7.5 2v.423l-1.09.452-.3-.3a1.5 1.5 0 0 0-2.121 0L2.576 3.99a1.5 1.5 0 0 0 0 2.121l.3.3L2.423 7.5H2A1.5 1.5 0 0 0 .5 9v2A1.5 1.5 0 0 0 2 12.5h.423l.452 1.09-.3.3a1.5 1.5 0 0 0 0 2.121l1.415 1.413a1.5 1.5 0 0 0 2.121 0l.3-.3 1.09.452V18A1.5 1.5 0 0 0 9 19.5h2a1.5 1.5 0 0 0 1.5-1.5v-.423l1.09-.452.3.3a1.5 1.5 0 0 0 2.121 0l1.415-1.414a1.5 1.5 0 0 0 0-2.121l-.3-.3.452-1.09H18a1.5 1.5 0 0 0 1.5-1.5V9A1.5 1.5 0 0 0 18 7.5Zm-8 6a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
+            </svg>
+            {/* {toggleSidebar ? (
+              <span className="px-7 font-medium">Settings</span>
+            ) : null} */}
+          </a>
+        </li>
+      </div>
     </div>
   );
 }

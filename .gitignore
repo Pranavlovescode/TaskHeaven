@@ -35,3 +35,4 @@ build/
 # Environment varibles
 .env
 
+/node_modules

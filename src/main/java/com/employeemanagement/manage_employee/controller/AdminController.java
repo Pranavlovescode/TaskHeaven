@@ -27,14 +27,16 @@ public class AdminController {
     private EmployeeInfo employeeInfo;
     @Autowired
     private ManagerInfo managerInfo;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 //    Adding a new admin to the database
     @PostMapping("/register")
     public String addAdmin(@RequestBody AdminDetails adminDetails){
         Date date = new Date();
-        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String password = bcrypt.encode(adminDetails.getPassword());
+        // BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String password = bCryptPasswordEncoder.encode(adminDetails.getPassword());
         adminDetails.setPassword(password);
         adminDetails.setDate_of_joining(date);
         adminInfo.save(adminDetails);
