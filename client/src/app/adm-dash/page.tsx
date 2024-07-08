@@ -27,7 +27,11 @@ export default function Page() {
   return (
     <>
       {data.loginTimeDetails ? (
-        <div>This is sidebar in the navbar section</div>
+        <>
+          <main className={"mt-[52px] text-center mx-auto"}>
+            This is the main section of the admin Dashboard
+          </main>
+        </>
       ) : (
         <>
           <div className="h-[20rem] w-[40rem] bg-gray-200 mx-auto text-center m-4 rounded-xl py-12">

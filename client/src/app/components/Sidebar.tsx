@@ -7,11 +7,11 @@ function Sidebar() {
   return (
     <div
       className={
-        "mt-[52px] absolute bg-gray-200 hidden md:h-full md:fixed md:flex md:flex-col md:justify-center"
+        "absolute z-30 bg-gray-200 hidden md:h-full md:flex md:flex-col md:justify-center"
       }
     >
       <div
-        className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 h-screen list-none`}
+        className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 list-none h-screen fixed bg-gray-200`}
       >
         <button
           onClick={() => {
@@ -41,7 +41,8 @@ function Sidebar() {
           <a
             href="/adm-dash"
             className={
-              "flex items-center my-3 text-gray-700 bg-gray-200 p-2 px-2 justify-evenly group hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg"
+              "flex items-center" +
+              "my-3 text-gray-700 bg-gray-200 p-2 px-2 justify-evenly group hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg"
             }
           >
             <svg
