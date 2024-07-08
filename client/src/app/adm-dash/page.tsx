@@ -1,29 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
-type AdminData = {
-  token: string;
-  adminDetails: object;
-  loginTimeDetails: object;
-};
+import React from "react";
 
 export default function Page() {
-  const [data, setData] = useState<AdminData>({
-    token: "",
-    adminDetails: {},
-    loginTimeDetails: {},
-  });
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("user")!)) {
-      setData({
-        token: JSON.parse(localStorage.getItem("user")!).token,
-        adminDetails: JSON.parse(localStorage.getItem("user")!).adminDetails,
-        loginTimeDetails: JSON.parse(localStorage.getItem("user")!)
-          .loginTimeDetails,
-      });
-    }
-  }, []);
+  const token = localStorage.getItem("user");
+  const data = token ? JSON.parse(token) : null;
   return (
     <>
       {data.loginTimeDetails ? (

@@ -7,6 +7,7 @@ import axios, { AxiosResponse } from "axios";
 type LogoutData = {
   email: string;
 };
+
 const Header = () => {
   const token = JSON.parse(localStorage.getItem("user")!);
   const navigate = useRouter();
@@ -28,21 +29,25 @@ const Header = () => {
 
   const logoutUser = async () => {
     localStorage.removeItem("user");
-    const response: AxiosResponse = await axios.put(
-      `http://localhost:8080/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
-      {
-        email: token.adminDetails.admemail,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token.token}`,
+    try {
+      const response: AxiosResponse = await axios.put(
+        `http://localhost:8080/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+        {
+          email: token.adminDetails.admemail,
         },
-      },
-    );
-    const data = await response.data;
-    console.log(data);
-    navigate.push("/");
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`,
+          },
+        },
+      );
+      const data = await response.data;
+      console.log(data);
+      navigate.push("/");
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <div>
