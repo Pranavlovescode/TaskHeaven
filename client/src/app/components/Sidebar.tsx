@@ -2,16 +2,41 @@
 
 import React from "react";
 
-function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
+function Sidebar() {
+  const [toggleSidebar, setToggleSidebar] = React.useState<boolean>(true);
   return (
     <div
       className={
-        "mt-14 absolute bg-gray-200 hidden md:h-full md:fixed md:flex md:flex-col md:justify-center"
+        "mt-[52px] absolute bg-gray-200 hidden md:h-full md:fixed md:flex md:flex-col md:justify-center"
       }
     >
       <div
         className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 h-screen list-none`}
       >
+        <button
+          onClick={() => {
+            setToggleSidebar(!toggleSidebar);
+          }}
+          className={`${toggleSidebar ? "transform translate-x-56 absolute rotate-180 ml-3" : "ml-3"} flex items-center px-2 my-3 text-gray-700  p-2 justify-evenly group bg-gray-100 hover:text-gray-900 rounded-3xl duration-300`}
+        >
+          <svg
+            className="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 12H5m14 0-4 4m4-4-4-4"
+            />
+          </svg>
+        </button>
         <li className={"px-2"}>
           <a
             href="/adm-dash"
@@ -115,7 +140,9 @@ function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
         className={`${toggleSidebar ? "flex-row px-2 w-64 my-2 duration-700" : "flex-col py-2 w-16 "} fixed bottom-0 
           items-end flex duration-250 list-none justify-center ease-in-out px-2 bg-gray-200`}
       >
-        <li className={`${toggleSidebar ? 'mx-2' : "py-2"} p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}>
+        <li
+          className={`${toggleSidebar ? "mx-2" : "py-2"} p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+        >
           <a
             href="#"
             className="flex items-center text-gray-700  justify-evenly"
@@ -134,7 +161,9 @@ function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
             ) : null} */}
           </a>
         </li>
-        <li className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}>
+        <li
+          className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+        >
           <a
             href="#"
             className="flex items-center text-gray-700 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
@@ -153,7 +182,9 @@ function Sidebar({ toggleSidebar }: { toggleSidebar: boolean }) {
             ) : null} */}
           </a>
         </li>
-        <li className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}>
+        <li
+          className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+        >
           <a
             href="#"
             className="flex items-center text-gray-700 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
