@@ -10,7 +10,9 @@ export default function Page() {
     <>
       {data.loginTimeDetails ? (
         <>
-          <main className={"mt-[52px] text-center mx-auto"}></main>
+          <main className={"mt-[52px] ml-20 mx-auto"}>
+            <div className={"text-4xl font-extrabold p-4"}>Dashboard</div>
+          </main>
         </>
       ) : (
         <>
