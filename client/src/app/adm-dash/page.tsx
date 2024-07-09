@@ -4,14 +4,13 @@ import React from "react";
 
 export default function Page() {
   const token = localStorage.getItem("user");
+  const [open, setOpen] = React.useState(true);
   const data = token ? JSON.parse(token) : null;
   return (
     <>
       {data.loginTimeDetails ? (
         <>
-          <main className={"mt-[52px] text-center mx-auto"}>
-            This is the main section of the admin Dashboard
-          </main>
+          <main className={"mt-[52px] text-center mx-auto"}></main>
         </>
       ) : (
         <>
