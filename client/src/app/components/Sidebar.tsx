@@ -116,7 +116,7 @@ function Sidebar() {
             </li>
             <li className={"px-2"}>
               <a
-                href="adm-dash/get-emp"
+                href="/adm-dash/get-emp"
                 className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
               >
                 <svg

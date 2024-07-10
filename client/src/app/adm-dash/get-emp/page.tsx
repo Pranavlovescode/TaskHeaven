@@ -16,15 +16,17 @@ export default function EmployeeDetails() {
   const parseToken = JSON.parse(token!);
   const [empData, setEmpData] = useState<any>([]);
   const getEmployeeData = async () => {
-    const response = await axios.get("http://localhost:8080/add-employee", {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${parseToken.token}`,
-      },
-    });
-    const data: AxiosResponse = await response.data;
-    setEmpData(data);
-    console.log(data);
+    if (parseToken) {
+      const response = await axios.get("http://localhost:8080/add-employee", {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${parseToken.token}`,
+        },
+      });
+      const data: AxiosResponse = await response.data;
+      setEmpData(data);
+      console.log(data);
+    }
   };
   useEffect(() => {
     getEmployeeData();
