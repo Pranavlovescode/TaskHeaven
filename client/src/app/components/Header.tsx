@@ -3,6 +3,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 type LogoutData = {
   email: string;
@@ -12,11 +19,14 @@ const Header = () => {
   const token = JSON.parse(localStorage.getItem("user")!);
   const navigate = useRouter();
   const [toggle, setToggle] = useState<boolean>(false);
-
+  const [open, setOpen] = React.useState(true);
   const [logoutData, setLogoutData] = useState<LogoutData>({
     email: "",
   });
-
+  const gotoLogin = () => {
+    setOpen(false);
+    navigate.push("/");
+  };
   const handleToggle = () => {
     setToggle(!toggle);
     // alert(toggle)
@@ -368,66 +378,63 @@ const Header = () => {
         </>
       ) : (
         <>
-          <div className="h-[20rem] w-[40rem] bg-gray-200 mx-auto text-center m-4 rounded-xl py-12">
-            <h2
-              className={
-                "flex items-center justify-center text-2xl p-3 font-bold text-red-600"
-              }
-            >
-              <svg
-                className={"mx-2"}
-                fill="#e31616"
-                height="30px"
-                width="30px"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                stroke="#e31616"
-              >
-                <g id="SVGRepo_bgCarrier" strokeWidth={0}></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap={"round"}
-                  strokeLinejoin={"round"}
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <g>
-                    <g>
-                      <path d="M505.403,406.394L295.389,58.102c-8.274-13.721-23.367-22.245-39.39-22.245c-16.023,0-31.116,8.524-39.391,22.246 L6.595,406.394c-8.551,14.182-8.804,31.95-0.661,46.37c8.145,14.42,23.491,23.378,40.051,23.378h420.028 c16.56,0,31.907-8.958,40.052-23.379C514.208,438.342,513.955,420.574,505.403,406.394z M477.039,436.372 c-2.242,3.969-6.467,6.436-11.026,6.436H45.985c-4.559,0-8.784-2.466-11.025-6.435c-2.242-3.97-2.172-8.862,0.181-12.765 L245.156,75.316c2.278-3.777,6.433-6.124,10.844-6.124c4.41,0,8.565,2.347,10.843,6.124l210.013,348.292 C479.211,427.512,479.281,432.403,477.039,436.372z"></path>
-                    </g>
-                  </g>
-                  <g>
-                    <g>
-                      <path d="M256.154,173.005c-12.68,0-22.576,6.804-22.576,18.866c0,36.802,4.329,89.686,4.329,126.489 c0.001,9.587,8.352,13.607,18.248,13.607c7.422,0,17.937-4.02,17.937-13.607c0-36.802,4.329-89.686,4.329-126.489 C278.421,179.81,268.216,173.005,256.154,173.005z"></path>
-                    </g>
-                  </g>
-                  <g>
-                    <g>
-                      <path d="M256.465,353.306c-13.607,0-23.814,10.824-23.814,23.814c0,12.68,10.206,23.814,23.814,23.814 c12.68,0,23.505-11.134,23.505-23.814C279.97,364.13,269.144,353.306,256.465,353.306z"></path>
-                    </g>
-                  </g>
-                </g>
-              </svg>
-              You are not Authorized
-            </h2>
-            <div>
-              Click this below button to login or else contact your
-              administrator
-            </div>
-            <div className={"m-5"}>
-              <a href="/">
-                <button
-                  type="submit"
-                  className={
-                    "bg-blue-500 m-5 p-3 rounded-lg text-white font-semibold focus:ring-blue-300 focus:ring-4 hover:bg-blue-700 duration-300"
-                  }
+          <Dialog open={open} onClose={setOpen} className="relative z-10">
+            <DialogBackdrop
+              transition
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+            />
+
+            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <DialogPanel
+                  transition
+                  className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
                 >
-                  Go to Login
-                </button>
-              </a>
+                  <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <ExclamationTriangleIcon
+                          aria-hidden="true"
+                          className="h-6 w-6 text-red-600"
+                        />
+                      </div>
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <DialogTitle
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
+                          Logged Out
+                        </DialogTitle>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            You are Logged out & you need to Login again. This
+                            action cannot be undone.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button
+                      type="button"
+                      onClick={gotoLogin}
+                      className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                    >
+                      Login
+                    </button>
+                    <button
+                      type="button"
+                      data-autofocus="true"
+                      onClick={() => setOpen(false)}
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </DialogPanel>
+              </div>
             </div>
-          </div>
+          </Dialog>
         </>
       )}
     </div>
