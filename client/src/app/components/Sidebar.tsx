@@ -11,10 +11,10 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
 function Sidebar() {
-  const navigate = useRouter();
   const [toggleSidebar, setToggleSidebar] = React.useState<boolean>(true);
   const tokenParsed = JSON.parse(localStorage.getItem("user")!);
   const [open, setOpen] = React.useState<boolean>(true);
+  const navigate = useRouter();
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
