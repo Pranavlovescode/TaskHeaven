@@ -56,22 +56,29 @@ const Admin = ({ children }: any) => {
 
   useEffect(() => {
     grabToken();
-    setInterval(() => {
-      const is_expired = jsonwebtoken.decode(JSON.parse(user!).token);
-      if (
-        typeof is_expired === "object" &&
-        is_expired !== null &&
-        "exp" in is_expired &&
-        typeof is_expired.exp === "number"
-      ) {
-        // console.log(is_expired);
-        if (is_expired.exp < Date.now() / 1000) {
-          console.log("expired");
-          setExpired(true);
-          localStorage.removeItem("user");
+    const intervalId = setInterval(() => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        const is_expired = jsonwebtoken.decode(JSON.parse(user).token);
+        if (
+          typeof is_expired === "object" &&
+          is_expired !== null &&
+          "exp" in is_expired &&
+          typeof is_expired.exp === "number"
+        ) {
+          if (is_expired.exp < Date.now() / 1000) {
+            console.log("expired");
+            setExpired(true);
+            localStorage.removeItem("user");
+            clearInterval(intervalId);
+            stop();
+          }
         }
       }
     }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -125,7 +132,7 @@ const Admin = ({ children }: any) => {
                     <button
                       type="button"
                       data-autofocus="true"
-                      onClick={() => setOpen(false)}
+                      onClick={() => setOpen(true)}
                       className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     >
                       Cancel

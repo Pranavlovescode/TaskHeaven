@@ -21,7 +21,7 @@ export default function Page() {
   };
   return (
     <>
-      {data.loginTimeDetails ? (
+      {data ? (
         <>
           <main className={"mt-[52px] ml-20 mx-auto"}>
             <div className={"text-4xl font-extrabold p-4"}>Dashboard</div>

@@ -2,16 +2,18 @@ package com.employeemanagement.manage_employee.utils;
 
 import com.employeemanagement.manage_employee.entity.TokenStorage;
 import com.employeemanagement.manage_employee.repository.TokenStorageInfo;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtils {
@@ -59,7 +61,7 @@ public class JwtUtils {
                 .header().empty().add("type", "JWT")
                 .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 50)) // 5 minutes expiration time
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2)) // 5 minutes expiration time
                 .signWith(getSigningKey())
                 .compact();
     }
