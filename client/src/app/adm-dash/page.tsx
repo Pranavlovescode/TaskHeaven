@@ -45,7 +45,7 @@ export default function Page() {
             <div className={"text-4xl font-extrabold p-4"}>Dashboard</div>
             <div className={"flex flex-row justify-center items-center mt-4"}>
               <div className={"mx-auto flex justify-center"}>
-                This is Employee
+                <div></div>
               </div>
               <div className={"mx-auto flex justify-center"}>
                 This is Manager

@@ -39,7 +39,40 @@ export default function EmployeeDetails() {
   return (
     <>
       {parseToken ? (
-        <div className={"mt-[52px] ml-20"}>
+        <div className={"mt-[52px] my-3 ml-20"}>
+          <div className={"flex flex-row justify-between my-3 py-4"}>
+            <h2 className={"font-bold text-4xl"}>Employee List</h2>
+          </div>
+          <div className={"flex flex-row justify-between my-3 py-4"}>
+            <h2 className={"font-semibold"}>
+              These are the Employees which are currently working in your branch
+            </h2>
+            <a href="get-emp/employee-registration">
+              <button
+                type="submit"
+                className={
+                  "flex mr-6 bg-blue-500 p-2 rounded-lg text-white py-3 text-sm font-semibold items-center justify-center hover:bg-blue-700 duration-300 focus:ring-4 focus:ring-blue-300"
+                }
+              >
+                <svg
+                  className="w-6 h-6 text-gray-800 dark:text-white mr-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="white"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Add Employee
+              </button>
+            </a>
+          </div>
           <ul role="list" className="divide-y divide-gray-100 mr-6">
             {empData.map((person: any) => (
               <li
