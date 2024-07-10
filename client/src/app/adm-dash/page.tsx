@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -9,19 +9,37 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
 
 export default function Page() {
   const token = localStorage.getItem("user");
   const [open, setOpen] = React.useState(true);
-  const data = token ? JSON.parse(token) : null;
+  const dataToken = token ? JSON.parse(token) : null;
   const navigate = useRouter();
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
   };
+  const [empData, setEmpData] = useState<any>([]);
+  const getEmployeeData = async () => {
+    if (dataToken) {
+      const response = await axios.get("http://localhost:8080/add-employee", {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${dataToken.token}`,
+        },
+      });
+      const data: AxiosResponse = await response.data;
+      setEmpData(data);
+      console.log(data);
+    }
+  };
+  useEffect(() => {
+    getEmployeeData();
+  }, []);
   return (
     <>
-      {data ? (
+      {dataToken ? (
         <>
           <main className={"mt-[52px] ml-20 mx-auto"}>
             <div className={"text-4xl font-extrabold p-4"}>Dashboard</div>
