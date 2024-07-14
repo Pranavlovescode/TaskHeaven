@@ -8,6 +8,8 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.WorkInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +44,8 @@ public class EmployeeController {
     }
 //    Fetching all the employees from the database
     @GetMapping
-    public Iterable<EmployeeDetails> getEmployee() {
-        return employeeInfo.findAll();
+    public Page<EmployeeDetails> getEmployee_Paginated(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        return employeeInfo.findAll(PageRequest.of(page, size));
     }
 
 

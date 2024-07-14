@@ -60,7 +60,6 @@ function EmpRegistration() {
                       </div>
                     </div>
                   </div>
-
                   <div className="col-span-full">
                     <label
                       htmlFor="about"
