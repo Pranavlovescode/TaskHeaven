@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import {
@@ -22,7 +24,8 @@ function EmpRegistration() {
     <>
       {tokenParse ? (
         <div className={"mt-[52px] ml-20 pt-10"}>
-          <form className={"m-3 justify-center mr-6 mx-auto px-52"}>
+          <form className={"m-3 justify-center mr-6 mx-auto md:px-52 w-full"}>
+            <p className={"text-xl font-extrabold mb-2"}>Add a new Employee</p>
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -300,8 +303,8 @@ function EmpRegistration() {
                   Notifications
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600">
-                  We'll always let you know about important changes, but you
-                  pick what else you want to hear about.
+                  We&apos;ll always let you know about important changes, but
+                  you pick what else you want to hear about.
                 </p>
 
                 <div className="mt-10 space-y-10">
@@ -442,7 +445,7 @@ function EmpRegistration() {
               </button>
               <button
                 type="submit"
-                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold duration-300 focus:ring-4 focus:ring-blue-300 text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Save
               </button>

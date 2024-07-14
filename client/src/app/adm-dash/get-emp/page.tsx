@@ -41,11 +41,13 @@ export default function EmployeeDetails() {
   return (
     <>
       {parseToken ? (
-        <div className={"mt-[52px] my-3 ml-20"}>
-          <div className={"flex flex-row justify-between my-3 py-4"}>
-            <h2 className={"font-bold text-4xl"}>Employee List</h2>
+        <div className={"mt-[52px] my-3 ml-20 lg:px-52 pt-10"}>
+          <div className={"flex flex-row justify-between pt-4"}>
+            <h2 className={"font-extrabold text-xl"}>Employee List</h2>
           </div>
-          <div className={"flex flex-row justify-between my-3 py-4"}>
+          <div
+            className={"flex md:flex-row justify-between items-center flex-col"}
+          >
             <h2 className={"font-semibold"}>
               These are the Employees which are currently working in your branch
             </h2>
@@ -76,15 +78,12 @@ export default function EmployeeDetails() {
             </a>
           </div>
           <ul role="list" className="divide-y divide-gray-100 mr-6">
-            {empData.map((person: any) => (
-              <li
-                key={person.email}
-                className="flex justify-between gap-x-5 py-5"
-              >
+            {empData.map((person: any, id: number) => (
+              <li key={id} className="flex justify-between gap-x-5 py-5">
                 <div className="flex min-w-0 gap-x-4">
                   <img
                     alt="employee"
-                    src={person.imageUrl}
+                    src={"/profilephoto.svg"}
                     className="h-12 w-12 flex-none rounded-full bg-gray-50"
                   />
                   <div className="min-w-0 flex-auto">
