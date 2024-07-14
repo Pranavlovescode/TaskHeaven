@@ -54,7 +54,7 @@ public class EmployeeController {
     public EmployeeDetails getEmployeeById(@PathVariable("id") String id) {
 
         EmployeeDetails emp = employeeInfo.findById(id).get();
-        logger.info("Manager Details fetched Successfully");
+        logger.info("Employee Details fetched Successfully");
         return  emp;
 
     }
