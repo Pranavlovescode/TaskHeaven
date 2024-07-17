@@ -1,13 +1,11 @@
 package com.employeemanagement.manage_employee.controller;
 
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
-import com.employeemanagement.manage_employee.entity.AdminDetails;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
-import lombok.extern.flogger.Flogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +29,7 @@ public class ManagerController {
     @Autowired
     private AdminInfo adminInfo;
 
-//    Adding a new manager to the database
+    //    Adding a new manager to the database
     @PostMapping("/register")
     public String addManager(@RequestBody ManagerDetails managerDetails) {
         Date date = new Date();
@@ -43,7 +41,7 @@ public class ManagerController {
         return "Manager added successfully";
     }
 
-//    Checking if employee exists under a manager or not
+    //    Checking if employee exists under a manager or not
     @GetMapping("/{id}")
     public String getEmployeeUnderManager(@PathVariable("id") String id) {
         Optional<EmployeeDetails> emp = employeeInfo.findById(id);
@@ -55,7 +53,7 @@ public class ManagerController {
     }
 
 
-//    Adding employees to a manager using list of employee ids
+    //    Adding employees to a manager using list of employee ids
     @PutMapping("/{mng_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
     public String addEmployeeToManager(@PathVariable("mng_id") String mng_id, @PathVariable("emp1_id") String emp1_id, @PathVariable("emp2_id") String emp2_id, @PathVariable("emp3_id") String emp3_id, @PathVariable("emp4_id") String emp4_id, @PathVariable("emp5_id") String emp5_id) {
         ManagerDetails mng = managerInfo.findById(mng_id).get();
