@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -7,19 +9,177 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { Checkbox } from "flowbite-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 
 function Page() {
-  const token = JSON.parse(localStorage.getItem("user")!);
+  const token = JSON.parse(window.localStorage.getItem("user")!);
+
+  // Code for paginating the managers
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const itemsPerPage: number = 10;
+
+  // Code for the login Dialog
   const [open, setOpen] = React.useState<boolean>(true);
   const navigate = useRouter();
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
   };
+
+  // Code for getting all the managers
+  const [getManagers, setGetManagers] = useState<[]>([]);
+  const getManager = async () => {
+    try {
+      if (token) {
+        const response = await axios.get("http://localhost:8080/add-manager", {
+          headers: {
+            Authorization: `Bearer ${token.token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const mng_data = response.data;
+        setGetManagers(mng_data);
+        setTotalPages(Math.ceil(mng_data.length / itemsPerPage));
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log("Error occured during fetching managers", error);
+    }
+  };
+
+  // Logic for slicing the data array of the managers
+  const displayedData = getManagers.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage,
+  );
+  // console.log(displayedData);
+
+  useEffect(() => {
+    getManager();
+  }, []);
+
+  const [checkIndex, setCheckIndex] = useState<number>(-1);
+  const handleCheck = (index: number) => {
+    if (checkIndex === index) {
+      setCheckIndex(-1); // will uncheck the checkbox
+    } else {
+      setCheckIndex(index); // will check the checkbox
+    }
+  };
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
   return (
     <>
       {token ? (
-        <div className={"pt-[102px]"}>This is manager page</div>
+        <div className={"mt-[52px] mx-auto md:px-52"}>
+          <>
+            <ul role="list" className="divide-y divide-gray-100">
+              {displayedData.map((person: any, index: number) => (
+                <>
+                  <li key={index} className="flex justify-between gap-x-6 py-5">
+                    <div className="flex min-w-0 gap-x-4 md:items-center">
+                      <Checkbox
+                        checked={index === checkIndex}
+                        onChange={() => handleCheck(index)}
+                      />
+                      <img
+                        alt=""
+                        src="/profilephoto.svg"
+                        className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                      />
+                      <div className="min-w-0 flex-auto">
+                        <p className="text-sm font-semibold leading-6 text-gray-900">
+                          {person.name}
+                        </p>
+                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                          {person.mngemail}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                      <p className="text-sm leading-6 text-gray-900">
+                        {person.role}
+                      </p>
+                      {person.date_of_joining ? (
+                        <p className="mt-1 text-xs leading-5 text-gray-500">
+                          Last seen{" "}
+                          <time dateTime={person.date_of_joining}>
+                            {new Date(person.date_of_joining).toDateString()}
+                          </time>
+                        </p>
+                      ) : (
+                        <div className="mt-1 flex items-center gap-x-1.5">
+                          <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          </div>
+                          <p className="text-xs leading-5 text-gray-500">
+                            Online
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                </>
+              ))}
+              <div className={"flex flex-row justify-between items-center"}>
+                <div>
+                  <Pagination className={"mt-3"}>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          className={`${currentPage === 0 ? "cursor-not-allowed disable" : ""}`}
+                        />
+                      </PaginationItem>
+                      {[...Array(totalPages)].map((_, index) => (
+                        <PaginationItem key={index}>
+                          <PaginationLink
+                            href="#"
+                            isActive={index === currentPage}
+                            onClick={() => handlePageChange(index)}
+                          >
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          className={`${currentPage === totalPages - 1 ? "cursor-not-allowed disabled:cursor-not-allowed" : ""}`}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+                <div>
+                  <Button
+                    className={
+                      "bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 duration-300"
+                    }
+                  >
+                    Assign as Manager
+                  </Button>
+                </div>
+              </div>
+            </ul>
+          </>
+        </div>
       ) : (
         <>
           <Dialog open={open} onClose={setOpen} className="relative z-10">

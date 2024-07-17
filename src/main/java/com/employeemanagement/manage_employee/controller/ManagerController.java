@@ -7,6 +7,8 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,10 +53,15 @@ public class ManagerController {
         return "No employee under this manager";
 
     }
+    @GetMapping()
+    public ResponseEntity<?> geAlltManager() {
+        Iterable<ManagerDetails> mng = managerInfo.findAll();
+        return new ResponseEntity<>(mng, HttpStatus.OK);
+    }
 
 
     //    Adding employees to a manager using list of employee ids
-    @PutMapping("/{mng_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
+    @GetMapping("/{mng_id}/{emp1_id}/{emp2_id}/{emp3_id}/{emp4_id}/{emp5_id}")
     public String addEmployeeToManager(@PathVariable("mng_id") String mng_id, @PathVariable("emp1_id") String emp1_id, @PathVariable("emp2_id") String emp2_id, @PathVariable("emp3_id") String emp3_id, @PathVariable("emp4_id") String emp4_id, @PathVariable("emp5_id") String emp5_id) {
         ManagerDetails mng = managerInfo.findById(mng_id).get();
         EmployeeDetails emp1 = employeeInfo.findById(emp1_id).get();
