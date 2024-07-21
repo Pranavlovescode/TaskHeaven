@@ -228,14 +228,12 @@ function Page() {
                                   as="h3"
                                   className="text-base font-semibold leading-6 text-gray-900"
                                 >
-                                  Deactivate account
+                                  Manager Added Successfully
                                 </DialogTitle>
                                 <div className="mt-2">
                                   <p className="text-sm text-gray-500">
-                                    Are you sure you want to deactivate your
-                                    account? All of your data will be
-                                    permanently removed. This action cannot be
-                                    undone.
+                                    Manager {manager_id} is added to Employee{" "}
+                                    {emp_id} Successfully
                                   </p>
                                 </div>
                               </div>

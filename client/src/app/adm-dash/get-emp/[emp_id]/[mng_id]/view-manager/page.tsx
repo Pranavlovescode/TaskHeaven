@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -11,35 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
-
-type Employee = {
-  name: string;
-  accountNonExpired: boolean;
-  accountNonLocked: boolean;
-  address: string;
-  adminDetails: object;
-  age: number;
-  authorities: boolean;
-  credentialsNonExpired: boolean;
-  date_of_joining: string;
-  email: string;
-  emp_id: string;
-  enabled: boolean;
-  managerDetails: Manager;
-  mobile_number: string;
-  password: string;
-  role: string;
-  username: string;
-  workDetails: object;
-};
 
 type Manager = {
   address: string;
@@ -53,72 +31,30 @@ type Manager = {
   password: string;
 };
 
-function Page() {
-  const [empDetail, setEmpDetail] = useState<Employee>({
-    name: "",
-    accountNonExpired: false,
-    accountNonLocked: false,
-    address: "",
-    adminDetails: {},
-    age: 0,
-    authorities: false,
-    credentialsNonExpired: false,
-    date_of_joining: "",
-    email: "",
-    emp_id: "",
-    enabled: true,
-    managerDetails: {
-      address: "",
-      adminDetails: {},
-      age: 0,
-      date_of_joining: "",
-      mng_id: "",
-      mngemail: "",
-      mobile_number: "",
-      name: "",
-      password: "",
-    },
-    mobile_number: "",
-    password: "",
-    role: "",
-    username: "",
-    workDetails: {},
-  });
-  const { emp_id } = useParams();
-  // Fetching the token
-
+function ViewManager() {
   const token = JSON.parse(localStorage.getItem("user")!);
 
-  const getEmployeeDetails = async () => {
-    try {
-      if (token) {
-        const response = await axios.get(
-          `http://localhost:8080/add-employee/${emp_id}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token.token}`,
-            },
-          },
-        );
-        const data = response.data;
-        setEmpDetail(data);
-        console.log(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getEmployeeDetails();
-  }, []);
-
+  // Code for the login Dialog
   const [open, setOpen] = React.useState<boolean>(true);
   const navigate = useRouter();
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
   };
+  console.log(token.token);
+
+  const [mngDetails, setMngDetails] = useState<Manager>({
+    address: "",
+    adminDetails: {},
+    age: 0,
+    date_of_joining: "",
+    mng_id: "",
+    mngemail: "",
+    mobile_number: "",
+    name: "",
+    password: "",
+  });
+
   return (
     <>
       {token ? (
@@ -126,9 +62,9 @@ function Page() {
           <div className={"mt-[52px] lg:px-52 ml-20 pt-14"}>
             <Card className="w-[750px] mx-auto ">
               <CardHeader>
-                <CardTitle>Employee Information</CardTitle>
+                <CardTitle>Manager Information</CardTitle>
                 <CardDescription>
-                  Personal details and information regarding an Employee.
+                  Personal details and information regarding an Manager.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -139,7 +75,7 @@ function Page() {
                         Full name
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.name}
+                        {mngDetails.name}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -147,7 +83,7 @@ function Page() {
                         Role
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.role}
+                        {mngDetails.role}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -155,7 +91,7 @@ function Page() {
                         Email address
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.email}
+                        {mngDetails.mngemail}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -163,7 +99,7 @@ function Page() {
                         Date of Joining
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {new Date(empDetail.date_of_joining).toDateString()}
+                        {new Date(mngDetails.date_of_joining).toDateString()}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -171,7 +107,7 @@ function Page() {
                         Mobile Number
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.mobile_number}
+                        {mngDetails.mobile_number}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -179,7 +115,7 @@ function Page() {
                         Address
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.address}
+                        {mngDetails.address}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -187,7 +123,7 @@ function Page() {
                         Age
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.age}
+                        {mngDetails.age}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -195,7 +131,7 @@ function Page() {
                         Manager Details
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.managerDetails ? (
+                        {mngDetails.adminDetails ? (
                           <a
                             href={`/adm-dash/get-emp/${emp_id}/${empDetail.managerDetails.mng_id}/view-manager/`}
                             className={
@@ -330,4 +266,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default ViewManager;

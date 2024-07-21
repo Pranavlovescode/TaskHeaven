@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 
@@ -45,14 +44,11 @@ public class ManagerController {
 
     //    Checking if employee exists under a manager or not
     @GetMapping("/{id}")
-    public String getEmployeeUnderManager(@PathVariable("id") String id) {
-        Optional<EmployeeDetails> emp = employeeInfo.findById(id);
-        if (emp.isPresent()) {
-            return "Employee under manager: " + emp.get().getName();
-        }
-        return "No employee under this manager";
-
+    public ResponseEntity<?> getEmployeeUnderManager(@PathVariable("id") String id) {
+        ManagerDetails mng = managerInfo.findById(id).get();
+        return new ResponseEntity<>(mng, HttpStatus.OK);
     }
+
     @GetMapping()
     public ResponseEntity<?> geAlltManager() {
         Iterable<ManagerDetails> mng = managerInfo.findAll();
