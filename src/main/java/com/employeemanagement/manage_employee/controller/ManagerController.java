@@ -84,4 +84,15 @@ public class ManagerController {
         return "Employees added to manager";
     }
 
+
+    @GetMapping("/{mng_id}/{emp_id}")
+    public ResponseEntity<?> addSingleManagerToEmployee( @PathVariable("mng_id") String mng_id,@PathVariable("emp_id") String emp_id) {
+        ManagerDetails mng = managerInfo.findById(mng_id).get();
+        EmployeeDetails employee = employeeInfo.findById(emp_id).get();
+        employee.setManagerDetails(mng);
+        employeeInfo.save(employee);
+        return new ResponseEntity<>(employee,HttpStatus.OK);
+
+    }
+
 }

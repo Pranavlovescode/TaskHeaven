@@ -165,7 +165,7 @@ function Page() {
                           <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
                             No Manager assigned yet
                             <a
-                              href={"/adm-dash/assign-manager/"}
+                              href={`/adm-dash/get-emp/${emp_id}/assign-manager/`}
                               className={
                                 "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                               }
