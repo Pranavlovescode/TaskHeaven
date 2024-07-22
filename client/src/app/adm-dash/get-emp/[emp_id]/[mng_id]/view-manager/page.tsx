@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 type Manager = {
   address: string;
@@ -33,6 +34,8 @@ type Manager = {
 
 function ViewManager() {
   const token = JSON.parse(localStorage.getItem("user")!);
+
+  const { emp_id, mng_id } = useParams();
 
   // Code for the login Dialog
   const [open, setOpen] = React.useState<boolean>(true);
@@ -55,6 +58,31 @@ function ViewManager() {
     password: "",
   });
 
+  const getManager = async () => {
+    try {
+      if (token.token) {
+        const response = await axios.get(
+          "http://localhost:8080/add-manager/" + mng_id,
+          {
+            headers: {
+              Authorization: `Bearer ${token.token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        setMngDetails(response.data);
+        const data = response.data;
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getManager();
+  }, []);
+
   return (
     <>
       {token ? (
@@ -76,14 +104,6 @@ function ViewManager() {
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                         {mngDetails.name}
-                      </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                      <dt className="text-sm font-medium leading-6 text-gray-900">
-                        Role
-                      </dt>
-                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {mngDetails.role}
                       </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -126,69 +146,11 @@ function ViewManager() {
                         {mngDetails.age}
                       </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                      <dt className="text-sm font-medium leading-6 text-gray-900">
-                        Manager Details
-                      </dt>
-                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {mngDetails.adminDetails ? (
-                          <a
-                            href={`/adm-dash/get-emp/${emp_id}/${empDetail.managerDetails.mng_id}/view-manager/`}
-                            className={
-                              "hover:underline text-blue-500 hover:text-blue-700 duration-300"
-                            }
-                          >
-                            View Manager
-                          </a>
-                        ) : (
-                          <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
-                            No Manager assigned yet
-                            <a
-                              href={`/adm-dash/get-emp/${emp_id}/assign-manager/`}
-                              className={
-                                "hover:underline text-blue-500 hover:text-blue-700 duration-300"
-                              }
-                            >
-                              Assign Manager
-                            </a>
-                          </dd>
-                        )}
-                      </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                      <dt className="text-sm font-medium leading-6 text-gray-900">
-                        Work Details
-                      </dt>
-                      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                        {empDetail.workDetails ? (
-                          <a
-                            href={"/adm-dash/assign-work/"}
-                            className={
-                              "hover:underline text-blue-500 hover:text-blue-700 duration-300"
-                            }
-                          >
-                            View Work
-                          </a>
-                        ) : (
-                          <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
-                            No Work assigned yet
-                            <a
-                              href={"/adm-dash/assign-work/" + emp_id}
-                              className={
-                                "hover:underline text-blue-500 hover:text-blue-700 duration-300"
-                              }
-                            >
-                              Assign Work
-                            </a>
-                          </dd>
-                        )}
-                      </dd>
-                    </div>
                   </dl>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <a href="/adm-dash/get-emp">
+                <a href={`/adm-dash/get-emp/${emp_id}`}>
                   <Button
                     className={
                       "bg-blue-500 hover:bg-blue-700 duration-300 focus:ring-4 focus:ring-blue-300"
