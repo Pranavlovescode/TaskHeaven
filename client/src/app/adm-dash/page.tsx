@@ -23,7 +23,7 @@ export default function Page() {
   const [empData, setEmpData] = useState<any>([]);
   const getEmployeeData = async () => {
     if (dataToken) {
-      const response = await axios.get("http://localhost:8080/add-employee", {
+      const response = await axios.get("http://localhost:8081/add-employee", {
         headers: {
           "Content-type": "application/json",
           Authorization: `Bearer ${dataToken.token}`,

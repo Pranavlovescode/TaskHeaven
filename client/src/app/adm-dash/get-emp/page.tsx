@@ -31,7 +31,7 @@ export default function EmployeeDetails() {
     try {
       if (parseToken) {
         const response = await axios.get(
-          `http://localhost:8080/add-employee?page=${page}&size=${itemsPerPage}`,
+          `http://localhost:8081/add-employee?page=${page}&size=${itemsPerPage}`,
           {
             headers: {
               "Content-type": "application/json",

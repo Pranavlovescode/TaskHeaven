@@ -93,7 +93,7 @@ function Page() {
     try {
       if (token) {
         const response = await axios.get(
-          `http://localhost:8080/add-employee/${emp_id}`,
+          `http://localhost:8081/add-employee/${emp_id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -226,7 +226,7 @@ function Page() {
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                         {empDetail.workDetails ? (
                           <a
-                            href={"/adm-dash/assign-work/"}
+                            href={`/adm-dash/get-emp/${emp_id}/assign-work/`}
                             className={
                               "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                             }
@@ -237,7 +237,7 @@ function Page() {
                           <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
                             No Work assigned yet
                             <a
-                              href={"/adm-dash/assign-work/" + emp_id}
+                              href={`/adm-dash/get-emp/${emp_id}/assign-work/`}
                               className={
                                 "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                               }

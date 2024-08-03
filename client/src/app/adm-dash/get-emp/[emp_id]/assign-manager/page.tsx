@@ -49,7 +49,7 @@ function Page() {
   const getManager = async () => {
     try {
       if (token) {
-        const response = await axios.get("http://localhost:8080/add-manager", {
+        const response = await axios.get("http://localhost:8081/add-manager", {
           headers: {
             Authorization: `Bearer ${token.token}`,
             "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function Page() {
     try {
       if (token) {
         const response = await axios.get(
-          `http://localhost:8080/add-manager/${manager_id}/${emp_id}`,
+          `http://localhost:8081/add-manager/${manager_id}/${emp_id}`,
           {
             headers: {
               "Content-Type": "application/json",
