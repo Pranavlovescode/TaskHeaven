@@ -10,6 +10,7 @@ type Form = {
 };
 
 export default function Home() {
+  console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
   const [formInput, setFormInput] = useState<Form>({
     email: "",
     password: "",
@@ -19,7 +20,7 @@ export default function Home() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/auth/login",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
         formInput,
         {
           headers: {

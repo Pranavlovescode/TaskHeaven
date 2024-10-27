@@ -21,7 +21,7 @@ const Employee = () => {
   const logoutUser = async () => {
     setEmail(token.employeeDetails.email);
     const response = await axios.put(
-      `http://localhost:8080/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
       { email },
       {
         headers: {

@@ -93,7 +93,7 @@ function Page() {
     try {
       if (token) {
         const response = await axios.get(
-          `http://localhost:8081/add-employee/${emp_id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/add-employee/${emp_id}`,
           {
             headers: {
               "Content-Type": "application/json",

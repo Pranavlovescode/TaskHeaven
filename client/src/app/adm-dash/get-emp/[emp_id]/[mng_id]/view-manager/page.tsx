@@ -62,7 +62,7 @@ function ViewManager() {
     try {
       if (token.token) {
         const response = await axios.get(
-          "http://localhost:8081/add-manager/" + mng_id,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/add-manager/` + mng_id,
           {
             headers: {
               Authorization: `Bearer ${token.token}`,

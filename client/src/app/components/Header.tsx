@@ -41,7 +41,7 @@ const Header = () => {
     localStorage.removeItem("user");
     try {
       const response: AxiosResponse = await axios.put(
-        `http://localhost:8080/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
         {
           email: token.adminDetails.admemail,
         },
