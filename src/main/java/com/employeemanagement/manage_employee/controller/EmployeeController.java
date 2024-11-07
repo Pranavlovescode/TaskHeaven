@@ -1,5 +1,23 @@
 package com.employeemanagement.manage_employee.controller;
 
+import java.util.Date;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
@@ -7,14 +25,6 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.WorkInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.logging.Logger;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -37,7 +47,7 @@ public class EmployeeController {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String emp_password = bcrypt.encode(employeeDetails.getPassword());
         employeeDetails.setPassword(emp_password);
-        employeeDetails.setDate_of_joining(date);
+        // employeeDetails.setDate_of_joining(date);
         employeeInfo.save(employeeDetails);
         return employeeDetails;
 
