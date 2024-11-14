@@ -1,11 +1,12 @@
 package com.employeemanagement.manage_employee.controller;
 
-import java.util.Date;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
-import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
-import com.employeemanagement.manage_employee.repository.WorkInfo;
+import com.employeemanagement.manage_employee.response.EmployeeRegisterResponse;
+import com.employeemanagement.manage_employee.services.JavaMailService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -35,21 +36,30 @@ public class EmployeeController {
     private EmployeeInfo employeeInfo;
     @Autowired
     private ManagerInfo manager;
+    // @Autowired
+    // private AdminInfo admin;
+    // @Autowired
+    // private WorkInfo work;
+    
     @Autowired
-    private AdminInfo admin;
-    @Autowired
-    private WorkInfo work;
+    private JavaMailService javaMailService;
+
+
 
 //    Adding a new employee to the database
     @PostMapping("/register")
-    public EmployeeDetails addEmployee(@RequestBody EmployeeDetails employeeDetails) {
-        Date date = new Date();
+    public ResponseEntity<?> addEmployee(@RequestBody EmployeeDetails employeeDetails) {
+        // Date date = new Date();
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String emp_password = bcrypt.encode(employeeDetails.getPassword());
         employeeDetails.setPassword(emp_password);
         // employeeDetails.setDate_of_joining(date);
         employeeInfo.save(employeeDetails);
-        return employeeDetails;
+        javaMailService.sendEmail(employeeDetails.getEmail(), "Verify your email", "Congratulations! You have successfully registered with us. Please verify your email to proceed further.");
+
+        EmployeeRegisterResponse response = new EmployeeRegisterResponse(employeeDetails, "Employee added successfully and verification email sent");
+
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
 
     }
 //    Fetching all the employees from the database
