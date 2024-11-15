@@ -54,7 +54,7 @@ function EmpRegistration() {
     const navigate = useRouter();
     const gotoLogin = () => {
         setOpen(false);
-        navigate.push("/");
+        navigate.push("/register/verify-email");
     };
     const [date, setDate] = React.useState<Date | undefined>(new Date())
     console.log(date)

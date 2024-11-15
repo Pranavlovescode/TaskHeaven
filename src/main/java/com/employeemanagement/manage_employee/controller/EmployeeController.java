@@ -25,7 +25,7 @@ import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.response.EmployeeRegisterResponse;
-import com.employeemanagement.manage_employee.services.JavaMailService;
+import com.employeemanagement.manage_employee.services.EmailService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -42,7 +42,7 @@ public class EmployeeController {
     // private WorkInfo work;
     
     @Autowired
-    private JavaMailService javaMailService;
+    private EmailService javaMailService;
 
 
 
