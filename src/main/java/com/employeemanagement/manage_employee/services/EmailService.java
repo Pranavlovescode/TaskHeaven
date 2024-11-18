@@ -20,7 +20,7 @@ public class EmailService implements EmailSerivceInterface {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("2004.sapp@gmail.com"); // use the domain name provided by mailtrap website.
+        message.setFrom("testheaven@pranavtitambe.in"); // use the domain name provided by mailtrap website.
         emailSender.send(message);
     }
 
@@ -30,7 +30,7 @@ public class EmailService implements EmailSerivceInterface {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("2004.sapp@gmail.com");
+        message.setFrom("testheaven@pranavtitambe.in");
         emailSender.send(message);
     }
 
