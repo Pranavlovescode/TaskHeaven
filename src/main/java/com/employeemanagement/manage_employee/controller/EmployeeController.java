@@ -1,5 +1,6 @@
 package com.employeemanagement.manage_employee.controller;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.response.EmployeeRegisterResponse;
 import com.employeemanagement.manage_employee.services.EmailService;
+import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -46,6 +48,7 @@ public class EmployeeController {
 
 
 
+
 //    Adding a new employee to the database
     @PostMapping("/register")
     public ResponseEntity<?> addEmployee(@RequestBody EmployeeDetails employeeDetails) {
@@ -55,9 +58,25 @@ public class EmployeeController {
         employeeDetails.setPassword(emp_password);
         // employeeDetails.setDate_of_joining(date);
         employeeInfo.save(employeeDetails);
-        javaMailService.sendEmail(employeeDetails.getEmail(), "Verify your email", "Congratulations! You have successfully registered with us. Please verify your email to proceed further.");
+        OtpCodeGenerator otpGenerator = new OtpCodeGenerator();
+        String otp = otpGenerator.generateOTP();
+        try {
+             int decider =0;
+            javaMailService.sendEmail(employeeDetails.getEmail(), "Verify your email", 
+                "Congratulations! You have successfully registered. Your OTP is: " + otp);
+                decider = 1;
 
+
+                if (decider == 1) {
+                    logger.info("Email sent successfully");
+                } else {
+                    logger.info("Email not sent");
+                }
+        } catch (Exception e) {
+            logger.log(Level.INFO, "Failed to send email: {0}", e);
+        }
         EmployeeRegisterResponse response = new EmployeeRegisterResponse(employeeDetails, "Employee added successfully and verification email sent");
+        
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
 
