@@ -5,6 +5,8 @@
 
 package com.employeemanagement.manage_employee.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,12 +54,13 @@ public class HumanResourceDataController {
 
     @PostMapping("/save/human-resource")
     public ResponseEntity<?> saveHumanResourceData(@RequestBody HumanResourceData humanResourceData) {
-        
+        Date date = new Date();
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String hr_passString = bcrypt.encode(humanResourceData.getHr_password());
         humanResourceData.setHr_password(hr_passString);
-        OtpCodeGenerator otpGenerator = new OtpCodeGenerator();
-        String otp = otpGenerator.generateOTP();
+        humanResourceData.setHr_doj(date);
+        // OtpCodeGenerator otpGenerator = new OtpCodeGenerator();
+        // String otp = otpGenerator.generateOTP();
         humanResourceInfo.save(humanResourceData);
         javaMailService.sendEmail(humanResourceData.getHr_email(), "Registration Complete",
                 "Congratulations! You have successfully registered. Your registration will soon be verified by our HR team. Once the verification is successfull you will be notified to verify your email.");
