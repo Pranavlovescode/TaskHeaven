@@ -36,7 +36,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 // .requestMatchers("/add-employee/register", "/add-manager/register").hasRole("ADMIN")
                                 .requestMatchers("/api/**","/add-admin/register","/add-employee/register","/add-manager/register").permitAll()
-                                .requestMatchers("/add-employee/register","/add-manager/register").permitAll()
+                                .requestMatchers("/add-employee/register","/add-manager/register","/verify/save/human-resource").permitAll()
                                 .requestMatchers("/add-employee/**").hasAnyRole("MANAGER", "ADMIN","EMPLOYEE")
                                 .requestMatchers("/add-manager/**").hasRole("ADMIN")
                                 .requestMatchers("/add-admin/**").hasRole("ADMIN")

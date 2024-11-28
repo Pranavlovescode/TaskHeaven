@@ -1,11 +1,16 @@
 package com.employeemanagement.manage_employee.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter // Lombok annotation to create all the getters
 @Setter // Lombok annotation to create all the setters
@@ -24,6 +29,8 @@ public class AdminDetails {
     private String password;
     private int age;
     private Date date_of_joining;
+    private Boolean is_verified;
+    
 
 
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import Link from 'next/link'
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -190,25 +190,25 @@ function Page() {
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                         {empDetail.managerDetails ? (
-                          <a
+                          <Link
                             href={`/adm-dash/get-emp/${emp_id}/${empDetail.managerDetails.mng_id}/view-manager/`}
                             className={
                               "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                             }
                           >
                             View Manager
-                          </a>
+                          </Link>
                         ) : (
                           <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
                             No Manager assigned yet
-                            <a
+                            <Link
                               href={`/adm-dash/get-emp/${emp_id}/assign-manager/`}
                               className={
                                 "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                               }
                             >
                               Assign Manager
-                            </a>
+                            </Link>
                           </dd>
                         )}
                       </dd>
@@ -219,25 +219,25 @@ function Page() {
                       </dt>
                       <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                         {empDetail.workDetails ? (
-                          <a
+                          <Link
                             href={`/adm-dash/get-emp/${emp_id}/assign-work/`}
                             className={
                               "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                             }
                           >
                             View Work
-                          </a>
+                          </Link>
                         ) : (
                           <dd className="mt-1 flex text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 justify-between items-center">
                             No Work assigned yet
-                            <a
+                            <Link
                               href={`/adm-dash/get-emp/${emp_id}/assign-work/`}
                               className={
                                 "hover:underline text-blue-500 hover:text-blue-700 duration-300"
                               }
                             >
                               Assign Work
-                            </a>
+                            </Link>
                           </dd>
                         )}
                       </dd>
@@ -246,7 +246,7 @@ function Page() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <a href="/adm-dash/get-emp">
+                <Link href="/adm-dash/get-emp">
                   <Button
                     className={
                       "bg-blue-500 hover:bg-blue-700 duration-300 focus:ring-4 focus:ring-blue-300"
@@ -254,7 +254,7 @@ function Page() {
                   >
                     Back
                   </Button>
-                </a>
+                </Link>
               </CardFooter>
             </Card>
           </div>

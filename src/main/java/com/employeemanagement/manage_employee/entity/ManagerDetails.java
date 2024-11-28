@@ -1,12 +1,16 @@
 package com.employeemanagement.manage_employee.entity;
 
-import jakarta.persistence.*;
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -29,5 +33,8 @@ public class ManagerDetails {
     private String mobile_number;
     private String password;
     private Date date_of_joining;
+    private Boolean is_verified;
+    private String mng_designation;
+    private String role;
 
 }

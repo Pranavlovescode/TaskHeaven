@@ -1,24 +1,30 @@
 package com.employeemanagement.manage_employee.entity;
 
 
-import jakarta.persistence.*;
+import java.sql.Timestamp;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.annotation.processing.Generated;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Entity
-@Table(name="work_info")
-public class WorkDetails {
+@Table(name="task_info")
+public class TaskDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String work_id;
-    private String work_name;
-    private String work_description;
+    private String task_id;
+    private String task_name;
+    private String task_description;
     private Timestamp alloted_time;
     private Timestamp completion_time;
 
@@ -26,31 +32,7 @@ public class WorkDetails {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="mng_id")
-    private ManagerDetails managerDetails;
-
-    public String getWork_description() {
-        return work_description;
-    }
-
-    public void setWork_description(String work_description) {
-        this.work_description = work_description;
-    }
-
-    public String getWork_id() {
-        return work_id;
-    }
-
-    public void setWork_id(String work_id) {
-        this.work_id = work_id;
-    }
-
-    public String getWork_name() {
-        return work_name;
-    }
-
-    public void setWork_name(String work_name) {
-        this.work_name = work_name;
-    }
+    private ManagerDetails managerDetails;    
 
     public Timestamp getAlloted_time() {
         return alloted_time;

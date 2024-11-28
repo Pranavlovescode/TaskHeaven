@@ -36,15 +36,16 @@ import LogoutMessage from "@/app/components/LogoutMessage";
 
 
 type Form = {
-    name: string;
-    email: string;
-    address: string;
-    password: string;
+    hr_name: string;
+    hr_email: string;
+    hr_address: string;
+    hr_password: string;
     confirm_password: string;
-    mobile_number: string;
-    date_of_joining: Date;
-    age: number;
-    role: string;
+    hr_contact: string;
+    hr_doj: Date;
+    hr_age: number;
+    hr_designation: string;
+    hr_role:string;
 }
 
 function EmpRegistration() {
@@ -54,31 +55,32 @@ function EmpRegistration() {
     const navigate = useRouter();
     const gotoLogin = () => {
         setOpen(false);
-        navigate.push("/register/verify-email");
+        navigate.push("/");
     };
     const [date, setDate] = React.useState<Date | undefined>(new Date())
     console.log(date)
 
 
     const [formData, setFormData] = useState<Form>({
-        name: "",
-        email: "",
-        address: "",
-        password: "",
+        hr_name: "",
+        hr_email: "",
+        hr_address: "",
+        hr_password: "",
         confirm_password: "",
-        mobile_number: "",
-        date_of_joining: new Date(),
-        age: 0,
-        role: ""
+        hr_contact: "",
+        hr_doj: new Date(),
+        hr_age: 0,
+        hr_designation: "",
+        hr_role: ""
     });
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (formData.password === formData.confirm_password) {
+        if (formData.hr_password === formData.confirm_password) {
             console.log("Initial form data from client side", formData)
             try {
                 const response = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/add-employee/register`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify/save/human-resource`,
                     formData,
                     {
                         headers: {
@@ -89,8 +91,10 @@ function EmpRegistration() {
                 console.log(response);
                 if (response.status === 201) {
                     alert("User Created Successfully")
-                    navigate.push("/");
+                    navigate.push("/register/verify-email");
                 }
+                alert("User Created Successfully")
+                navigate.push("/register/verify-email");
             } catch (e) {
                 console.log(e);
             }
@@ -103,7 +107,6 @@ function EmpRegistration() {
 
     return (
         <>
-
             <form onSubmit={submitForm} className="flex h-screen w-full items-center justify-center px-4">
                 <Card className="mx-auto md:w-[1090px] w-[380px]">
                     <CardHeader>
@@ -118,7 +121,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="first-name">Name</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, hr_name: e.target.value })}
                                         id="name"
                                         name="name"
                                         placeholder="John Doe"
@@ -128,7 +131,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="last-name">Email</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, hr_email: e.target.value })}
                                         id="email"
                                         name="email"
                                         type="email"
@@ -140,7 +143,7 @@ function EmpRegistration() {
                             <div className="grid gap-2">
                                 <Label htmlFor="address">Address</Label>
                                 <Input
-                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                    onChange={(e) => setFormData({ ...formData, hr_address: e.target.value })}
                                     id="address"
                                     name="address"
                                     type="text"
@@ -152,7 +155,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">Password</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, hr_password: e.target.value })}
                                         id="password"
                                         name="password"
                                         type="password"
@@ -177,7 +180,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="telephone">Mobile Number</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, hr_contact: e.target.value })}
                                         id="mobile_number"
                                         name="mobile_number"
                                         type="tel"
@@ -188,7 +191,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="date_of_joining">Date of Joining</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, date_of_joining: new Date(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, hr_doj: new Date(e.target.value) })}
                                         id="date_of_joining"
                                         name="date_of_joining"
                                         type="date"
@@ -201,7 +204,7 @@ function EmpRegistration() {
                                 <div className="grid gap-2">
                                     <Label htmlFor="telephone">Age</Label>
                                     <Input
-                                        onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, hr_age: Number(e.target.value) })}
                                         id="age"
                                         name="age"
                                         type="number"
@@ -210,10 +213,10 @@ function EmpRegistration() {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="role">Select Role</Label>
-                                    <Select onValueChange={(value) => { setFormData({ ...formData, role: value }) }}>
+                                    <Label htmlFor="role">Select Designation</Label>
+                                    <Select onValueChange={(value) => { setFormData({ ...formData, hr_designation: value }) }}>
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select Role" />
+                                            <SelectValue placeholder="Select Designation" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="Junior Developer">Junior Developer</SelectItem>
@@ -225,6 +228,18 @@ function EmpRegistration() {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                            </div>
+                            <div>
+                            <Label htmlFor="role">Select Role</Label>
+                                    <Select onValueChange={(value) => { setFormData({ ...formData, hr_role: value }) }}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select Role" />
+                                        </SelectTrigger>
+                                        <SelectContent>                                            
+                                            <SelectItem value="employee">Employee</SelectItem>
+                                            <SelectItem value="manager">Manager</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                             </div>
                             <Button type="submit" className="mx-auto mt-4">
                                 Create an account

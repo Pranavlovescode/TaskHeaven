@@ -18,8 +18,9 @@ export default function Page() {
   const dataToken = token ? JSON.parse(token) : null;
   const navigate = useRouter();
   const gotoLogin = () => {
+    console.log("Logout");
     setOpen(false);
-    navigate.push("/");
+    navigate.push('/');
   };
   const [empData, setEmpData] = useState<any>([]);
   const getEmployeeData = async () => {
