@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.HumanResourceData;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
-import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.HumanResourceInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.services.EmailService;
 import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
+
 
 /**
  *
@@ -41,8 +42,8 @@ public class HumanResourceDataController {
     private EmployeeInfo employeeInfo;
     @Autowired
     private ManagerInfo managerInfo;
-    @Autowired
-    private AdminInfo adminInfo;
+    // @Autowired
+    // private AdminInfo adminInfo;
     // @Autowired
     // private EmployeeDetails employeeDetails;
     // @Autowired
@@ -110,10 +111,16 @@ public class HumanResourceDataController {
         managerDetails.setDate_of_joining(humanResourceData.getHr_doj());
         managerInfo.save(managerDetails);
         javaMailService.sendEmail(humanResourceData.getHr_email(), "Verification Complete",
-                "You have been successfully verified as an Manager. Now click on link to verify your email. http://localhost:3000/register/verify-email. Your OTP for verification is "
+                "You have been successfully verified as an" + humanResourceData.getHr_role()
+                        + ". Now click on link to verify your email. http://localhost:3000/register/verify-email. Your OTP for verification is "
                         + otp);
 
         return new ResponseEntity<>(managerDetails, null, 200);
     }
 
+    @GetMapping("/get-hr")
+    public ResponseEntity<?> getMethodName() {
+        return new ResponseEntity<>(humanResourceInfo.findAll(), null, 200);
+    }
+    
 }
