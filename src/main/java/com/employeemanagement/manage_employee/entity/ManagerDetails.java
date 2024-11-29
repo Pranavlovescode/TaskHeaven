@@ -33,7 +33,7 @@ public class ManagerDetails {
     private String mobile_number;
     private String password;
     private Date date_of_joining;
-    private Boolean is_verified;
+    private String is_verified;
     private String mng_designation;
     private String role;
 

@@ -29,7 +29,7 @@ public class AdminDetails {
     private String password;
     private int age;
     private Date date_of_joining;
-    private Boolean is_verified;
+    private String is_verified;
     
 
 

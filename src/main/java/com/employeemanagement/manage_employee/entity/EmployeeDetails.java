@@ -46,7 +46,7 @@ public class EmployeeDetails  {
     private String role;
     private int age;
     private Date date_of_joining;
-    private Boolean is_verified;
+    private String is_verified;
 
 
     

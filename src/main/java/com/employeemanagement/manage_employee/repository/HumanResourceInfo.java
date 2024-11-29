@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
-
 package com.employeemanagement.manage_employee.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import com.employeemanagement.manage_employee.entity.HumanResourceData;
 
-/**
- *
- * @author pranavtitambe
- */
-public interface HumanResourceInfo extends JpaRepository<HumanResourceData, String> {
-    
+
+public interface HumanResourceInfo extends CrudRepository<HumanResourceData, String> {
+    HumanResourceData findByHrId(String hr_id);    
+    HumanResourceData findByHremail(String hr_email);
 }

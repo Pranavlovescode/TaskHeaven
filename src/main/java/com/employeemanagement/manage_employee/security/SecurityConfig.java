@@ -36,6 +36,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 // .requestMatchers("/add-employee/register", "/add-manager/register").hasRole("ADMIN")
                                 .requestMatchers("/api/**","/add-admin/register","/add-employee/register","/add-manager/register").permitAll()
+                                // .requestMatchers("/socket.io/**").permitAll()
                                 .requestMatchers("/add-employee/register","/add-manager/register","/verify/save/human-resource").permitAll()
                                 .requestMatchers("/add-employee/**").hasAnyRole("MANAGER", "ADMIN","EMPLOYEE")
                                 .requestMatchers("/add-manager/**").hasRole("ADMIN")
@@ -51,6 +52,18 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    // @Bean
+    // public CorsFilter corsFilter() {
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     CorsConfiguration config = new CorsConfiguration();
+    //     config.setAllowCredentials(true);
+    //     config.addAllowedOrigin("http://localhost:3000"); // Replace with your frontend's origin
+    //     config.addAllowedHeader("*");
+    //     config.addAllowedMethod("*");
+    //     source.registerCorsConfiguration("/**", config);
+    //     return new CorsFilter();
+    // }
 //    @Bean
 //    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
 //        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
