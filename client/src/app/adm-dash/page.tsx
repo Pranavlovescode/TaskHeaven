@@ -120,6 +120,23 @@ export default function Page() {
     }
   };
 
+  const rejectUser = async (data:any)=>{
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reject/user/${data.hrId}`,{},{
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:`Bearer ${dataToken.token}`
+        }
+      })
+      const responseData:AxiosResponse = response.data;
+      console.log("User Rejected",responseData);
+      alert("User Rejected Successfully");
+      setIsHRDataFetched(true);
+    } catch (error) {
+      console.error("Error rejecting user",error);
+    }
+  }
+
   useEffect(() => {
    
     getEmployeeData();
@@ -218,7 +235,9 @@ export default function Page() {
                                       >
                                         Verify
                                       </Button>
-                                      <Button>Reject</Button>
+                                      <Button onClick={()=>{
+                                        rejectUser(empDataHR[index]);
+                                      }}>Reject</Button>
                                     </TableCell>
                                   </TableRow>
                                 </>
