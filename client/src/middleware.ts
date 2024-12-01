@@ -6,6 +6,11 @@ export function middleware(request: NextRequest) {
 
   // Define public paths
   const publicPaths = ["/", "/register"];
+  const dashboardPaths = {
+    admin: "/adm-dash",
+    employee: "/emp-dash",
+    manager: "/mng-dash",
+  };
 
   // Get cookies
   const admin_jwt = request.cookies.get("admin_jwt")?.value;
@@ -20,9 +25,25 @@ export function middleware(request: NextRequest) {
   console.log(`OTP Cookie: ${cookie_otp}`);
 
   // Check for public paths
+  // if (publicPaths.includes(path)) {
+  //   console.log("Public path detected, middleware allowing access.");
+  //   return NextResponse.next();
+  // }
+
+  // Redirect logged-in users to their respective dashboards from public paths
   if (publicPaths.includes(path)) {
-    console.log("Public path detected, middleware allowing access.");
-    return NextResponse.next();
+    if (admin_jwt) {
+      console.log("Admin logged in, redirecting to admin dashboard.");
+      return NextResponse.redirect(new URL(dashboardPaths.admin, request.url));
+    }
+    if (emp_jwt) {
+      console.log("Employee logged in, redirecting to employee dashboard.");
+      return NextResponse.redirect(new URL(dashboardPaths.employee, request.url));
+    }
+    if (mng_jwt) {
+      console.log("Manager logged in, redirecting to manager dashboard.");
+      return NextResponse.redirect(new URL(dashboardPaths.manager, request.url));
+    }
   }
 
   // Check for valid JWT cookies based on path

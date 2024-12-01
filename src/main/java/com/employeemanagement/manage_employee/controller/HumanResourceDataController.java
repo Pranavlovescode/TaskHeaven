@@ -28,7 +28,7 @@ import com.employeemanagement.manage_employee.repository.HumanResourceInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.services.EmailService;
 import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
-import com.employeemanagement.manage_employee.utils.CookieKUtils;
+import com.employeemanagement.manage_employee.utils.CookieUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -61,7 +61,7 @@ public class HumanResourceDataController {
     private EmailService javaMailService;
 
     @Autowired
-    private CookieKUtils cookieUtils;
+    private CookieUtils cookieUtils;
 
     @PostMapping("/save/human-resource")
     public ResponseEntity<?> saveHumanResourceData(@RequestBody HumanResourceData humanResourceData) {
@@ -218,7 +218,7 @@ public class HumanResourceDataController {
         if (enteredOtp.equals(sessionOtp)) {
             session.removeAttribute(email); // Clear OTP after successful verification
             logger.log(Level.INFO, "OTP verified successfully for email {0}", email);
-            cookieUtils.deleteCookie(cookieUtils.getCookie(request, "cookie_otp"));
+            cookieUtils.deleteCookie(cookieUtils.getCookie(request, "cookie_otp"),response);
             return ResponseEntity.ok("OTP verified successfully.");
         }
 

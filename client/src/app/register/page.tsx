@@ -89,10 +89,10 @@ function EmpRegistration() {
         console.log(response);
         if (response.status === 201) {
           alert("User Created Successfully");
-          navigate.push("/register/verify-email");
+          navigate.push("/");
         }
         alert("User Created Successfully");
-        navigate.push("/register/verify-email");
+        navigate.push("/");
       } catch (e) {
         console.log(e);
       }

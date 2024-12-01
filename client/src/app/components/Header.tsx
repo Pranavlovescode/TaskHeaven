@@ -51,6 +51,7 @@ const Header = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token.token}`,
           },
+          withCredentials: true, // Required for cookies & sessions
         },
       );
       const data = await response.data;
