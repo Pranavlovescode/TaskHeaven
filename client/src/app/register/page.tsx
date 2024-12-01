@@ -36,7 +36,7 @@ import LogoutMessage from "@/app/components/LogoutMessage";
 
 type Form = {
   hr_name: string;
-  hr_email: string;
+  hremail: string;
   hr_address: string;
   hr_password: string;
   confirm_password: string;
@@ -61,7 +61,7 @@ function EmpRegistration() {
 
   const [formData, setFormData] = useState<Form>({
     hr_name: "",
-    hr_email: "",
+    hremail: "",
     hr_address: "",
     hr_password: "",
     confirm_password: "",
@@ -133,7 +133,7 @@ function EmpRegistration() {
                   <Label htmlFor="last-name">Email</Label>
                   <Input
                     onChange={(e) =>
-                      setFormData({ ...formData, hr_email: e.target.value })
+                      setFormData({ ...formData, hremail: e.target.value })
                     }
                     id="email"
                     name="email"

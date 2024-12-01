@@ -1,17 +1,9 @@
 package com.employeemanagement.manage_employee.controller;
 
-import com.employeemanagement.manage_employee.entity.*;
-import com.employeemanagement.manage_employee.repository.AdminInfo;
-import com.employeemanagement.manage_employee.repository.EmployeeInfo;
-import com.employeemanagement.manage_employee.repository.LoginTimeInfo;
-import com.employeemanagement.manage_employee.repository.ManagerInfo;
-import com.employeemanagement.manage_employee.response.AdminResponse;
-import com.employeemanagement.manage_employee.response.EmployeeResponse;
-import com.employeemanagement.manage_employee.response.ManagerResponse;
-import com.employeemanagement.manage_employee.utils.JwtUtils;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +11,32 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import java.sql.Timestamp;
-import java.util.Optional;
-import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.employeemanagement.manage_employee.entity.AdminDetails;
+import com.employeemanagement.manage_employee.entity.EmployeeDetails;
+import com.employeemanagement.manage_employee.entity.LoginRequest;
+import com.employeemanagement.manage_employee.entity.LoginTimeDetails;
+import com.employeemanagement.manage_employee.entity.ManagerDetails;
+import com.employeemanagement.manage_employee.repository.AdminInfo;
+import com.employeemanagement.manage_employee.repository.EmployeeInfo;
+import com.employeemanagement.manage_employee.repository.LoginTimeInfo;
+import com.employeemanagement.manage_employee.repository.ManagerInfo;
+import com.employeemanagement.manage_employee.response.AdminResponse;
+import com.employeemanagement.manage_employee.response.EmployeeResponse;
+import com.employeemanagement.manage_employee.response.ManagerResponse;
+import com.employeemanagement.manage_employee.utils.CookieKUtils;
+import com.employeemanagement.manage_employee.utils.JwtUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -46,7 +60,10 @@ public class LoginTimeController {
 
     private final JwtUtils jwt;
 
-
+    @Autowired 
+    private CookieKUtils cookieKUtils;
+    @Autowired
+    private HttpSession session;
 
 
     public LoginTimeController(AuthenticationManager authenticationManager,
@@ -68,7 +85,7 @@ public class LoginTimeController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> createLoginTimeEmployee(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
 
         EmployeeDetails employeeDetails = employeeInfo.findByEmail(loginRequest.getEmail());
         AdminDetails adminDetails = adminInfo.findByAdmemail(loginRequest.getEmail());
@@ -86,9 +103,9 @@ public class LoginTimeController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 //            Creating a jwt token
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
-            Cookie jwtCookie = jwt.createCookie(jwtToken);
+            request.getSession().setAttribute("jwt", jwtToken);            
             // Adding jwt token to the response
-            response.addCookie(jwtCookie);
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(employeeDetails.getEmail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -105,10 +122,10 @@ public class LoginTimeController {
                     UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
-            Cookie jwtCookie = jwt.createCookie(jwtToken);
-
+            
+            request.getSession().setAttribute("jwt", jwtToken);            
             // Adding jwt token to the response
-            response.addCookie(jwtCookie);
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -129,10 +146,12 @@ public class LoginTimeController {
                     UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
-            Cookie jwtCookie = jwt.createCookie(jwtToken);
+            // Cookie jwtCookie = cookieKUtils.createCookie(jwtToken,"jwt");
 
             // Adding jwt token to the response
-            response.addCookie(jwtCookie);
+            request.getSession().setAttribute("jwt", jwtToken);            
+            // Adding jwt token to the response
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(managerDetails.getMngemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));

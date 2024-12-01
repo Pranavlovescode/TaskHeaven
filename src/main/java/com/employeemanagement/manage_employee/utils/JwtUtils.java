@@ -1,19 +1,20 @@
 package com.employeemanagement.manage_employee.utils;
 
-import com.employeemanagement.manage_employee.entity.TokenStorage;
-import com.employeemanagement.manage_employee.repository.TokenStorageInfo;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.employeemanagement.manage_employee.entity.TokenStorage;
+import com.employeemanagement.manage_employee.repository.TokenStorageInfo;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
@@ -70,31 +71,7 @@ public class JwtUtils {
         return !isTokenExpired(token);
     }
 
-    public Cookie createCookie(String token) {
-        Cookie jwtCookie = new Cookie("jwt", token);
-        jwtCookie.setMaxAge(60 * 60 * 24);
-        jwtCookie.setSecure(false);  // Enable this for production
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setPath("/");
-        return jwtCookie;
-    }
-
-    public void deleteCookie(Cookie cookie){
-        cookie.setMaxAge(0);
-    }
-
-    public Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return cookie;
-                }
-            }
-        }
-        return null;
-    }
-
+    
 
 
     public void addBlackListToken(String token){

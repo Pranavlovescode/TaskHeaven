@@ -28,12 +28,17 @@ import com.employeemanagement.manage_employee.repository.HumanResourceInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.services.EmailService;
 import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
+import com.employeemanagement.manage_employee.utils.CookieKUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author pranavtitambe
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/verify")
 public class HumanResourceDataController {
@@ -55,6 +60,9 @@ public class HumanResourceDataController {
     @Autowired
     private EmailService javaMailService;
 
+    @Autowired
+    private CookieKUtils cookieUtils;
+
     @PostMapping("/save/human-resource")
     public ResponseEntity<?> saveHumanResourceData(@RequestBody HumanResourceData humanResourceData) {
 
@@ -64,6 +72,7 @@ public class HumanResourceDataController {
         humanResourceData.setHr_password(hr_passString);
         humanResourceData.setHr_doj(date);
         humanResourceData.setAdmin_verified("PENDING");
+
         // OtpCodeGenerator otpGenerator = new OtpCodeGenerator();
         // String otp = otpGenerator.generateOTP();
         humanResourceInfo.save(humanResourceData);
@@ -74,12 +83,12 @@ public class HumanResourceDataController {
     }
 
     @PostMapping("/employee/{id}")
-    public ResponseEntity<?> verifyEmployeeEntity(@PathVariable String id) {
+    public ResponseEntity<?> verifyEmployeeEntity(@PathVariable String id, HttpServletRequest request,HttpServletResponse response) {
         HumanResourceData humanResourceData = humanResourceInfo.findById(id).get();
         logger.log(Level.INFO, "Received hr_id: {0}", id);
 
         // Check if the human resource data exists
-        if (humanResourceData==null) {
+        if (humanResourceData == null) {
             logger.log(Level.WARNING, "Human Resource with ID {0} not found.", id);
             return ResponseEntity.status(404).body("Human Resource with ID " + id + " not found.");
         }
@@ -98,13 +107,22 @@ public class HumanResourceDataController {
         employeeDetails.setAge(humanResourceData.getHr_age());
         employeeDetails.setDate_of_joining(humanResourceData.getHr_doj());
         employeeDetails.setIs_verified("PENDING");
+        employeeDetails.setEmp_dessignation(humanResourceData.getHr_designation());
 
         humanResourceData.setAdmin_verified("VERIFIED");
 
         try {
             humanResourceInfo.save(humanResourceData);
             employeeInfo.save(employeeDetails);
+            // Storing OTP in sessions for verification.
+            HttpSession session = request.getSession();
+            session.setAttribute(employeeDetails.getEmail(), otp);
 
+            response.addCookie(cookieUtils.createCookie(otp,"cookie_otp"));
+
+
+            logger.log(Level.INFO, "Set OTP for email {0}: {1}, Session ID: {2}",
+                    new Object[] { employeeDetails.getEmail(), otp, session.getId() });
             javaMailService.sendEmail(
                     employeeDetails.getEmail(),
                     "Verification Complete",
@@ -123,10 +141,10 @@ public class HumanResourceDataController {
     }
 
     @PostMapping("/manager/{hr_id}")
-    public ResponseEntity<?> verifyManagerEntity(@PathVariable String hr_id) {
+    public ResponseEntity<?> verifyManagerEntity(@PathVariable String hr_id, HttpServletRequest request, HttpServletResponse response) {
         HumanResourceData humanResourceData = humanResourceInfo.findById(hr_id).get();
 
-        if (humanResourceData==null) {
+        if (humanResourceData == null) {
             return ResponseEntity.status(404).body("Human Resource with ID " + hr_id + " not found.");
         }
 
@@ -144,23 +162,33 @@ public class HumanResourceDataController {
         managerDetails.setAge(humanResourceData.getHr_age());
         managerDetails.setDate_of_joining(humanResourceData.getHr_doj());
         managerDetails.setIs_verified("PENDING");
-
+        managerDetails.setMng_designation(humanResourceData.getHr_designation());
         humanResourceData.setAdmin_verified("VERIFIED");
 
-        managerInfo.save(managerDetails);
-        humanResourceInfo.save(humanResourceData);
-
         try {
+            managerInfo.save(managerDetails);
+            humanResourceInfo.save(humanResourceData);
+
+            // Storing OTP in sessions for verification.
+            HttpSession session = request.getSession();
+            session.setAttribute("cookie_otp", otp);
+            
+            response.addCookie(cookieUtils.createCookie(otp,"cookie_otp"));
+
+            logger.log(Level.INFO, "Set OTP for email {0}: {1}, Session ID: {2}",
+                    new Object[] { managerDetails.getMngemail(), otp, session.getId() });
+            // Send email to manager
             javaMailService.sendEmail(
-                managerDetails.getMngemail(),
-                "Verification Complete",
-                "You have been successfully verified as an " + humanResourceData.getHr_role() +
-                        ". Now click on the link to verify your email: http://localhost:3000/register/verify-email. " +
-                        "Your OTP for verification is " + otp);
+                    managerDetails.getMngemail(),
+                    "Verification Complete",
+                    "You have been successfully verified as an " + humanResourceData.getHr_role() +
+                            ". Now click on the link to verify your email: http://localhost:3000/register/verify-email. "
+                            +
+                            "Your OTP for verification is " + otp);
 
-                        logger.log(Level.INFO, "Manager verification successful");
+            logger.log(Level.INFO, "Manager verification successful");
 
-        return ResponseEntity.ok(managerDetails);
+            return ResponseEntity.ok(managerDetails);
         } catch (Exception e) {
             // TODO: handle exception
             logger.log(Level.SEVERE, "Error processing HR verification", e);
@@ -171,6 +199,31 @@ public class HumanResourceDataController {
     @GetMapping("/get-hr")
     public ResponseEntity<?> getMethodName() {
         return new ResponseEntity<>(humanResourceInfo.findAll(), null, 200);
+    }
+
+    @PostMapping("/otp/{email}/{enteredOtp}")
+    public ResponseEntity<?> verifyOTP(@PathVariable String email, @PathVariable String enteredOtp,
+            HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String sessionOtp = (String) session.getAttribute(email);
+        String storedOtp = (String) cookieUtils.getCookie(request, "cookie_otp").getValue();
+
+        logger.log(Level.INFO, "Retrieved OTP from session for email {0}: {1}", new Object[] { email, sessionOtp });
+        logger.log(Level.INFO, "Retrieving OTP from Session ID: {0}", session.getId());
+
+        if (storedOtp==null) {
+            return ResponseEntity.status(404).body("No OTP found for the provided email.");
+        }
+
+        if (enteredOtp.equals(sessionOtp)) {
+            session.removeAttribute(email); // Clear OTP after successful verification
+            logger.log(Level.INFO, "OTP verified successfully for email {0}", email);
+            cookieUtils.deleteCookie(cookieUtils.getCookie(request, "cookie_otp"));
+            return ResponseEntity.ok("OTP verified successfully.");
+        }
+
+        logger.log(Level.WARNING, "Invalid OTP entered for email {0}", email);
+        return ResponseEntity.status(401).body("Invalid OTP.");
     }
 
 }

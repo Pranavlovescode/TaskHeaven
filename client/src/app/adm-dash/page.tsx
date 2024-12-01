@@ -89,6 +89,7 @@ export default function Page() {
             "Content-type": "application/json",
             Authorization: `Bearer ${dataToken.token}`,
           },
+          
         }
       );
       const data: AxiosResponse = await response.data;
@@ -107,6 +108,7 @@ export default function Page() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${dataToken.token}`,
           },
+          withCredentials: true, // Required for cookies && sessions
         }
       );
       const responseData: AxiosResponse = response.data;
@@ -115,6 +117,7 @@ export default function Page() {
       alert("User Verified Successfully");
       // navigate.push("/adm-dash");
       setIsHRDataFetched(true);
+      
     } catch (error) {
       console.error("Error verifying user", error);
     }
@@ -143,15 +146,15 @@ export default function Page() {
     if (!isHRDataFetched) {
       getHRData();
     }
-    const intervalId = setInterval(()=>{
-      getHRData();
-    },10000)
+    // const intervalId = setInterval(()=>{
+    //   getHRData();
+    // },10000)
     // setEmpDataHR((prevData) => {
     //   return [...prevData, ...empDataHR]; // Append new data to the previous state
     // });
-    return () => {
-      clearInterval(intervalId);
-    }
+    // return () => {
+    //   clearInterval(intervalId);
+    // }
   }, [isHRDataFetched, empDataHR]);
   return (
     <>
