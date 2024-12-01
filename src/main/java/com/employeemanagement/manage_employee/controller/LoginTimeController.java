@@ -103,9 +103,9 @@ public class LoginTimeController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 //            Creating a jwt token
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
-            request.getSession().setAttribute("jwt", jwtToken);            
+            request.getSession().setAttribute("employee_jwt", jwtToken);            
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"employee_jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(employeeDetails.getEmail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -123,9 +123,9 @@ public class LoginTimeController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
             
-            request.getSession().setAttribute("jwt", jwtToken);            
+            request.getSession().setAttribute("admin_jwt", jwtToken);            
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"admin_jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -149,9 +149,9 @@ public class LoginTimeController {
             // Cookie jwtCookie = cookieKUtils.createCookie(jwtToken,"jwt");
 
             // Adding jwt token to the response
-            request.getSession().setAttribute("jwt", jwtToken);            
+            request.getSession().setAttribute("manager_jwt", jwtToken);            
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken,"jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken,"manager_jwt"));
 //            response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(managerDetails.getMngemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));

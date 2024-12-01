@@ -45,13 +45,13 @@ export default function Home() {
       localStorage.setItem("user", JSON.stringify(response.data));
       // Debugging purpose
       // console.log("User data is as follows",JSON.parse(localStorage.getItem('user')!));
-      // if (user.hasOwnProperty("adminDetails")) {
-      //   navigate.push("/adm-dash");
-      // } else if (user.hasOwnProperty("employeeDetails")) {
-      //   navigate.push("/emp-dash");
-      // } else {
-      //   navigate.push("/mng-dash");
-      // }
+      if (user.hasOwnProperty("adminDetails")) {
+        navigate.push("/adm-dash");
+      } else if (user.hasOwnProperty("employeeDetails")) {
+        navigate.push("/emp-dash");
+      } else {
+        navigate.push("/mng-dash");
+      }
     } catch (e) {
       console.log(e);
     }
