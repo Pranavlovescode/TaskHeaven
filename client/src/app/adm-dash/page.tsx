@@ -99,9 +99,10 @@ export default function Page() {
   };
 
   const verifyUser = async (data: any) => {
+    console.log(dataToken.adminDetails.adm_id);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify/${data.hr_role}/${data.hrId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify/${data.hr_role}/${data.hrId}/${dataToken.adminDetails.adm_id}`,
         {},
         {
           headers: {
