@@ -31,17 +31,23 @@ function Sidebar() {
       {tokenParsed ? (
         <div
           className={
-            "absolute z-30 bg-gray-200 hidden md:h-full md:flex md:flex-col md:justify-center"
+            "absolute z-30 bg-gray-200 hidden md:h-full md:flex md:flex-col md:justify-center md:mt-12"
           }
         >
           <div
-            className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 list-none h-screen fixed bg-gray-200`}
+            className={`${
+              toggleSidebar ? "w-64 p-2 py-2" : "w-16"
+            } duration-300 list-none h-screen fixed bg-gray-200`}
           >
             <button
               onClick={() => {
                 setToggleSidebar(!toggleSidebar);
               }}
-              className={`${toggleSidebar ? "transform translate-x-56 absolute rotate-180 ml-3" : "ml-3"} flex items-center px-2 my-3 text-gray-700  p-2 justify-evenly group bg-gray-100 hover:text-gray-900 rounded-3xl duration-300`}
+              className={`${
+                toggleSidebar
+                  ? "transform translate-x-56 absolute rotate-180 ml-3"
+                  : "ml-3"
+              } flex items-center px-2 my-3 text-gray-700  p-2 justify-evenly group bg-gray-100 hover:text-gray-900 rounded-3xl duration-300`}
             >
               <svg
                 className="w-6 h-6 text-gray-800 dark:text-white"
@@ -219,11 +225,17 @@ function Sidebar() {
             </li>
           </div>
           <div
-            className={`${toggleSidebar ? "flex-row px-2 w-64 my-2 duration-700" : "flex-col py-2 w-16 "} fixed bottom-0 
+            className={`${
+              toggleSidebar
+                ? "flex-row px-2 w-64 my-2 duration-700"
+                : "flex-col py-2 w-16 "
+            } fixed bottom-0 
           items-end flex duration-250 list-none justify-center ease-in-out px-2 bg-gray-200`}
           >
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
               <Link
                 href="#"
@@ -244,7 +256,9 @@ function Sidebar() {
               </Link>
             </li>
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
               <Link
                 href="#"
@@ -265,7 +279,9 @@ function Sidebar() {
               </Link>
             </li>
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
               <Link
                 href="#"
@@ -289,11 +305,7 @@ function Sidebar() {
         </div>
       ) : (
         <>
-          <LogoutMessage
-            open={open}
-            setOpen={setOpen}
-            gotoLogin={gotoLogin}
-          />
+          <LogoutMessage open={open} setOpen={setOpen} gotoLogin={gotoLogin} />
         </>
       )}
     </>

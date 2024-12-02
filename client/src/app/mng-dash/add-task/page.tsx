@@ -24,7 +24,7 @@ function AssignManager() {
     <>
       {token ? (
         <>
-          <div className={"mt-[52px] mx-auto md:px-52"}>
+          <div className={"mx-auto md:px-52"}>
             <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
               <div
                 aria-hidden="true"
