@@ -86,6 +86,11 @@ public class EmployeeController {
         return employeeInfo.findAll(PageRequest.of(page, size));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllEmployeeWithoutPagination() {
+        return ResponseEntity.status(200).body(employeeInfo.findAll());
+    }
+
     // Fetching a manager details using employee id (checking if manager exists for
     // a given employee id)
     @GetMapping("/{id}")

@@ -35,6 +35,7 @@ public class TeamDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String team_id;
     private String team_name;
+    private String team_desc;
     @ElementCollection
     @CollectionTable(name = "team_members", joinColumns = @jakarta.persistence.JoinColumn(name = "team_id"))
     @Column(name = "member")

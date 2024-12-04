@@ -136,9 +136,11 @@ export default function ManagerDashboard() {
         </div>
         <div className="flex gap-2">
           <Button>
-            <Link href={"/mng-dash/add-task"}>Create a Task</Link>
+            <Link href={"/mng-dash/add-team"}>Create a Team</Link>
           </Button>
-          <Button variant="outline">New Tracker</Button>
+          {/* <Button variant="outline">
+            <Link href={"/mng-dash/add-team"}>Create a Team</Link>
+          </Button> */}
           <Button variant="secondary">Add Payroll</Button>
         </div>
       </div>
