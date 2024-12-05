@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
 import com.employeemanagement.manage_employee.repository.TeamInfo;
+
 
 
 /**
@@ -56,6 +58,12 @@ public class TeamController {
         logger.log(Level.WARNING, "Error in creating team");
         return ResponseEntity.status(404).body("Error in creating team");
     }
+
+    @GetMapping
+    public ResponseEntity<?> getTeams() {
+        return ResponseEntity.status(200).body(teamInfo.findAll());
+    }
+    
     
 
 }

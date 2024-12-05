@@ -38,7 +38,7 @@ const Manager = ({children}:any) => {
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
-  const user = window.localStorage.getItem("user");
+  const user = localStorage.getItem("user");
   const grabToken = () => {
     if (user) {
       const parsedUser = JSON.parse(user!);
@@ -96,7 +96,7 @@ const Manager = ({children}:any) => {
       ) : (
         <>
           <Header  name={data.managerDetails.name} email={data.managerDetails.mngemail} />
-          <Sidebar />
+          {/* <Sidebar /> */}
           <main>{children}</main>
         </>
       )}

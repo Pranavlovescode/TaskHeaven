@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -21,6 +21,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import axios from "axios";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { loadBindings } from "next/dist/build/swc";
 
 // Register required Chart.js components
 ChartJS.register(
@@ -31,6 +34,13 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+type Team = {
+  team_id: string;
+  team_name: string;
+  mng_id: string;
+  members: string[];
+}[];
 
 export default function ManagerDashboard() {
   // Sample data
@@ -121,14 +131,57 @@ export default function ManagerDashboard() {
     // Add more team data as needed
   ];
 
+  const [getTeams, setTeams] = React.useState<Team>([]);
+
   const currentDay = dayNames[new Date().getDay()];
   const currentMonth = monthNames[new Date().getMonth()];
+
+  // Code for fetching teams
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/team`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("user") || "{}").token || " "
+            }`,
+          },
+        }
+      );
+      const data = response.data;
+      localStorage.setItem('teams', JSON.stringify(data));
+      setTeams(
+        data.map(
+          (team: {
+            team_id: string;
+            team_name: string;
+            team_members: string[];
+            mng_id: string;
+          }) => ({
+            team_id: team.team_id,
+            team_name: team.team_name,
+            members: team.team_members,
+            mng_id: team.managerDetails.mng_id,
+          })
+        )
+      );
+      console.log("Teams", data);
+    };
+    fetchTeams();
+  }, []);
+
+  // console.log(getTeams);
+
   return (
-    <div className=" space-y-6 md:p-12 md:pl-20">
+    <div className="bg-slate-50 space-y-6 md:p-12 md:pl-20">
       {/* Header Section */}
       <div className="flex justify-between items-center py-4">
         <div>
-          <h1 className="text-2xl font-semibold">Hello, Arthur Sjorgen</h1>
+          <h1 className="text-2xl font-semibold">Hello, {JSON.parse(localStorage.getItem("user") || "{}")
+                            .managerDetails.name || " "}</h1>
           <p className="text-sm text-gray-500">
             It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
             {new Date().getUTCFullYear()}
@@ -153,42 +206,55 @@ export default function ManagerDashboard() {
             <CardTitle>Teams</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <Table className="min-w-full table-auto">
+            <div className="overflow-x-auto w-full">
+              <Table className="w-full">
                 <TableCaption>
                   A list of teams under your guidance.
                 </TableCaption>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="font-bold">Team Name</TableCell>
+                    <TableCell className="font-bold md:w-[250px]">Team Name</TableCell>
                     <TableCell className="font-bold">No. of Members</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {teams.map((team) => (
-                    <Link href={"#"} className="w-full">
-                      <TableRow key={team.id} className="hover:bg-gray-100">
-                        <TableCell>{team.name}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            {team.members.slice(0, 3).map((src, index) => (
-                              <img
-                                key={index}
-                                src={src}
-                                alt={`Member ${index + 1}`}
-                                className="w-8 h-8 rounded-full border-2 border-white -ml-2 first:ml-0 shadow-md"
-                              />
-                            ))}
-                            {team.members.length > 3 && (
-                              <div className="w-8 h-8 rounded-full bg-gray-300 text-center text-sm font-medium flex items-center justify-center -ml-2 shadow-md">
-                                {team.members[3]}
-                              </div>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    </Link>
-                  ))}
+                  {getTeams
+                    .filter(
+                      (team) =>
+                        team.mng_id ===
+                          JSON.parse(localStorage.getItem("user") || "{}")
+                            .managerDetails.mng_id || " "
+                    )
+                    .map((team) => (
+                      <Link href={`mng-dash/team-info/${team.team_id}`} className="w-full">
+                        <TableRow
+                          key={team.team_id}
+                          className="hover:bg-gray-100 w-full"
+                        >
+                          <TableCell className="md:w-[250px]">{team.team_name}</TableCell>
+                          <TableCell className="text-left">
+                            <div className="flex items-center justify-start space-x-2">
+                              {team.members &&
+                                team.members.slice(0, 3).map((member, index) => (
+                                  <Avatar className="h-6 w-6" key={index}>
+                                    <AvatarImage
+                                      src={`https://api.dicebear.com/6.x/initials/svg?seed=${member}`}
+                                    />
+                                    <AvatarFallback>
+                                      {member[0].toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                ))}
+                              {team.members && team.members.length > 3 && (
+                                <div className="w-8 h-8 rounded-full bg-gray-300 text-center text-sm font-medium flex items-center justify-center -ml-2 shadow-md">
+                                  {team.members.length - 3}+
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      </Link>
+                    ))}
                 </TableBody>
               </Table>
             </div>
