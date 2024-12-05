@@ -30,7 +30,7 @@ export default function CreateTeam() {
   const [memberEmail, setMemberEmail] = useState("");
   const [members, setMembers] = useState<string[]>([]);
   const [team, setTeam] = useState<Team>();
-  const [employee, setEmployees] = useState<string[]>([]);
+  const [employee, setEmployees] = useState<{ label: string; value: string }[]>([]);
 
   const addMember = () => {
     if (memberEmail && !members.includes(memberEmail)) {
@@ -152,7 +152,7 @@ export default function CreateTeam() {
               <Select
                 options={employee}
                 value={employee.find((emp) => emp.value === memberEmail)}
-                onChange={(option) => setMemberEmail(option?.value || "")}
+                onChange={(option: { label: string; value: string } | null) => setMemberEmail(option?.value || "")}
               />
               <Button onClick={addMember} size="icon">
                 <PlusCircle className="h-4 w-4" />

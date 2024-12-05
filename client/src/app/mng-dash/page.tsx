@@ -37,8 +37,8 @@ ChartJS.register(
 
 type Team = {
   team_id: string;
-  team_name: string;
-  mng_id: string;
+  team_name: string 
+  mng_id: string
   members: string[];
 }[];
 
@@ -159,6 +159,7 @@ export default function ManagerDashboard() {
             team_id: string;
             team_name: string;
             team_members: string[];
+            managerDetails: { mng_id: string };
             mng_id: string;
           }) => ({
             team_id: team.team_id,
