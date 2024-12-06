@@ -1,6 +1,7 @@
 package com.employeemanagement.manage_employee.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -8,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -33,6 +36,14 @@ public class EmployeeDetails  {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="task_id")
     private TaskDetails taskDetails;
+
+    @ManyToMany
+    @JoinTable(
+        name = "team_task",
+        joinColumns = @JoinColumn(name = "emp_id"),
+        inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<TaskDetails> tasks; // Adjusted to match TaskDetails entity
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

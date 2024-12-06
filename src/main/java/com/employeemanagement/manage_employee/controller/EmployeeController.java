@@ -1,5 +1,6 @@
 package com.employeemanagement.manage_employee.controller;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
+import com.employeemanagement.manage_employee.entity.TaskDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
+import com.employeemanagement.manage_employee.repository.TaskInfo;
 import com.employeemanagement.manage_employee.response.EmployeeRegisterResponse;
 import com.employeemanagement.manage_employee.services.EmailService;
 import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
@@ -45,6 +48,9 @@ public class EmployeeController {
 
     @Autowired
     private EmailService javaMailService;
+
+    @Autowired
+    private TaskInfo taskInfo;
 
     // Adding a new employee to the database
     @PostMapping("/register")
@@ -122,4 +128,27 @@ public class EmployeeController {
         return "Employee deleted";
     }
 
+    @PostMapping("/assign-task")
+    public ResponseEntity<?> assignTaskToEmployee(@RequestBody List<String> task_id, @RequestParam String emp_id) {
+        //TODO: process POST request
+        try {
+            if (task_id.isEmpty()) {
+                return ResponseEntity.status(400).body("Task id cannot be empty");
+            }else{
+                EmployeeDetails emp = employeeInfo.findById(emp_id).get();
+                List<TaskDetails> tasks = (List<TaskDetails>) taskInfo.findAllById(task_id);
+                emp.getTasks().addAll(tasks);
+                employeeInfo.save(emp);
+                logger.log(Level.INFO, "Task assigned to Employee successfully -> {}", emp);
+                return ResponseEntity.status(200).body("Task assigned to Employee successfully -> " + emp);
+            }
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.log(Level.INFO, "Error in assigning task -> {}", e);
+            return ResponseEntity.status(500).body("Error in assigning task -> " + e);
+        }
+        
+    }
+    
 }

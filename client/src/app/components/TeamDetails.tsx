@@ -51,6 +51,7 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
   useEffect(() => {
     const localStorageTeams = JSON.parse(localStorage.getItem("teams") || "[]");
     const teamDetails = getTeamDetails(teamId, localStorageTeams);
+    console.log("Team details",teamDetails);      // For debugging purposes
     setTeam(teamDetails);
   }, [teamId]);
 
@@ -70,7 +71,7 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
       <CardContent>
         <p className="text-muted-foreground mb-4">{team.description}</p>
         <h3 className="text-lg font-semibold mb-2">Team Members</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-24">
           {team.members.map((member) => (
             <div key={member.id} className="flex items-center space-x-4">
               <Avatar>

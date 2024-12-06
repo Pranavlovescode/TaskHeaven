@@ -42,10 +42,10 @@ public class TeamDetails {
     private List<String> team_members;
 
 
-    @ElementCollection
-    @CollectionTable(name = "team_task", joinColumns = @jakarta.persistence.JoinColumn(name = "team_id"))
-    @Column(name = "task_id")
-    private List<String> task;
+    // @ElementCollection
+    // @CollectionTable(name = "team_task", joinColumns = @jakarta.persistence.JoinColumn(name = "team_id"))
+    // @Column(name = "task_id")
+    // private List<String> task;
     
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="mng_id")

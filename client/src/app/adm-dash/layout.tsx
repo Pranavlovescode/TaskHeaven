@@ -91,7 +91,7 @@ const Admin = ({ children }: any) => {
         <>
           <Header name={data.adminDetails.name} email={data.adminDetails.admemail} />
           {/* <Sidebar /> */}
-          {/* <main>{children}</main> */}
+         <main>{children}</main> 
         </>
       )}
     </>
