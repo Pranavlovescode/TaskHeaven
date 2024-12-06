@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   Dialog,
   DialogBackdrop,
@@ -30,17 +31,23 @@ function Sidebar() {
       {tokenParsed ? (
         <div
           className={
-            "absolute z-30 bg-gray-200 hidden md:h-full md:flex md:flex-col md:justify-center"
+            "absolute z-30 bg-gray-200 hidden md:h-full md:flex md:flex-col md:justify-center md:mt-12"
           }
         >
           <div
-            className={`${toggleSidebar ? "w-64 p-2 py-2" : "w-16"} duration-300 list-none h-screen fixed bg-gray-200`}
+            className={`${
+              toggleSidebar ? "w-64 p-2 py-2" : "w-16"
+            } duration-300 list-none h-screen fixed bg-gray-200`}
           >
             <button
               onClick={() => {
                 setToggleSidebar(!toggleSidebar);
               }}
-              className={`${toggleSidebar ? "transform translate-x-56 absolute rotate-180 ml-3" : "ml-3"} flex items-center px-2 my-3 text-gray-700  p-2 justify-evenly group bg-gray-100 hover:text-gray-900 rounded-3xl duration-300`}
+              className={`${
+                toggleSidebar
+                  ? "transform translate-x-56 absolute rotate-180 ml-3"
+                  : "ml-3"
+              } flex items-center px-2 my-3 text-gray-700  p-2 justify-evenly group bg-gray-100 hover:text-gray-900 rounded-3xl duration-300`}
             >
               <svg
                 className="w-6 h-6 text-gray-800 dark:text-white"
@@ -63,7 +70,7 @@ function Sidebar() {
             <li className={"px-2"}>
               <HoverCard>
                 <HoverCardTrigger>
-                  <a
+                  <Link
                     href="/adm-dash"
                     className={
                       "flex items-center" +
@@ -122,7 +129,7 @@ function Sidebar() {
                     {toggleSidebar ? (
                       <span className="mx-4 font-medium">Dashboard</span>
                     ) : null}
-                  </a>
+                  </Link>
                 </HoverCardTrigger>
 
                 <HoverCardContent>
@@ -133,7 +140,7 @@ function Sidebar() {
             <li className={"px-2"}>
               <HoverCard>
                 <HoverCardTrigger>
-                  <a
+                  <Link
                     href="/adm-dash/get-emp"
                     className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
                   >
@@ -150,7 +157,7 @@ function Sidebar() {
                     {toggleSidebar ? (
                       <span className="px-4 font-medium">Employees</span>
                     ) : null}
-                  </a>
+                  </Link>
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <span className="font-medium">Employees</span>
@@ -160,7 +167,7 @@ function Sidebar() {
             <li className={"px-2"}>
               <HoverCard>
                 <HoverCardTrigger>
-                  <a
+                  <Link
                     href="#"
                     className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
                   >
@@ -176,7 +183,7 @@ function Sidebar() {
                     {toggleSidebar ? (
                       <span className="px-7 font-medium">Settings</span>
                     ) : null}
-                  </a>
+                  </Link>
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <span className="font-medium">Settings</span>
@@ -186,7 +193,7 @@ function Sidebar() {
             <li className={"px-2"}>
               <HoverCard>
                 <HoverCardTrigger>
-                  <a
+                  <Link
                     href="#"
                     className="flex items-center my-3 text-gray-700 bg-gray-200 p-2 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
                   >
@@ -209,7 +216,7 @@ function Sidebar() {
                     {toggleSidebar ? (
                       <span className="px-7 font-medium">Managers</span>
                     ) : null}
-                  </a>
+                  </Link>
                 </HoverCardTrigger>
                 <HoverCardContent>
                   <span className="font-medium">Managers</span>
@@ -218,13 +225,19 @@ function Sidebar() {
             </li>
           </div>
           <div
-            className={`${toggleSidebar ? "flex-row px-2 w-64 my-2 duration-700" : "flex-col py-2 w-16 "} fixed bottom-0 
+            className={`${
+              toggleSidebar
+                ? "flex-row px-2 w-64 my-2 duration-700"
+                : "flex-col py-2 w-16 "
+            } fixed bottom-0 
           items-end flex duration-250 list-none justify-center ease-in-out px-2 bg-gray-200`}
           >
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2  hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
-              <a
+              <Link
                 href="#"
                 className="flex items-center text-gray-700  justify-evenly"
               >
@@ -240,12 +253,14 @@ function Sidebar() {
                 {/* {toggleSidebar ? (
               <span className="px-7 font-medium">Settings</span>
             ) : null} */}
-              </a>
+              </Link>
             </li>
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
-              <a
+              <Link
                 href="#"
                 className="flex items-center text-gray-700 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
               >
@@ -261,12 +276,14 @@ function Sidebar() {
                 {/* {toggleSidebar ? (
               <span className="px-7 font-medium">Settings</span>
             ) : null} */}
-              </a>
+              </Link>
             </li>
             <li
-              className={`${toggleSidebar ? "mx-2" : "py-2"} p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
+              className={`${
+                toggleSidebar ? "mx-2" : "py-2"
+              } p-2 hover:text-gray-500 hover:rounded-lg group group hover:bg-gray-100`}
             >
-              <a
+              <Link
                 href="#"
                 className="flex items-center text-gray-700 justify-evenly hover:bg-gray-100 hover:text-gray-900 hover:rounded-lg group"
               >
@@ -282,17 +299,13 @@ function Sidebar() {
                 {/* {toggleSidebar ? (
               <span className="px-7 font-medium">Settings</span>
             ) : null} */}
-              </a>
+              </Link>
             </li>
           </div>
         </div>
       ) : (
         <>
-          <LogoutMessage
-            open={open}
-            setOpen={setOpen}
-            gotoLogin={gotoLogin}
-          />
+          <LogoutMessage open={open} setOpen={setOpen} gotoLogin={gotoLogin} />
         </>
       )}
     </>

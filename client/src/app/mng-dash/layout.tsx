@@ -1,12 +1,13 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { Children, ReactNode, useEffect, useState } from "react";
 import Header from "@/app/components/Header";
 import Sidebar from "@/app/components/Sidebar";
 import jsonwebtoken from "jsonwebtoken";
 
 import { useRouter } from "next/navigation";
 import LogoutMessage from "../components/LogoutMessage";
+import ManagerDashboard from "./page";
 
 // type tokenInfo={
 //     exp:number
@@ -14,9 +15,14 @@ import LogoutMessage from "../components/LogoutMessage";
 //     sub:string
 // }
 
-type AdminData = {
+type ManagerDetails = {
+  name: string;
+  mngemail: string;
+};
+
+type ManagerData = {
   token: string;
-  adminDetails: object;
+  managerDetails: {};
   loginTimeDetails: object | null;
 };
 
@@ -24,21 +30,21 @@ interface AdminProps {
   children: ReactNode;
 }
 
-const Admin = ({ children }: any) => {
-  const [data, setData] = useState<AdminData>({
+const Manager = ({children}:any) => {
+  const [data, setData] = useState<ManagerData>({
     token: "",
-    adminDetails: {},
+    managerDetails: {},
     loginTimeDetails: {},
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
-  const user = window.localStorage.getItem("user");
+  const user = localStorage.getItem("user");
   const grabToken = () => {
     if (user) {
       const parsedUser = JSON.parse(user!);
       setData({
         token: parsedUser.token,
-        adminDetails: parsedUser.adminDetails,
+        managerDetails: parsedUser.managerDetails,
         loginTimeDetails: parsedUser.loginTimeDetails,
       });
     }
@@ -89,13 +95,13 @@ const Admin = ({ children }: any) => {
         </>
       ) : (
         <>
-          <Header name={data.adminDetails.name} email={data.adminDetails.admemail} />
+          <Header  name={data.managerDetails.name} email={data.managerDetails.mngemail} />
           {/* <Sidebar /> */}
-          {/* <main>{children}</main> */}
+          <main>{children}</main>
         </>
       )}
     </>
   );
 };
 
-export default Admin;
+export default Manager;

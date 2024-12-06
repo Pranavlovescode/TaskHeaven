@@ -16,7 +16,7 @@ type LogoutData = {
   email: string;
 };
 
-const Header = () => {
+const Header = ({name,email}:any) => {
   const token = JSON.parse(localStorage.getItem("user")!);
   const navigate = useRouter();
   const [toggle, setToggle] = useState<boolean>(false);
@@ -44,13 +44,14 @@ const Header = () => {
       const response: AxiosResponse = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
         {
-          email: token.adminDetails.admemail,
+          email: email,
         },
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token.token}`,
           },
+          withCredentials: true, // Required for cookies & sessions
         },
       );
       const data = await response.data;
@@ -65,7 +66,7 @@ const Header = () => {
       {token ? (
         <>
           <header className="antialiased">
-            <nav className="bg-gray-100 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 fixed w-full z-50 top-0">
+            <nav className="bg-gray-200 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 fixed w-full z-50 top-0">
               <div className="flex flex-wrap justify-between items-center">
                 <div className="flex justify-start items-center ">
                   {/*<button*/}
@@ -163,7 +164,7 @@ const Header = () => {
               </div>
             </nav>
           </header>
-          <div className="absolute z-50 right-2.5">
+          <div className="absolute z-50 right-2.5 mt-12">
             {toggle && (
               <div
                 className=" z-50 my-1 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-2xl dark:bg-gray-700 dark:divide-gray-600"
@@ -171,10 +172,10 @@ const Header = () => {
               >
                 <div className="py-3 px-4">
                   <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                    {token.adminDetails.name}
+                    {name}
                   </span>
                   <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    {token.adminDetails.admemail}
+                    {email}
                   </span>
                 </div>
                 <ul

@@ -16,12 +16,17 @@ public class EmailService implements EmailSerivceInterface {
 
     @Override
     public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        message.setFrom("2004.sapp@gmail.com"); // use the domain name provided by mailtrap website.
-        emailSender.send(message);
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(body);
+            message.setFrom("taskheaven@pranavtitambe.in"); // use the domain name provided by mailtrap website.
+            emailSender.send(message);
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -30,7 +35,7 @@ public class EmailService implements EmailSerivceInterface {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("2004.sapp@gmail.com");
+        message.setFrom("testheaven@pranavtitambe.in");
         emailSender.send(message);
     }
 

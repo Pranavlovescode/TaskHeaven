@@ -1,15 +1,17 @@
 package com.employeemanagement.manage_employee.entity;
 
-import jakarta.persistence.*;
+import java.util.Date;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
 
 
 
@@ -17,7 +19,7 @@ import java.util.Optional;
 @Setter
 @Entity
 @Table(name="employee")
-public class EmployeeDetails implements UserDetails {
+public class EmployeeDetails  {
 
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -29,8 +31,8 @@ public class EmployeeDetails implements UserDetails {
     private AdminDetails adminDetails;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="work_id")
-    private WorkDetails workDetails;
+    @JoinColumn(name="task_id")
+    private TaskDetails taskDetails;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,37 +42,12 @@ public class EmployeeDetails implements UserDetails {
     private String email;
     private String mobile_number;
     private String password;
+    private String emp_dessignation;
     private String role;
     private int age;
     private Date date_of_joining;
+    private String is_verified;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
-    }
+    
 }

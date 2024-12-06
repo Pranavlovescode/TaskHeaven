@@ -19,6 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import LogoutMessage from "@/app/components/LogoutMessage";
+import Link from "next/link";
 
 export default function EmployeeDetails() {
   const token = localStorage.getItem("user");
@@ -75,9 +76,9 @@ export default function EmployeeDetails() {
             className={"flex md:flex-row justify-between items-center flex-col"}
           >
             <h2 className={"font-semibold"}>
-              These are the Employees which are currently working in your branch
+              These are the Employees which are currently working in your company
             </h2>
-            <a href="get-emp/employee-registration">
+            {/* <a href="get-emp/employee-registration">
               <button
                 type="submit"
                 className={
@@ -101,11 +102,11 @@ export default function EmployeeDetails() {
                 </svg>
                 Add Employee
               </button>
-            </a>
+            </a> */}
           </div>
           <ul role="list" className="divide-y divide-gray-100 mr-6">
             {empData.map((person: any, id: number) => (
-              <a href={`/adm-dash/get-emp/${empData[id].emp_id}`} key={id}>
+              <Link href={`/adm-dash/get-emp/${empData[id].emp_id}`} key={id}>
                 <li className="flex justify-between gap-x-5 py-5">
                   <div className="flex min-w-0 gap-x-4">
                     <img
@@ -145,7 +146,7 @@ export default function EmployeeDetails() {
                     )}
                   </div>
                 </li>
-              </a>
+              </Link>
             ))}
             <Pagination className={"mt-3"}>
               <PaginationContent>
