@@ -16,6 +16,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -36,11 +38,20 @@ public class TeamDetails {
     private String team_id;
     private String team_name;
     private String team_desc;
+
     @ElementCollection
     @CollectionTable(name = "team_members", joinColumns = @jakarta.persistence.JoinColumn(name = "team_id"))
     @Column(name = "member")
     private List<String> team_members;
 
+    // one team will have multiple tasks
+    @ManyToMany
+    @JoinTable(
+        name = "team_tasks",
+        joinColumns = @JoinColumn(name = "team_id"),
+        inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<TaskDetails> tasks; // Adjusted to match TaskDetails entity
 
     // @ElementCollection
     // @CollectionTable(name = "team_task", joinColumns = @jakarta.persistence.JoinColumn(name = "team_id"))

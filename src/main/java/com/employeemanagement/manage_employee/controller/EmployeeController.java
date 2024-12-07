@@ -25,9 +25,11 @@ import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.entity.TaskDetails;
+import com.employeemanagement.manage_employee.entity.TeamDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
+import com.employeemanagement.manage_employee.repository.TeamInfo;
 import com.employeemanagement.manage_employee.response.EmployeeRegisterResponse;
 import com.employeemanagement.manage_employee.services.EmailService;
 import com.employeemanagement.manage_employee.services.OtpCodeGenerator;
@@ -51,6 +53,8 @@ public class EmployeeController {
 
     @Autowired
     private TaskInfo taskInfo;
+    @Autowired
+    private TeamInfo teamInfo;
 
     // Adding a new employee to the database
     @PostMapping("/register")
@@ -129,16 +133,19 @@ public class EmployeeController {
     }
 
     @PostMapping("/assign-task")
-    public ResponseEntity<?> assignTaskToEmployee(@RequestBody List<String> task_id, @RequestParam String email) {
+    public ResponseEntity<?> assignTaskToEmployee(@RequestBody List<String> task_id, @RequestParam String email,@RequestParam String team_id) {
         //TODO: process POST request
         try {
-            if (task_id.isEmpty()) {
+            if (task_id.isEmpty() || team_id.isEmpty()) {
                 return ResponseEntity.status(400).body("Task id cannot be empty");
             }else{
                 EmployeeDetails emp = employeeInfo.findByEmail(email);
+                TeamDetails team = teamInfo.findById(team_id).get();
                 List<TaskDetails> tasks = (List<TaskDetails>) taskInfo.findAllById(task_id);
                 emp.getTasks().addAll(tasks);
+                team.getTasks().addAll(tasks);
                 employeeInfo.save(emp);
+                teamInfo.save(team);
                 logger.log(Level.INFO, "Task assigned to Employee successfully -> {}", emp);
                 return ResponseEntity.status(200).body("Task assigned to Employee successfully -> " + emp);
             }
@@ -149,6 +156,19 @@ public class EmployeeController {
             return ResponseEntity.status(500).body("Error in assigning task -> " + e);
         }
         
+    }
+
+    // Fetching all the tasks assigned to an employee
+    @GetMapping("/get-tasks")
+    public ResponseEntity<?> getEmployeeTasks(@RequestParam String task_id) {
+        List<EmployeeDetails> emp = employeeInfo.findByTaskId(task_id);
+        if (emp != null) {    
+            logger.log(Level.INFO, "Tasks of employee -> {}", emp);
+            return ResponseEntity.status(200).body(emp);
+        } else {
+            logger.log(Level.WARNING, "Employee not found");
+            return ResponseEntity.status(404).body("Employee not found");
+        }
     }
     
 }

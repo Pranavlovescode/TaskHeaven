@@ -46,7 +46,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    console.log("New task:", { title, description, status });
+    console.log("New task:", { teamId,title, description, status });
   
     try {
       // Add task to the database
@@ -82,6 +82,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
             {
               params: {
                 email: assignee,
+                team_id: teamId,
               },
               headers: {
                 "Content-Type": "application/json",

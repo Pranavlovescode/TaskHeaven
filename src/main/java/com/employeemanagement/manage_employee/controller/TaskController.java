@@ -8,7 +8,9 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +23,8 @@ import com.employeemanagement.manage_employee.repository.AdminInfo;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
+import com.employeemanagement.manage_employee.repository.TeamInfo;
 import com.employeemanagement.manage_employee.response.TaskAssignmentResponse;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -39,14 +39,17 @@ public class TaskController {
     private EmployeeInfo employee;
     @Autowired
     private AdminInfo admin;
+    @Autowired
+    private TeamInfo teamInfo;
 
     // Adding task to the database along with reference to manager
     @PostMapping()
-    public ResponseEntity<?> addWork(@RequestBody TaskDetails taskDetails, @RequestParam String mng_id) {
+    public ResponseEntity<?> addTask(@RequestBody TaskDetails taskDetails, @RequestParam String mng_id) {
         try {
             Date date = new Date();
             taskDetails.setAlloted_time(new Timestamp(date.getTime()));
-            ManagerDetails mng = manager.findById(mng_id).get();
+            ManagerDetails mng = manager.findById(mng_id).get();            
+
             taskDetails.setManagerDetails(mng);
             taskInfo.save(taskDetails);
             logger.log(Level.INFO, "Task added successfully->{0}", taskDetails);

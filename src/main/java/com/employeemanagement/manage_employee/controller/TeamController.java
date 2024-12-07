@@ -63,6 +63,14 @@ public class TeamController {
     public ResponseEntity<?> getTeams() {
         return ResponseEntity.status(200).body(teamInfo.findAll());
     }
+
+    // This route will return all the tasks assigned to the team
+    @GetMapping("/tasks")
+    public ResponseEntity<?> getTeamTasks(@RequestParam String team_id) {
+        TeamDetails team = teamInfo.findById(team_id).get();
+        logger.log(Level.INFO, "Tasks of team -> {0}", team.getTasks());
+        return ResponseEntity.status(200).body(team.getTasks());
+    }
     
     
 

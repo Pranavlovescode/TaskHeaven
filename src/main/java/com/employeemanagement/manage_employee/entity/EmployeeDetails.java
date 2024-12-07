@@ -16,8 +16,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
 @Getter
 @Setter
 @Entity
@@ -37,9 +35,10 @@ public class EmployeeDetails  {
     @JoinColumn(name="task_id")
     private TaskDetails taskDetails;
 
+    // One employee can have multiple tasks
     @ManyToMany
     @JoinTable(
-        name = "team_task",
+        name = "employee_tasks",
         joinColumns = @JoinColumn(name = "emp_id"),
         inverseJoinColumns = @JoinColumn(name = "task_id")
     )
