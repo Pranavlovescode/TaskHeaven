@@ -19,11 +19,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+
 
 
 
 export default function page() {
   // const [otp, setOtp] = useState("");
+  const toast = useToast();
   const [inputOtp, setInputOtp] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const navigate = useRouter();
@@ -43,8 +46,18 @@ export default function page() {
       console.log(data);
       // localStorage.setItem("auth_data", JSON.stringify(data));
       alert("Email Verified Successfully");
+      toast.toast({
+        title: "Email Verified Successfully",
+        description: "You can now login to your account",  
+      })
       navigate.push("/");
-    } else alert("Invalid OTP");
+    } else{
+      alert("Invalid OTP");
+      toast.toast({
+        title: "Invalid OTP",
+        description: "Please enter a valid OTP",
+      });
+    };
   };
   return (
     <>

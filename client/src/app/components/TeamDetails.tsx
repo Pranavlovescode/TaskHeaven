@@ -53,6 +53,7 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
     const teamDetails = getTeamDetails(teamId, localStorageTeams);
     console.log("Team details",teamDetails);      // For debugging purposes
     setTeam(teamDetails);
+    localStorage.setItem("selected-team", JSON.stringify(teamDetails));
   }, [teamId]);
 
   if (!team) {

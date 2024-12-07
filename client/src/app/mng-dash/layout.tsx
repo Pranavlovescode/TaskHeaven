@@ -8,6 +8,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 import LogoutMessage from "../components/LogoutMessage";
 import ManagerDashboard from "./page";
+import { Toaster } from "@/components/ui/toaster";
 
 // type tokenInfo={
 //     exp:number
@@ -98,6 +99,7 @@ const Manager = ({children}:any) => {
           <Header  name={data.managerDetails.name} email={data.managerDetails.mngemail} />
           {/* <Sidebar /> */}
           <main>{children}</main>
+          {/* <Toaster/> */}
         </>
       )}
     </>

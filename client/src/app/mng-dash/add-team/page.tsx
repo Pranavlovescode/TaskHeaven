@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, X } from "lucide-react";
 import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 type Team = {
   team_name: string;
@@ -25,6 +26,7 @@ type Team = {
 };
 
 export default function CreateTeam() {
+  const toast = useToast();
   const [teamName, setTeamName] = useState("");
   const [description, setDescription] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
@@ -69,9 +71,20 @@ export default function CreateTeam() {
       const teamData = response.data;
       console.log("Response data", teamData);
       alert("Team created successfully");
-      
+      toast.toast({
+        title: "Team created successfully",
+        description: "You can now assign tasks to your team members",
+      });
+      setTeamName("");
+      setDescription("");
+      setMembers([]);      
     } catch (error) {
       console.error("Error creating team", error);
+      alert("Error creating team");
+      toast.toast({
+        title: "Error creating team",
+        description: "Please try again",
+      });
     }
   };
 

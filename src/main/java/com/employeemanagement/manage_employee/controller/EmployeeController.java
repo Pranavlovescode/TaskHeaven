@@ -129,13 +129,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/assign-task")
-    public ResponseEntity<?> assignTaskToEmployee(@RequestBody List<String> task_id, @RequestParam String emp_id) {
+    public ResponseEntity<?> assignTaskToEmployee(@RequestBody List<String> task_id, @RequestParam String email) {
         //TODO: process POST request
         try {
             if (task_id.isEmpty()) {
                 return ResponseEntity.status(400).body("Task id cannot be empty");
             }else{
-                EmployeeDetails emp = employeeInfo.findById(emp_id).get();
+                EmployeeDetails emp = employeeInfo.findByEmail(email);
                 List<TaskDetails> tasks = (List<TaskDetails>) taskInfo.findAllById(task_id);
                 emp.getTasks().addAll(tasks);
                 employeeInfo.save(emp);

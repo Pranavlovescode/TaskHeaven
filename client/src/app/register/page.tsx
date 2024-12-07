@@ -33,6 +33,7 @@ import { SelectGroup, SelectLabel, Value } from "@radix-ui/react-select";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import LogoutMessage from "@/app/components/LogoutMessage";
+import { useToast } from "@/hooks/use-toast";
 
 type Form = {
   hr_name: string;
@@ -48,6 +49,7 @@ type Form = {
 };
 
 function EmpRegistration() {
+  const toast = useToast();
   const token = localStorage.getItem("user");
   const tokenParse = token ? JSON.parse(token) : null;
   const [open, setOpen] = React.useState<boolean>(true);
@@ -89,15 +91,28 @@ function EmpRegistration() {
         console.log(response);
         if (response.status === 201) {
           alert("User Created Successfully");
+          toast.toast({
+            title: "User Created Successfully",
+            description: "We are happy to have you on board",
+          });
           navigate.push("/");
         }
         alert("User Created Successfully");
         navigate.push("/");
       } catch (e) {
+        alert("User Creation Failed");
+        toast.toast({
+          title: "User Creation Failed",
+          description: "Please try again later"
+        })
         console.log(e);
       }
     } else {
       alert("Password and Confirm Password does not match");
+      toast.toast({
+        title: "Password and Confirm Password does not match",
+        description: "Please try again"
+      })
     }
   };
 

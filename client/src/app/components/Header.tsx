@@ -164,10 +164,10 @@ const Header = ({name,email}:any) => {
               </div>
             </nav>
           </header>
-          <div className="absolute z-50 right-2.5 mt-12">
+          <div className="absolute z-50 right-2.5">
             {toggle && (
               <div
-                className=" z-50 my-1 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-2xl dark:bg-gray-700 dark:divide-gray-600"
+                className="z-50 my-1 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-2xl dark:bg-gray-700 dark:divide-gray-600"
                 id="dropdown"
               >
                 <div className="py-3 px-4">
