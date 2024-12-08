@@ -4,40 +4,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-async function getTeamTasks(teamId: string) {
-  // This is a mock function. In a real application, you would fetch this data from your API or database.
-  return [
-    {
-      id: 1,
-      title: "Implement user authentication",
-      status: "In Progress",
-      assignee: "John Doe",
-    },
-    {
-      id: 2,
-      title: "Design new landing page",
-      status: "Pending",
-      assignee: "Bob Johnson",
-    },
-    {
-      id: 3,
-      title: "Optimize database queries",
-      status: "Completed",
-      assignee: "Jane Smith",
-    },
-    {
-      id: 4,
-      title: "Write API documentation",
-      status: "In Progress",
-      assignee: "Jane Smith",
-    },
-  ];
-}
+type Task={
+  taskId: string;
+  taskName: string;
+  taskDescription: string;
+  status: string;
+  employeeId: string;
+  employeeName: string;
+  employeeEmail: string;
+  allotedTime:Date;
+  completionTime:Date;
+}[]
+
 
 export default function TaskList({ teamId }: { teamId: string }) {
-  const tasks = getTeamTasks(teamId);
+  const [tasks, setTasks] = useState<Task>([{
+    taskId: "",
+    taskName: "",
+    taskDescription: "",
+    status: "",
+    employeeId: "",
+    employeeName: "",
+    employeeEmail: "",
+    allotedTime:new Date(),
+    completionTime:new Date()
+  }]);
+
   const toast = useToast();
   const getTasksForATeam = async () => {
     try {
@@ -53,9 +47,7 @@ export default function TaskList({ teamId }: { teamId: string }) {
           },
         }
       );
-      // const tasksData = tasks.data.task_id;
-      // const tasksDataArray = [];
-      // tasksDataArray.push(tasks.data)
+      setTasks(tasks.data);
       console.log("Tasks for team",tasks.data);
     } catch (error) {
       console.error("Error fetching tasks for team", error);
@@ -76,32 +68,38 @@ export default function TaskList({ teamId }: { teamId: string }) {
         <CardTitle>Team Tasks</CardTitle>
       </CardHeader>
       <CardContent>
-        {/* <div className="space-y-4">
+        <div className="space-y-4">
           {tasks.map((task) => (
             <div
-              key={task.id}
+              key={task.taskId}
               className="flex items-center justify-between p-4 border rounded-lg"
             >
               <div>
-                <h3 className="font-medium">{task.title}</h3>
+                <h3 className="font-medium">{task.taskName}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Assigned to: {task.assignee}
+                  Assigned to: {task.employeeName}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Alloted Time: {new Date(task.allotedTime).toDateString()}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Completion Time: {task.completionTime ? new Date(task.completionTime).toDateString() : "Not completed"}
                 </p>
               </div>
               <Badge
                 className={
                   task.status === "Completed"
-                    ? "bg-green-500"
+                    ? "bg-green-500 hover:bg-green-600"
                     : task.status === "In Progress"
-                      ? "bg-orange-400"
-                      : "bg-red-600"
+                      ? "bg-orange-400 hover:"
+                      : "bg-red-600 hover:bg-red-700"
                 }
               >
-                {task.status}
+                {task.status.toLowerCase()}
               </Badge>
             </div>
           ))}
-        </div> */}
+        </div>
       </CardContent>
     </Card>
   );

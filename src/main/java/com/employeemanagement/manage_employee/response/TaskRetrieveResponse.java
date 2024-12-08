@@ -6,6 +6,9 @@
 package com.employeemanagement.manage_employee.response;
 
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,8 +27,10 @@ public class TaskRetrieveResponse {
     private String employeeEmail;
     private String employeeName;
     private String EmployeeId;
+    private Timestamp allotedTime;
+    private Timestamp completionTime;
 
-    public TaskRetrieveResponse(String taskId, String taskName, String taskDescription, String status,String employeeEmail,String employeeName,String EmployeeId) {
+    public TaskRetrieveResponse(String taskId, String taskName, String taskDescription, String status,String employeeEmail,String employeeName,String EmployeeId,Timestamp allotedTime,Timestamp completionTime) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
@@ -33,6 +38,8 @@ public class TaskRetrieveResponse {
         this.employeeEmail = employeeEmail;
         this.employeeName = employeeName;
         this.EmployeeId = EmployeeId;
+        this.allotedTime = allotedTime;
+        this.completionTime = completionTime;
     }
 
 }

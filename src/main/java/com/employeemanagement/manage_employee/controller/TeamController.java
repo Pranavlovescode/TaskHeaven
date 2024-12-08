@@ -87,7 +87,9 @@ public class TeamController {
                 task.getStatus(),
                 employee.getEmail(),
                 employee.getName(),
-                employee.getEmp_id()
+                employee.getEmp_id(),
+                task.getAlloted_time(),
+                task.getCompletion_time()
             );
 
             taskArray.add(taskResponse);

@@ -70,7 +70,7 @@ export default function CreateTeam() {
       );
       const teamData = response.data;
       console.log("Response data", teamData);
-      alert("Team created successfully");
+      // alert("Team created successfully");
       toast.toast({
         title: "Team created successfully",
         description: "You can now assign tasks to your team members",
@@ -80,7 +80,7 @@ export default function CreateTeam() {
       setMembers([]);      
     } catch (error) {
       console.error("Error creating team", error);
-      alert("Error creating team");
+      // alert("Error creating team");
       toast.toast({
         title: "Error creating team",
         description: "Please try again",
