@@ -158,17 +158,5 @@ public class EmployeeController {
         
     }
 
-    // Fetching all the tasks assigned to an employee
-    @GetMapping("/get-tasks")
-    public ResponseEntity<?> getEmployeeTasks(@RequestParam String task_id) {
-        List<EmployeeDetails> emp = employeeInfo.findByTaskId(task_id);
-        if (emp != null) {    
-            logger.log(Level.INFO, "Tasks of employee -> {}", emp);
-            return ResponseEntity.status(200).body(emp);
-        } else {
-            logger.log(Level.WARNING, "Employee not found");
-            return ResponseEntity.status(404).body("Employee not found");
-        }
-    }
-    
+ 
 }

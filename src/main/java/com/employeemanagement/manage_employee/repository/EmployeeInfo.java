@@ -16,5 +16,5 @@ public interface EmployeeInfo
     EmployeeDetails findByPassword(String password);
 
     @Query("SELECT e FROM EmployeeDetails e JOIN e.tasks t WHERE t.task_id = :task_id")
-    List<EmployeeDetails> findByTaskId(@Param("task_id") String taskId);
+    EmployeeDetails findByTaskId(@Param("task_id") String taskId);
 }

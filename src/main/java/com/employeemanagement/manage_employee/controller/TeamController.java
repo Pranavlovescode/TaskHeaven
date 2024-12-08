@@ -5,6 +5,9 @@
 
 package com.employeemanagement.manage_employee.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.employeemanagement.manage_employee.entity.EmployeeDetails;
+import com.employeemanagement.manage_employee.entity.TaskDetails;
 import com.employeemanagement.manage_employee.entity.TeamDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
 import com.employeemanagement.manage_employee.repository.TeamInfo;
+import com.employeemanagement.manage_employee.response.TaskRetrieveResponse;
 
 
 
@@ -68,10 +74,33 @@ public class TeamController {
     @GetMapping("/tasks")
     public ResponseEntity<?> getTeamTasks(@RequestParam String team_id) {
         TeamDetails team = teamInfo.findById(team_id).get();
-        logger.log(Level.INFO, "Tasks of team -> {0}", team.getTasks());
-        return ResponseEntity.status(200).body(team.getTasks());
-    }
-    
+        // HashMap<String,TaskRetrieveResponse> response = new HashMap<>();
+        ArrayList<TaskRetrieveResponse> taskArray = new ArrayList<>();
+        team.getTasks().forEach(task -> {
+
+            EmployeeDetails employee = employeeInfo.findByTaskId(task.getTask_id());
+
+            TaskRetrieveResponse taskResponse = new TaskRetrieveResponse(
+                task.getTask_id(),
+                task.getTask_name(),
+                task.getTask_description(),
+                task.getStatus(),
+                employee.getEmail(),
+                employee.getName(),
+                employee.getEmp_id()
+            );
+
+            taskArray.add(taskResponse);
+            
+        });
+
+        // ArrayList<?> taskResponse = new ArrayList<>();
+        // taskResponse.addAll(response);
+        
+        
+        logger.log(Level.INFO, "Tasks of team -> {0}", taskArray);
+        return ResponseEntity.status(200).body(taskArray);
+    }   
     
 
 }
