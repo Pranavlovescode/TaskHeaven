@@ -184,12 +184,12 @@ export default function ManagerDashboard() {
           {/* <Button variant="outline">
             <Link href={"/mng-dash/add-team"}>Create a Team</Link>
           </Button> */}
-          <Button
+          {/* <Button
             variant="secondary"
             className="bg-gray-400 text-white hover:bg-gray-500 duration-300"
           >
             Add Payroll
-          </Button>
+          </Button> */}
         </div>
       </div>
 

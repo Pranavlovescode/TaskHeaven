@@ -175,7 +175,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
               </SelectContent>
             </Select>
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full bg-gray-800 hover:bg-gray-600 duration-300">
             Add Task
           </Button>
         </form>
