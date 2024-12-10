@@ -63,7 +63,7 @@ export default function TaskList({ teamId }: { teamId: string }) {
   },[])
 
   return (
-    <Card>
+    <Card className="bg-gray-50">
       <CardHeader>
         <CardTitle>Team Tasks</CardTitle>
       </CardHeader>

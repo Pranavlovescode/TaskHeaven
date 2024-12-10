@@ -65,7 +65,7 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
   }
 
   return (
-    <Card>
+    <Card className="bg-gray-50">
       <CardHeader>
         <CardTitle>{team.name}</CardTitle>
       </CardHeader>

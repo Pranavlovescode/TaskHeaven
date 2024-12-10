@@ -23,7 +23,17 @@ import {
 import Link from "next/link";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { loadBindings } from "next/dist/build/swc";
+import { Progress } from "@/components/ui/progress";
+import {
+  BarChart3,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  FileText,
+  PieChart,
+  Users,
+} from "lucide-react";
+import LeaveManagementDashboard from "../components/LeaveManagement";
 
 // Register required Chart.js components
 ChartJS.register(
@@ -37,8 +47,8 @@ ChartJS.register(
 
 type Team = {
   team_id: string;
-  team_name: string 
-  mng_id: string
+  team_name: string;
+  mng_id: string;
   members: string[];
 }[];
 
@@ -107,30 +117,6 @@ export default function ManagerDashboard() {
     "Saturday",
   ];
 
-  const teams = [
-    {
-      id: 1,
-      name: "Marketing Team",
-      members: [
-        "/path/to/image1.jpg",
-        "/path/to/image2.jpg",
-        "/path/to/image3.jpg",
-        "+10",
-      ],
-    },
-    {
-      id: 2,
-      name: "Development Team",
-      members: [
-        "/path/to/image4.jpg",
-        "/path/to/image5.jpg",
-        "/path/to/image6.jpg",
-        "+5",
-      ],
-    },
-    // Add more team data as needed
-  ];
-
   const [getTeams, setTeams] = React.useState<Team>([]);
 
   const currentDay = dayNames[new Date().getDay()];
@@ -152,7 +138,7 @@ export default function ManagerDashboard() {
         }
       );
       const data = response.data;
-      localStorage.setItem('teams', JSON.stringify(data));
+      localStorage.setItem("teams", JSON.stringify(data));
       setTeams(
         data.map(
           (team: {
@@ -177,32 +163,40 @@ export default function ManagerDashboard() {
   // console.log(getTeams);
 
   return (
-    <div className="bg-slate-50 space-y-6 md:p-12 md:pl-20">
+    <div className="bg-gray-200 space-y-6 md:p-12 md:pl-20 mt-[52px]">
       {/* Header Section */}
       <div className="flex justify-between items-center py-4">
         <div>
-          <h1 className="text-2xl font-semibold">Hello, {JSON.parse(localStorage.getItem("user") || "{}")
-                            .managerDetails.name || " "}</h1>
+          <h1 className="text-2xl font-semibold">
+            Hello,{" "}
+            {JSON.parse(localStorage.getItem("user") || "{}").managerDetails
+              .name || " "}
+          </h1>
           <p className="text-sm text-gray-500">
             It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
             {new Date().getUTCFullYear()}
           </p>
         </div>
         <div className="flex gap-2">
-          <Button>
+          <Button className="bg-gray-800">
             <Link href={"/mng-dash/add-team"}>Create a Team</Link>
           </Button>
           {/* <Button variant="outline">
             <Link href={"/mng-dash/add-team"}>Create a Team</Link>
           </Button> */}
-          <Button variant="secondary">Add Payroll</Button>
+          <Button
+            variant="secondary"
+            className="bg-gray-400 text-white hover:bg-gray-500 duration-300"
+          >
+            Add Payroll
+          </Button>
         </div>
       </div>
 
       {/* Dashboard Content */}
       <div className="grid grid-cols-3 gap-6">
         {/* Performance Metrics */}
-        <Card>
+        <Card className="bg-gray-50">
           <CardHeader>
             <CardTitle>Teams</CardTitle>
           </CardHeader>
@@ -214,7 +208,9 @@ export default function ManagerDashboard() {
                 </TableCaption>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="font-bold md:w-[250px]">Team Name</TableCell>
+                    <TableCell className="font-bold md:w-[250px]">
+                      Team Name
+                    </TableCell>
                     <TableCell className="font-bold">No. of Members</TableCell>
                   </TableRow>
                 </TableHead>
@@ -227,25 +223,32 @@ export default function ManagerDashboard() {
                             .managerDetails.mng_id || " "
                     )
                     .map((team) => (
-                      <Link href={`mng-dash/team-info/${team.team_id}`} className="w-full">
+                      <Link
+                        href={`mng-dash/team-info/${team.team_id}`}
+                        className="w-full"
+                      >
                         <TableRow
                           key={team.team_id}
                           className="hover:bg-gray-100 w-full"
                         >
-                          <TableCell className="md:w-[250px]">{team.team_name}</TableCell>
+                          <TableCell className="md:w-[250px]">
+                            {team.team_name}
+                          </TableCell>
                           <TableCell className="text-left">
-                            <div className="flex items-center justify-start space-x-2">
+                            <div className="flex items-center justify-start space-x-2 w-full">
                               {team.members &&
-                                team.members.slice(0, 3).map((member, index) => (
-                                  <Avatar className="h-6 w-6" key={index}>
-                                    <AvatarImage
-                                      src={`https://api.dicebear.com/6.x/initials/svg?seed=${member}`}
-                                    />
-                                    <AvatarFallback>
-                                      {member[0].toUpperCase()}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                ))}
+                                team.members
+                                  .slice(0, 3)
+                                  .map((member, index) => (
+                                    <Avatar className="h-6 w-6" key={index}>
+                                      <AvatarImage
+                                        src={`https://api.dicebear.com/6.x/initials/svg?seed=${member}`}
+                                      />
+                                      <AvatarFallback>
+                                        {member[0].toUpperCase()}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                  ))}
                               {team.members && team.members.length > 3 && (
                                 <div className="w-8 h-8 rounded-full bg-gray-300 text-center text-sm font-medium flex items-center justify-center -ml-2 shadow-md">
                                   {team.members.length - 3}+
@@ -263,9 +266,9 @@ export default function ManagerDashboard() {
         </Card>
 
         {/* Task List */}
-        <div className="col-span-2 grid grid-cols-2 gap-4">
+        {/* <div className="col-span-2 grid grid-cols-2 gap-4">
           {tasks.map((task, index) => (
-            <Card key={index}>
+            <Card key={index} className="bg-gray-50">
               <CardHeader>
                 <CardTitle>{task.title}</CardTitle>
               </CardHeader>
@@ -276,37 +279,161 @@ export default function ManagerDashboard() {
               </CardContent>
             </Card>
           ))}
+        </div> */}
+        <div className="col-span-2 grid grid-cols-2 gap-4">
+          {/* Task Overview */}
+          <Card className="bg-gray-50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Task Overview
+              </CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm font-medium">Completed Tasks</p>
+                  <Progress value={66} className="mt-2 bg-gray-200" />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    66% (120/180 tasks)
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">In Progress</p>
+                  <Progress value={25} className="mt-2 bg-gray-200" />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    25% (45/180 tasks)
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Team Performance */}
+          <Card className="bg-gray-50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Team Performance
+              </CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">
+                      Requirements Team Alpha
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      92% efficiency
+                    </p>
+                  </div>
+                  <PieChart className="h-4 w-4 text-green-500" />
+                </div>
+                <div className="flex items-center">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Development Team</p>
+                    <p className="text-xs text-muted-foreground">
+                      87% efficiency
+                    </p>
+                  </div>
+                  <PieChart className="h-4 w-4 text-blue-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Upcoming Deadlines */}
+          <Card className="bg-gray-50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Upcoming Deadlines
+              </CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 text-orange-500 mr-2" />
+                  <div>
+                    <p className="text-sm font-medium">Project Alpha Review</p>
+                    <p className="text-xs text-muted-foreground">
+                      Due in 2 days
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 text-red-500 mr-2" />
+                  <div>
+                    <p className="text-sm font-medium">Sprint Planning</p>
+                    <p className="text-xs text-muted-foreground">
+                      Due tomorrow
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Team Activity */}
+          <Card className="bg-gray-50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Recent Activity
+              </CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                  <div>
+                    <p className="text-sm">New team member added</p>
+                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                  <div>
+                    <p className="text-sm">Project milestone completed</p>
+                    <p className="text-xs text-muted-foreground">5 hours ago</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Attendance Table */}
-      <div className="w-full">
-        <Card className="w-full">
+      {/* <div className="w-full">
+        <Card className="w-full bg-gray-50">
           <CardHeader>
-            <CardTitle>Employer Attendance</CardTitle>
+            <CardTitle>Leave Management</CardTitle>
           </CardHeader>
           <CardContent>
             <Table className="mt-4 ">
-              <TableHead className="">
-                <TableRow>
-                  <TableHead>Employee ID</TableHead>
-                  <TableHead>Full Name</TableHead>
-                  <TableHead>Status</TableHead>
+              <TableHead className="w-full">
+                <TableRow className="w-full">
+                  <TableHead className="w-full">Employee ID</TableHead>
+                  <TableHead className="w-full">Full Name</TableHead>
+                  <TableHead className="w-full">Status</TableHead>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {employees.map((employee, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{employee.id}</TableCell>
-                    <TableCell>{employee.name}</TableCell>
-                    <TableCell>{employee.status}</TableCell>
+                  <TableRow key={index} className="w-full">
+                    <TableCell className="w-full">{employee.id}</TableCell>
+                    <TableCell className="w-full">{employee.name}</TableCell>
+                    <TableCell className="w-full">{employee.status}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
-      </div>
+      </div>  */}
+      <LeaveManagementDashboard />
     </div>
   );
 }

@@ -66,7 +66,7 @@ const Header = ({name,email}:any) => {
       {token ? (
         <>
           <header className="antialiased">
-            <nav className="bg-gray-200 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 fixed w-full z-50 top-0">
+            <nav className="bg-gray-800 border-gray-200 px-4 lg:px-6 py-2.5 fixed w-full z-50 top-0 text-gray-100">
               <div className="flex flex-wrap justify-between items-center">
                 <div className="flex justify-start items-center ">
                   {/*<button*/}
@@ -98,7 +98,7 @@ const Header = ({name,email}:any) => {
                       alt="FlowBite Logo"
                     />
                     <span className="self-center text-2xl font-bold whitespace-nowrap dark:text-white">
-                      Company X
+                      TaskHeaven
                     </span>
                   </p>
                 </div>
@@ -167,7 +167,7 @@ const Header = ({name,email}:any) => {
           <div className="absolute z-50 right-2.5">
             {toggle && (
               <div
-                className="z-50 my-1 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-2xl dark:bg-gray-700 dark:divide-gray-600"
+                className="sticky  z-50 my-1 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-2xl dark:bg-gray-700 dark:divide-gray-600"
                 id="dropdown"
               >
                 <div className="py-3 px-4">

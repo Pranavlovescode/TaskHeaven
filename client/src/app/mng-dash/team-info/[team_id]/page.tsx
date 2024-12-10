@@ -13,7 +13,7 @@ export default function TeamPage() {
   const params = useParams<{team_id:string}>()
   console.log(params.team_id)
     return (
-        <div className="min-h-screen bg-gray-50 mt-[52px]">
+        <div className="min-h-screen bg-gray-200 mt-[52px]">
         <div className="container mx-auto p-4 max-w-7xl">
           <Link href="/mng-dash">
             <Button variant="ghost" size="sm" className="mb-4 text-muted-foreground hover:text-foreground">

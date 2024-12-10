@@ -126,7 +126,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
     // console.log("team",team)
   }, []);
   return (
-    <Card>
+    <Card className="bg-gray-50">
       <CardHeader>
         <CardTitle>Add New Task</CardTitle>
       </CardHeader>

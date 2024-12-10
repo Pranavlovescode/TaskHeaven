@@ -126,8 +126,8 @@ export default function CreateTeam() {
   console.log(employee);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl bg-gray-50">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Create Your Team</CardTitle>
           <CardDescription>
@@ -163,11 +163,12 @@ export default function CreateTeam() {
             </label>
             <div className="flex space-x-2">
               <Select
+                className="w-full"
                 options={employee}
                 value={employee.find((emp) => emp.value === memberEmail)}
                 onChange={(option: { label: string; value: string } | null) => setMemberEmail(option?.value || "")}
               />
-              <Button onClick={addMember} size="icon">
+              <Button onClick={addMember} className="bg-gray-800" size="icon">
                 <PlusCircle className="h-4 w-4" />
               </Button>
             </div>
@@ -204,7 +205,7 @@ export default function CreateTeam() {
           )}
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={createTeam}>
+          <Button className="w-full bg-gray-800" onClick={createTeam}>
             Create Team
           </Button>
         </CardFooter>

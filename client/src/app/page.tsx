@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 type Form = {
   email: string;
@@ -26,6 +27,7 @@ export default function Home() {
     email: "",
     password: "",
   });
+  const toast = useToast();
   const navigate = useRouter();
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,19 +48,36 @@ export default function Home() {
       // Debugging purpose
       // console.log("User data is as follows",JSON.parse(localStorage.getItem('user')!));
       if (user.hasOwnProperty("adminDetails")) {
+        toast.toast({
+          title: "Welcome Admin",
+          description: "You have successfully logged in",          
+        })
         navigate.push("/adm-dash");
       } else if (user.hasOwnProperty("employeeDetails")) {
+        toast.toast({
+          title: "Welcome Employee",
+          description: "You have successfully logged in",          
+        })
         navigate.push("/emp-dash");
       } else {
+        toast.toast({
+          title: "Welcome Manager",
+          description: "You have successfully logged in",
+        })
         navigate.push("/mng-dash");
       }
     } catch (e) {
       console.log(e);
+      toast.toast({
+        title: "Error",
+        description: "Invalid email or password",        
+      });
+      setFormInput({ email: "", password: "" });
     }
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      <main className="flex h-screen w-full items-center justify-center px-4">
+      <main className="bg-slate-50 flex h-screen w-full items-center justify-center px-4">
         <Card className="mx-auto max-w-sm">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
