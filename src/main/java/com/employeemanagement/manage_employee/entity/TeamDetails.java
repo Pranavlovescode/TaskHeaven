@@ -61,5 +61,6 @@ public class TeamDetails {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="mng_id")
     private ManagerDetails managerDetails;
+    
 
 }

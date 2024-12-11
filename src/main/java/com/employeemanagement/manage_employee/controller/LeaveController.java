@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +68,7 @@ public class LeaveController {
                 EmployeeDetails emp = employeeInfo.findByEmail(email);
                 leaveDetails.setEmployeeDetails(emp);
                 leaveInfo.save(leaveDetails);
-                emailService.sendEmail(email, "Leave message notified to Manager",
+                emailService.sendEmail(email, "manager@taskheaven.pranavtitambe.in","Leave message notified to Manager",
                         "Your Leave is notified to Manager. Please wait for the approval");
                 logger.log(Level.INFO, "Leave added successfully->{0}", leaveDetails);
                 return ResponseEntity.status(200).body(leaveDetails);
@@ -90,11 +89,11 @@ public class LeaveController {
             leaveInfo.save(leave);
             if (status.equals("Approved")) {
 
-                emailService.sendEmail(leave.getEmployeeDetails().getEmail(), "Leave Approved",
+                emailService.sendEmail(leave.getEmployeeDetails().getEmail(), "manager@taskheaven.pranavtitambe.in","Leave Approved",
                         "Your leave status has been changed to " + status);
             } else {
 
-                emailService.sendEmail(leave.getEmployeeDetails().getEmail(), "Leave Rejected",
+                emailService.sendEmail(leave.getEmployeeDetails().getEmail(), "manager@taskheaven.pranavtitambe.in","Leave Rejected",
                         "Your leave status has been changed to " + status);
             }
             logger.log(Level.INFO, "Leave status changed->{0}", leave);

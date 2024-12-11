@@ -35,7 +35,7 @@ public class RejectRegisteredUser {
     public ResponseEntity<?> rejectUserEntity(@PathVariable String id) {
         //TODO: process POST request
         HumanResourceData humanResourceData = humanResourceInfo.findById(id).get();
-        javaMailService.sendEmail(humanResourceData.getHremail(), "Registration Rejected", "Your registration has been rejected by the admin. Please contact the admin for more details.");
+        javaMailService.sendEmail(humanResourceData.getHremail(), "admin@taskheaven.pranavtitambe.in","Registration Rejected", "Your registration has been rejected by the admin. Please contact the admin for more details.");
         return ResponseEntity.status(200).body("User Rejected");
     }
     

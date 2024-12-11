@@ -69,7 +69,7 @@ public class EmployeeController {
         String otp = otpGenerator.generateOTP();
         try {
             int decider = 0;
-            javaMailService.sendEmail(employeeDetails.getEmail(), "Verification Complete",
+            javaMailService.sendEmail(employeeDetails.getEmail(),"admin@taskheaven.pranavtitambe.in", "Verification Complete",
                     "You have been successfully verified as an employee. Now click on link to verify your email. http://localhost:3000/register/verify-email. Your OTP for verification is "
                             + otp);
             decider = 1;

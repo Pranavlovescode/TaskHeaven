@@ -80,7 +80,7 @@ public class HumanResourceDataController {
         // OtpCodeGenerator otpGenerator = new OtpCodeGenerator();
         // String otp = otpGenerator.generateOTP();
         humanResourceInfo.save(humanResourceData);
-        javaMailService.sendEmail(humanResourceData.getHremail(), "Registration Complete",
+        javaMailService.sendEmail(humanResourceData.getHremail(), "admin@taskheaven.pranavtitambe.in","Registration Complete",
                 "Congratulations! You have successfully registered. Your registration will soon be verified by our HR team. Once the verification is successfull you will be notified to verify your email.");
 
         return new ResponseEntity<>(humanResourceData, null, 200);
@@ -134,6 +134,7 @@ public class HumanResourceDataController {
                     new Object[] { employeeDetails.getEmail(), otp, session.getId() });
             javaMailService.sendEmail(
                     employeeDetails.getEmail(),
+                    "admin@taskheaven.pranavtitambe.in",
                     "Verification Complete",
                     "You have been successfully verified as an " + humanResourceData.getHr_role() +
                             ". Now click on the link to verify your email: http://localhost:3000/register/verify-email. "
@@ -195,6 +196,7 @@ public class HumanResourceDataController {
             // Send email to manager
             javaMailService.sendEmail(
                     managerDetails.getMngemail(),
+                    "admin@taskheaven.pranavtitambe.in",
                     "Verification Complete",
                     "You have been successfully verified as an " + humanResourceData.getHr_role() +
                             ". Now click on the link to verify your email: http://localhost:3000/register/verify-email. "
