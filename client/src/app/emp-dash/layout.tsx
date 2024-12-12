@@ -2,30 +2,15 @@
 
 import React, { Children, ReactNode, useEffect, useState } from "react";
 import Header from "@/app/components/Header";
-import Sidebar from "@/app/components/Sidebar";
 import jsonwebtoken from "jsonwebtoken";
-
 import { useRouter } from "next/navigation";
 import LogoutMessage from "../components/LogoutMessage";
-import ManagerDashboard from "./page";
-import { Toaster } from "@/components/ui/toaster";
 
-// type tokenInfo={
-//     exp:number
-//     iat:number
-//     sub:string
-// }
-
-type ManagerDetails = {
-  name: string;
-  mngemail: string;
-};
-
-type ManagerData = {
+type EmployeeData = {
   token: string;
-  managerDetails: {
+  employeeDetails: {
     name: string;
-    mngemail: string;
+    email: string;
   };
   loginTimeDetails: object | null;
 };
@@ -34,12 +19,12 @@ interface AdminProps {
   children: ReactNode;
 }
 
-const Manager = ({children}:any) => {
-  const [data, setData] = useState<ManagerData>({
+const Employee = ({ children }: any) => {
+  const [data, setData] = useState<EmployeeData>({
     token: "",
-    managerDetails: {
+    employeeDetails: {
       name: "",
-      mngemail: "",
+      email: "",
     },
     loginTimeDetails: {},
   });
@@ -51,7 +36,7 @@ const Manager = ({children}:any) => {
       const parsedUser = JSON.parse(user!);
       setData({
         token: parsedUser.token,
-        managerDetails: parsedUser.managerDetails,
+        employeeDetails: parsedUser.employeeDetails,
         loginTimeDetails: parsedUser.loginTimeDetails,
       });
     }
@@ -102,9 +87,12 @@ const Manager = ({children}:any) => {
         </>
       ) : (
         <>
-          <Header  name={data.managerDetails.name} email={data.managerDetails.mngemail} />
+          <Header
+            name={data.employeeDetails.name}
+            email={data.employeeDetails.email}
+          />
           {/* <Sidebar /> */}
-          <main>{children}</main>
+          <main className="mt-[52px]">{children}</main>
           {/* <Toaster/> */}
         </>
       )}
@@ -112,4 +100,4 @@ const Manager = ({children}:any) => {
   );
 };
 
-export default Manager;
+export default Employee;
