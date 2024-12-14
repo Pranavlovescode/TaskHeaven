@@ -19,28 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.entity.TaskDetails;
-import com.employeemanagement.manage_employee.repository.AdminInfo;
-import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
-import com.employeemanagement.manage_employee.repository.TeamInfo;
 import com.employeemanagement.manage_employee.response.TaskAssignmentResponse;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/add-task")
 public class TaskController {
-    Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
+    static final Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
     @Autowired
     private TaskInfo taskInfo;
     @Autowired
     private ManagerInfo manager;
-    @Autowired
-    private EmployeeInfo employee;
-    @Autowired
-    private AdminInfo admin;
-    @Autowired
-    private TeamInfo teamInfo;
+    // @Autowired
+    // private EmployeeInfo employee;
+    // @Autowired
+    // private AdminInfo admin;
+    // @Autowired
+    // private TeamInfo teamInfo;
 
     // Adding task to the database along with reference to manager
     @PostMapping()

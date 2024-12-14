@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Card,
   CardContent,
@@ -9,23 +9,44 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, CheckCircle2, Clock, FileText } from "lucide-react";
+import { useEffect } from "react";
+import { Separator } from "@radix-ui/react-select";
+import Link from "next/link";
 
-export default function EmployeeDashboard() {
+type Tasks = {
+  task_id: string;
+  task_name: string;
+  task_description: string;
+  status: string;
+  alloted_time: Date;
+  completed_time: Date;
+  due_date: Date;
+};
+
+export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
+  console.log("This is task from props", task);
+  useEffect(() => {}, [task]);
+
+  const total = task.length;
+  const completed = task.filter((task) => task.status === "completed").length;
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Tasks Overview</CardTitle>
           <FileText className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">5/8</div>
+          <div className="text-2xl font-bold">
+            {completed} / {total}
+          </div>
           <p className="text-xs text-muted-foreground">Tasks completed</p>
-          <Progress value={62.5} className="mt-2" />
+          <Progress value={completed / total} className="mt-2 bg-gray-200" />
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Leave Balance</CardTitle>
           <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -38,7 +59,7 @@ export default function EmployeeDashboard() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             Upcoming Meetings
@@ -51,7 +72,7 @@ export default function EmployeeDashboard() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             Recent Notifications
@@ -72,30 +93,45 @@ export default function EmployeeDashboard() {
         </CardContent>
       </Card>
 
-      <Card className="md:col-span-2">
+      <Card className="md:col-span-2 bg-gray-50">
         <CardHeader>
           <CardTitle>Current Tasks</CardTitle>
           <CardDescription>Your assigned tasks for this week</CardDescription>
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
-            <li className="flex items-center justify-between">
-              <span>Complete project proposal</span>
-              <Badge>High Priority</Badge>
-            </li>
-            <li className="flex items-center justify-between">
-              <span>Review code changes</span>
-              <Badge variant="secondary">In Progress</Badge>
-            </li>
-            <li className="flex items-center justify-between">
-              <span>Prepare for team meeting</span>
-              <Badge variant="outline">Low Priority</Badge>
-            </li>
+            {task.map((task: Tasks) => (
+              <>
+                <Link href={`/emp-dash/task/${task.task_id}`}>
+                  <li className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <span>{task.task_name}</span>
+                      <p className="text-gray-400 text-sm">
+                        Due Date{" "}
+                        {new Date(task.due_date).toDateString()}
+                      </p>
+                    </div>
+                    <Badge
+                      className={
+                        task.status == "COMPLETED"
+                          ? "bg-green-500 hover:bg-green-600"
+                          : task.status == "IN PROGRESS"
+                          ? "bg-orange-400 hover:bg-orange-500"
+                          : "bg-red-500 hover:bg-red-600"
+                      }
+                    >
+                      {task.status}
+                    </Badge>
+                  </li> 
+                </Link>
+                <Separator className="my-4" />
+              </>
+            ))}
           </ul>
         </CardContent>
       </Card>
 
-      <Card className="md:col-span-2">
+      <Card className="md:col-span-2 bg-gray-50">
         <CardHeader>
           <CardTitle>Recent Activities</CardTitle>
           <CardDescription>Your activities from the past week</CardDescription>

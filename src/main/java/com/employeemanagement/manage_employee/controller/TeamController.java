@@ -6,8 +6,6 @@
 package com.employeemanagement.manage_employee.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employeemanagement.manage_employee.entity.EmployeeDetails;
-import com.employeemanagement.manage_employee.entity.TaskDetails;
 import com.employeemanagement.manage_employee.entity.TeamDetails;
 import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
-import com.employeemanagement.manage_employee.repository.TaskInfo;
 import com.employeemanagement.manage_employee.repository.TeamInfo;
 import com.employeemanagement.manage_employee.response.TaskRetrieveResponse;
 
@@ -48,8 +44,8 @@ public class TeamController {
     private ManagerInfo managerInfo;
     @Autowired
     private EmployeeInfo employeeInfo;
-    @Autowired
-    private TaskInfo taskInfo;
+    // @Autowired
+    // private TaskInfo taskInfo;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTeam(@RequestBody TeamDetails teamDetails,@RequestParam String mng_id) {
@@ -68,6 +64,13 @@ public class TeamController {
     @GetMapping
     public ResponseEntity<?> getTeams() {
         return ResponseEntity.status(200).body(teamInfo.findAll());
+    }
+
+    @GetMapping("/employee")
+    public ResponseEntity<?> getTeamByEmployee(@RequestParam String email) {        
+        TeamDetails team = teamInfo.findByteam_memberEmail(email);
+        logger.log(Level.INFO, "Team of employee -> {0}", team);
+        return ResponseEntity.status(200).body(team);
     }
 
     // This route will return all the tasks assigned to the team
