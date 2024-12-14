@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 const metadata: Metadata = {
   title: "Task Details",
@@ -54,17 +55,38 @@ export default function TaskDetailsPage({
       due_date : new Date(),
     },
   ]);
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = async(newStatus: string) => {
     if (task) {
       setTask((prevTasks) =>
         prevTasks.map((t) =>
           t.task_id === params.task_id ? { ...t, status: newStatus } : t
         )
       );
-      toast.toast({
-        title: "Task Updated",
-        description: `Task status changed to ${newStatus}`,
-      });
+      try {
+        const statusUpdate = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/add-task/update`, {},{
+          params:{
+            task_id: params.task_id,
+            status: newStatus,
+          },
+          headers:{
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}")?.token}`,
+            "Content-Type": "application/json",
+          }
+        })
+        console.log("The status update is", statusUpdate.data);
+        toast.toast({
+          title: "Task Updated",
+          description: `Task status changed to ${newStatus}`,
+        });
+
+      } catch (error) {
+        console.error("Error updating task status", error);
+        toast.toast({
+          title: "Error updating task status",
+          description: "Try refreshing the page or try again later",
+        });         
+      }
+      
     }
   };
   const getStatusColor = (status: Tasks["status"]) => {
@@ -85,8 +107,8 @@ export default function TaskDetailsPage({
   }
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "{}");
+    // const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
 
     setTask(() =>
       tasks.map((task: Tasks) => ({

@@ -45,7 +45,7 @@ public class TaskController {
         try {
             Date date = new Date();
             taskDetails.setAlloted_time(new Timestamp(date.getTime()));
-            ManagerDetails mng = manager.findById(mng_id).get();            
+            ManagerDetails mng = manager.findById(mng_id).get();
 
             taskDetails.setManagerDetails(mng);
             taskInfo.save(taskDetails);
@@ -67,14 +67,22 @@ public class TaskController {
 
     // Update task status
     @PutMapping("/update")
+    @SuppressWarnings("StringEquality")
     public ResponseEntity<?> updateTaskStatus(@RequestParam String task_id, @RequestParam String status) {
         try {
             TaskDetails task = taskInfo.findById(task_id).get();
             if (task != null) {
-                task.setStatus(status);
+                if ("COMPLETED".equals(status)) {
+                    Date date = new Date();
+                    task.setCompletion_time(new Timestamp(date.getTime()));
+                    task.setStatus(status);
+                    
+                } else {
+                    task.setStatus(status);
+                }
                 taskInfo.save(task);
                 logger.log(Level.INFO, "Task status updated successfully");
-                return ResponseEntity.status(200).body("Task status updated successfully"+task);
+                return ResponseEntity.status(200).body("Task status updated successfully " + task);
             } else {
                 logger.log(Level.WARNING, "Task not found");
                 return ResponseEntity.status(404).body("Task not found");

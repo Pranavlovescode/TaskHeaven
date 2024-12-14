@@ -74,28 +74,30 @@ export default function EmployeeDashboardPage() {
         }
       );
       console.log("The response is ", response.data);
-      setTask(response.data);
+      const tasks = response.data.tasks;
+      setTask(() =>
+        tasks.map((task:Tasks) => ({
+          task_id: task.task_id,
+          task_name: task.task_name,
+          task_description: task.task_description,
+          status: task.status,
+          alloted_time: task.alloted_time,
+          completed_time: task.completed_time,
+          due_date: task.due_date,
+        }))
+      );
+      localStorage.setItem("tasks", JSON.stringify(tasks));
     } catch (error) {
       console.error("Error fetching tasks", error);
     }
   };
 
   useEffect(() => {
-    // fetchTasks();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
+    fetchTasks();
+    // const user = JSON.parse(localStorage.getItem("user") || "{}");
+    // const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
 
-    setTask(() =>
-      tasks.map((task:Tasks) => ({
-        task_id: task.task_id,
-        task_name: task.task_name,
-        task_description: task.task_description,
-        status: task.status,
-        alloted_time: task.alloted_time,
-        completed_time: task.completed_time,
-        due_date: task.due_date,
-      }))
-    );
+    
   }, []);
 
   console.log("The tasks are ", task);

@@ -28,7 +28,7 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
   useEffect(() => {}, [task]);
 
   const total = task.length;
-  const completed = task.filter((task) => task.status === "completed").length;
+  const completed = task.filter((task) => task.status === "COMPLETED").length;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -42,7 +42,7 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
             {completed} / {total}
           </div>
           <p className="text-xs text-muted-foreground">Tasks completed</p>
-          <Progress value={completed / total} className="mt-2 bg-gray-200" />
+          <Progress value={(completed / total)*100} className="mt-2 bg-gray-200" />
         </CardContent>
       </Card>
 
