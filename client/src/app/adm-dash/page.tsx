@@ -1,27 +1,15 @@
 "use client";
-import { io } from "socket.io-client";
+
 import React, { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import LogoutMessage from "../components/LogoutMessage";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart, DollarSign, Users } from "lucide-react";
+import { UserRegistrationTable } from "../components/userRegistrationTable";
+import Link from "next/link";
+import { IndianRupee } from "lucide-react";
 
 type Data = {
   hrId: string;
@@ -37,8 +25,8 @@ type Data = {
 }[];
 
 export default function Page() {
-  const token = localStorage.getItem("user");
   const [open, setOpen] = React.useState(true);
+  const token = localStorage.getItem("user");
   const dataToken = token ? JSON.parse(token) : null;
   const navigate = useRouter();
   const gotoLogin = () => {
@@ -89,7 +77,6 @@ export default function Page() {
             "Content-type": "application/json",
             Authorization: `Bearer ${dataToken.token}`,
           },
-          
         }
       );
       const data: AxiosResponse = await response.data;
@@ -98,162 +85,94 @@ export default function Page() {
     }
   };
 
-  const verifyUser = async (data: any) => {
-    console.log(dataToken.adminDetails.adm_id);
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify/${data.hr_role}/${data.hrId}/${dataToken.adminDetails.adm_id}`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${dataToken.token}`,
-          },
-          withCredentials: true, // Required for cookies && sessions
-        }
-      );
-      const responseData: AxiosResponse = response.data;
-      console.log("User Verified", responseData);
-      setVerifiedData(responseData);
-      alert("User Verified Successfully");
-      // navigate.push("/adm-dash");
-      setIsHRDataFetched(true);
-      
-    } catch (error) {
-      console.error("Error verifying user", error);
-    }
-  };
-
-  const rejectUser = async (data:any)=>{
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reject/user/${data.hrId}`,{},{
-        headers:{
-          "Content-Type":"application/json",
-          Authorization:`Bearer ${dataToken.token}`
-        }
-      })
-      const responseData:AxiosResponse = response.data;
-      console.log("User Rejected",responseData);
-      alert("User Rejected Successfully");
-      setIsHRDataFetched(true);
-    } catch (error) {
-      console.error("Error rejecting user",error);
-    }
-  }
-
+  const pendingEmpData = empDataHR.filter((emp) => emp.admin_verified === "PENDING").length;
   useEffect(() => {
-   
     getEmployeeData();
     if (!isHRDataFetched) {
       getHRData();
     }
-    // const intervalId = setInterval(()=>{
-    //   getHRData();
-    // },10000)
-    // setEmpDataHR((prevData) => {
-    //   return [...prevData, ...empDataHR]; // Append new data to the previous state
-    // });
-    // return () => {
-    //   clearInterval(intervalId);
-    // }
+    console.log(empData);
   }, [isHRDataFetched, empDataHR]);
   return (
     <>
       {dataToken ? (
         <>
-          <main className={"md:mt-[60px] ml-20 mx-auto"}>
-            <div className={"text-3xl font-extrabold p-4"}>
-              List of new Users
-            </div>
-            <div className={"px-4 text-gray-500"}>
-              Verify the below new registrations.
-            </div>
-            <div className={"w-full mt-4 md:p-12 mx-auto"}>
-              <div className={""}>
-                <div>
-                  {loading ? (
-                    <div>Loading....</div>
-                  ) : empDataHR.some(
-                      (data) => data.admin_verified === "PENDING"
-                    ) ? (
-                    <Card>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-[100px]">Id</TableHead>
-                            <TableHead className="text-center">
-                              Full Name
-                            </TableHead>
-                            <TableHead className="text-center">
-                              Email Address
-                            </TableHead>
-                            <TableHead className="text-center">
-                              Mobile Number
-                            </TableHead>
-                            <TableHead className="text-center">Role</TableHead>
-                            <TableHead className="text-center">
-                              Designation
-                            </TableHead>
-                            <TableHead className="text-center">
-                              Date of Joining
-                            </TableHead>
-                            <TableHead className="text-center">
-                              Address
-                            </TableHead>
-                            <TableHead className="text-center">Age</TableHead>
-                            <TableHead className="text-center">
-                              Action
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {Array.isArray(empDataHR) &&
-                            empDataHR
-                              .filter((data) => {
-                                // console.log("Inspecting data:", data);
-                                return data?.admin_verified === "PENDING"; // Safely access properties
-                              })
-                              .map((data, index) => (
-                                <>
-                                  <TableRow key={index}>
-                                    <TableCell>{data.hrId}</TableCell>
-                                    <TableCell>{data.hr_name}</TableCell>
-                                    <TableCell>{data.hremail}</TableCell>
-                                    <TableCell>{data.hr_contact}</TableCell>
-                                    <TableCell>{data.hr_role}</TableCell>
-                                    <TableCell>{data.hr_designation}</TableCell>
-                                    <TableCell>
-                                      {new Date(
-                                        data.hr_doj
-                                      ).toLocaleDateString()}
-                                    </TableCell>
-                                    <TableCell>{data.hr_address}</TableCell>
-                                    <TableCell>{data.hr_age}</TableCell>
-                                    <TableCell className="text-right flex flex-col md:flex-row justify-center items-center">
-                                      <Button
-                                        onClick={() => {
-                                          verifyUser(empDataHR[index]);
-                                          console.log(index);
-                                        }}
-                                        className="md:mr-3 mb-2 md:mb-0"
-                                      >
-                                        Verify
-                                      </Button>
-                                      <Button onClick={()=>{
-                                        rejectUser(empDataHR[index]);
-                                      }}>Reject</Button>
-                                    </TableCell>
-                                  </TableRow>
-                                </>
-                              ))}
-                        </TableBody>
-                      </Table>
-                    </Card>
-                  ) : (
-                    <p>No new registration</p>
-                  )}
-                </div>
+          <main className={"md:pt-[70px] mx-auto bg-gray-200 min-h-screen"}>
+            <div className="container mx-auto p-6 space-y-8">
+              <div className="flex justify-between items-center">
+                <h1 className="text-3xl font-bold">HR Admin Dashboard</h1>
+                <Button asChild className="bg-gray-800 hover:bg-gray-600 duration-500" >
+                  <Link href="/adm-dash/payroll">
+                    <DollarSign className="mr-2 h-4 w-4" /> Manage Payroll
+                  </Link>
+                </Button>
               </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Employees
+                    </CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">1,234</div>
+                    <p className="text-xs text-muted-foreground">
+                      +2% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total Payroll
+                    </CardTitle>
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">$1,234,567</div>
+                    <p className="text-xs text-muted-foreground">
+                      +5% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Average Salary
+                    </CardTitle>
+                    <BarChart className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold flex"><IndianRupee className="h-8 w-5" />65,432</div>
+                    <p className="text-xs text-muted-foreground">
+                      +1% from last month
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Pending Approvals
+                    </CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{pendingEmpData}</div>
+                    <p className="text-xs text-muted-foreground">
+                      -3 from last week
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>New User Registrations</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <UserRegistrationTable employeeData={empDataHR} />
+                </CardContent>
+              </Card>
             </div>
           </main>
         </>

@@ -19,7 +19,7 @@ type Tasks = {
   task_description: string;
   status: string;
   alloted_time: Date;
-  completed_time: Date;
+  completion_time: Date;
   due_date: Date;
 };
 
@@ -29,6 +29,8 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
 
   const total = task.length;
   const completed = task.filter((task) => task.status === "COMPLETED").length;
+  console.log("Today's date", new Date().getDate());
+  console.log("Completed task date", new Date(task[1].completion_time).getDate());
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -42,7 +44,13 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
             {completed} / {total}
           </div>
           <p className="text-xs text-muted-foreground">Tasks completed</p>
-          <Progress value={(completed / total)*100} className="mt-2 bg-gray-200" />
+          <Progress
+            value={(completed / total) * 100}
+            className="mt-2 bg-gray-200"
+          />
+          <p className="text-xs text-muted-foreground">
+            {((completed / total) * 100).toFixed(2)}% of tasks completed
+          </p>
         </CardContent>
       </Card>
 
@@ -83,7 +91,7 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
           <ul className="space-y-2">
             <li className="flex items-center text-sm">
               <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-              Task "Update report" completed
+              Task completed
             </li>
             <li className="flex items-center text-sm">
               <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
@@ -107,8 +115,7 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
                     <div className="flex flex-col">
                       <span>{task.task_name}</span>
                       <p className="text-gray-400 text-sm">
-                        Due Date{" "}
-                        {new Date(task.due_date).toDateString()}
+                        Due Date {new Date(task.due_date).toDateString()}
                       </p>
                     </div>
                     <Badge
@@ -122,9 +129,9 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
                     >
                       {task.status}
                     </Badge>
-                  </li> 
+                  </li>
                 </Link>
-                <Separator className="my-4" />
+                <Separator className="my-4 bg-gray-200" />
               </>
             ))}
           </ul>
@@ -137,20 +144,16 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
           <CardDescription>Your activities from the past week</CardDescription>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-2">
-            <li className="flex items-center text-sm">
-              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-              Submitted weekly report - 2 days ago
-            </li>
-            <li className="flex items-center text-sm">
-              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-              Attended team building event - 4 days ago
-            </li>
-            <li className="flex items-center text-sm">
-              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-              Completed online training course - 6 days ago
-            </li>
-          </ul>
+          {task
+            .filter((t: Tasks) => t.status === "COMPLETED")
+            .map((completedTask: Tasks) => (
+              <ul className="space-y-2">
+                <li className="flex items-center text-sm">
+                  <Clock className="mr-2 h-4 w-4 text-muted-foreground" />                  
+                  {completedTask.task_name} - {new Date().getDate() - new Date(completedTask.completion_time).getDate()} days ago
+                </li>                
+              </ul>
+            ))}
         </CardContent>
       </Card>
     </div>

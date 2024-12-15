@@ -130,6 +130,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
       setTitle("");
       setDescription("");
       setAssignee("");
+      setDate(undefined);
     } catch (error) {
       console.error("Error adding task to database:", error);
       // Show error notification

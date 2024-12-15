@@ -23,6 +23,7 @@ type Form = {
 
 export default function Home() {
   console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+  const[isSubmitting, setIsSubmitting] = useState(false);
   const [formInput, setFormInput] = useState<Form>({
     email: "",
     password: "",
@@ -77,8 +78,8 @@ export default function Home() {
   };
   return (
     <form onSubmit={handleFormSubmit}>
-      <main className="bg-slate-50 flex h-screen w-full items-center justify-center px-4">
-        <Card className="mx-auto max-w-sm">
+      <main className="bg-gray-200 flex h-screen w-full items-center justify-center px-4">
+        <Card className="mx-auto max-w-sm bg-gray-50">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
             <CardDescription>
@@ -120,8 +121,8 @@ export default function Home() {
                   required
                 />
               </div>
-              <Button className="w-full" type="submit">
-                Login
+              <Button className="w-full bg-gray-800 hover:bg-gray-600 duration-500" type="submit">
+                {isSubmitting ? "Logging in..." : "Login"}
               </Button>
               {/* <Button variant="outline" className="w-full">
             Login with Google

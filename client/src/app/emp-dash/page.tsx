@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import EmployeeDashboard from "../components/EmployeeDashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const metadata: Metadata = {
   title: "Employee Dashboard",
@@ -76,7 +78,7 @@ export default function EmployeeDashboardPage() {
       console.log("The response is ", response.data);
       const tasks = response.data.tasks;
       setTask(() =>
-        tasks.map((task:Tasks) => ({
+        tasks.map((task: Tasks) => ({
           task_id: task.task_id,
           task_name: task.task_name,
           task_description: task.task_description,
@@ -96,27 +98,34 @@ export default function EmployeeDashboardPage() {
     fetchTasks();
     // const user = JSON.parse(localStorage.getItem("user") || "{}");
     // const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
-
-    
   }, []);
 
   console.log("The tasks are ", task);
   return (
     <>
       <main className="bg-gray-200 pt-[56px]">
-        <div className="container">
-          <h1 className="text-2xl font-semibold">
-            Hello,{" "}
-            {JSON.parse(localStorage.getItem("user") || "{}").employeeDetails
-              .name || " "}
-          </h1>
-          <p className="text-sm text-gray-500">
-            It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
-            {new Date().getUTCFullYear()}
-          </p>
+        <div className="container flex flex-row justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-semibold">
+              Hello,{" "}
+              {JSON.parse(localStorage.getItem("user") || "{}").employeeDetails
+                .name || " "}
+            </h1>
+            <p className="text-sm text-gray-500">
+              It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
+              {new Date().getUTCFullYear()}
+            </p>
+          </div>
+          <div>
+            <Button className="bg-gray-800 hover:bg-gray-600 duration-500">
+              <Link href={`/emp-dash/leave-request`}>Request Leave</Link>
+            </Button>
+          </div>
         </div>
         <div className="mx-auto min-h-screen container py-10">
-          <EmployeeDashboard task={task} />
+          <EmployeeDashboard
+            task={JSON.parse(localStorage.getItem("tasks") || "[]") as Tasks[]}
+          />
         </div>
       </main>
     </>
