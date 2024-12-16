@@ -27,7 +27,7 @@ type Data = {
 export default function Page() {
   const [open, setOpen] = React.useState(true);
   const [token, setToken] = React.useState<any>();
-  
+
   const dataToken = token ? JSON.parse(token) : null;
   const navigate = useRouter();
   const gotoLogin = () => {
@@ -86,17 +86,20 @@ export default function Page() {
     }
   };
 
-  const pendingEmpData = empDataHR.filter((emp) => emp.admin_verified === "PENDING").length;
+  const pendingEmpData = empDataHR.filter(
+    (emp) => emp.admin_verified === "PENDING"
+  ).length;
 
   useEffect(() => {
     const token = localStorage.getItem("user");
     setToken(token);
+
     getEmployeeData();
-    if (!isHRDataFetched) {
-      getHRData();
-    }
+
+    getHRData();
+
     console.log(empData);
-  }, [isHRDataFetched, empDataHR]);
+  }, []);
   return (
     <>
       {dataToken ? (
@@ -105,7 +108,10 @@ export default function Page() {
             <div className="container mx-auto p-6 space-y-8">
               <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold">HR Admin Dashboard</h1>
-                <Button asChild className="bg-gray-800 hover:bg-gray-600 duration-500" >
+                <Button
+                  asChild
+                  className="bg-gray-800 hover:bg-gray-600 duration-500"
+                >
                   <Link href="/adm-dash/payroll">
                     <DollarSign className="mr-2 h-4 w-4" /> Manage Payroll
                   </Link>
@@ -148,7 +154,10 @@ export default function Page() {
                     <BarChart className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold flex"><IndianRupee className="h-8 w-5" />65,432</div>
+                    <div className="text-2xl font-bold flex">
+                      <IndianRupee className="h-8 w-5" />
+                      65,432
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +1% from last month
                     </p>
