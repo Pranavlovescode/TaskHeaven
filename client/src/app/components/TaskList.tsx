@@ -62,7 +62,7 @@ export default function TaskList({ teamId }: { teamId: string }) {
 
   useEffect(()=>{
     getTasksForATeam();
-  },[])
+  })
 
   return (
     <Card className="bg-gray-50">

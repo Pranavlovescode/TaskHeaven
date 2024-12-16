@@ -94,12 +94,16 @@ export default function Page() {
     const token = localStorage.getItem("user");
     setToken(token);
 
-    getEmployeeData();
+    if (getEmployeeData && getHRData) {
+      getEmployeeData();
+      getHRData();
+    }
+  }, [getEmployeeData, getHRData]);
 
-    getHRData();
+  useEffect(() => {
+    console.log(empData); // Log only when `empData` changes.
+  }, [empData]);
 
-    console.log(empData);
-  }, []);
   return (
     <>
       {dataToken ? (

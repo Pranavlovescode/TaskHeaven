@@ -146,8 +146,8 @@ export default function EmployeeDashboard({ task }: { task: Tasks[] }) {
         <CardContent>
           {task
             .filter((t: Tasks) => t.status === "COMPLETED")
-            .map((completedTask: Tasks) => (
-              <ul className="space-y-2">
+            .map((completedTask: Tasks,index) => (
+              <ul key={index} className="space-y-2">
                 <li className="flex items-center text-sm">
                   <Clock className="mr-2 h-4 w-4 text-muted-foreground" />                  
                   {completedTask.task_name} - {new Date().getDate() - new Date(completedTask.completion_time).getDate()} days ago

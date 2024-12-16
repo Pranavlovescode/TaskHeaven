@@ -102,10 +102,6 @@ export default function TaskDetailsPage({
     }
   };
 
-  if (!task) {
-    return <div>Task not found</div>;
-  }
-
   useEffect(() => {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "{}");
     // const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
@@ -122,7 +118,7 @@ export default function TaskDetailsPage({
       }))
     );
     console.log("The params are", params);
-  }, []);
+  },[params]);
 
   // console.log(foundTask)
   // console.log(params.taskId)
@@ -132,8 +128,8 @@ export default function TaskDetailsPage({
         <h1 className="text-3xl font-bold mb-6">Task Details</h1>
         {task
           .filter((t) => t.task_id === params.task_id)
-          .map((foundTask) => (
-            <Card className="bg-gray-50">
+          .map((foundTask,index) => (
+            <Card className="bg-gray-50" key={index}>
               <CardHeader>
                 <CardTitle>{foundTask.task_name}</CardTitle>
                 <CardDescription>Task ID: {foundTask.task_id}</CardDescription>

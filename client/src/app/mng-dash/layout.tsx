@@ -87,7 +87,7 @@ const Manager = ({children}:any) => {
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
+  });
 
   return (
     <>

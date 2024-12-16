@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 
 
 
-export default function page() {
+export default function VerifyEmailPage() {
   // const [otp, setOtp] = useState("");
   const toast = useToast();
   const [inputOtp, setInputOtp] = useState<string>("");

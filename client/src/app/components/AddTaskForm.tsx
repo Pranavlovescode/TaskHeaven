@@ -193,8 +193,8 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
               <SelectContent>
                 {/* Mapping the members in a team */}
                 {team.members &&
-                  team.members.map((member) => (
-                    <SelectItem value={member.id}>{member.name}</SelectItem>
+                  team.members.map((member,index) => (
+                    <SelectItem key={index} value={member.id}>{member.name}</SelectItem>
                   ))}
               </SelectContent>
             </Select>

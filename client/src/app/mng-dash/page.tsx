@@ -222,8 +222,9 @@ export default function ManagerDashboard() {
                           JSON.parse(localStorage.getItem("user") || "{}")
                             .managerDetails.mng_id || " "
                     )
-                    .map((team) => (
+                    .map((team,index) => (
                       <Link
+                        key={index}
                         href={`mng-dash/team-info/${team.team_id}`}
                         className="w-full"
                       >
