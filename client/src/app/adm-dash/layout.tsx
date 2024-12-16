@@ -32,24 +32,29 @@ const Admin = ({ children }: any) => {
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
-  const user = localStorage.getItem("user");
-  const grabToken = () => {
-    if (user) {
-      const parsedUser = JSON.parse(user!);
-      setData({
-        token: parsedUser.token,
-        adminDetails: parsedUser.adminDetails,
-        loginTimeDetails: parsedUser.loginTimeDetails,
-      });
-    }
-  };
+  const [user, setUser] = useState<any>(null);
+  
+  
   const navigate = useRouter();
-  const gotoLogin = () => {
-    setOpen(false);
-    navigate.push("/");
-  };
+    const gotoLogin = () => {
+      setOpen(false);
+      navigate.push("/");
+    };
 
   useEffect(() => {
+    const user = localStorage.getItem("user");
+    setUser(user);
+    const grabToken = () => {
+      if (user) {
+        const parsedUser = JSON.parse(user!);
+        setData({
+          token: parsedUser.token,
+          adminDetails: parsedUser.adminDetails,
+          loginTimeDetails: parsedUser.loginTimeDetails,
+        });
+      }
+    };
+    
     grabToken();
     const intervalId = setInterval(() => {
       const user = window.localStorage.getItem("user");

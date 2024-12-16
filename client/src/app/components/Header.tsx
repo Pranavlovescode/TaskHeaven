@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import {
@@ -17,7 +17,8 @@ type LogoutData = {
 };
 
 const Header = ({name,email}:any) => {
-  const token = JSON.parse(localStorage.getItem("user")!);
+  const [token,setToken] = useState<any>(null);
+  
   const navigate = useRouter();
   const [toggle, setToggle] = useState<boolean>(false);
   const [open, setOpen] = React.useState(true);
@@ -61,6 +62,12 @@ const Header = ({name,email}:any) => {
       console.log(e);
     }
   };
+
+  useEffect(()=>{
+    const token = JSON.parse(localStorage.getItem("user")!);
+    setToken(token);
+  },[])
+
   return (
     <div>
       {token ? (

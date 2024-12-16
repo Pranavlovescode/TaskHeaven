@@ -26,7 +26,8 @@ type Data = {
 
 export default function Page() {
   const [open, setOpen] = React.useState(true);
-  const token = localStorage.getItem("user");
+  const [token, setToken] = React.useState<any>();
+  
   const dataToken = token ? JSON.parse(token) : null;
   const navigate = useRouter();
   const gotoLogin = () => {
@@ -86,7 +87,10 @@ export default function Page() {
   };
 
   const pendingEmpData = empDataHR.filter((emp) => emp.admin_verified === "PENDING").length;
+
   useEffect(() => {
+    const token = localStorage.getItem("user");
+    setToken(token);
     getEmployeeData();
     if (!isHRDataFetched) {
       getHRData();
