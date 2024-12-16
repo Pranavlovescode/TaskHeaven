@@ -11,14 +11,15 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import LogoutMessage from "./LogoutMessage";
+import Image from "next/image";
 
 type LogoutData = {
   email: string;
 };
 
-const Header = ({name,email}:any) => {
-  const [token,setToken] = useState<any>(null);
-  
+const Header = ({ name, email }: any) => {
+  const [token, setToken] = useState<any>(null);
+
   const navigate = useRouter();
   const [toggle, setToggle] = useState<boolean>(false);
   const [open, setOpen] = React.useState(true);
@@ -53,7 +54,7 @@ const Header = ({name,email}:any) => {
             Authorization: `Bearer ${token.token}`,
           },
           withCredentials: true, // Required for cookies & sessions
-        },
+        }
       );
       const data = await response.data;
       console.log(data);
@@ -63,10 +64,10 @@ const Header = ({name,email}:any) => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = JSON.parse(localStorage.getItem("user")!);
     setToken(token);
-  },[])
+  }, []);
 
   return (
     <div>
@@ -99,11 +100,14 @@ const Header = ({name,email}:any) => {
                   {/*  </svg>*/}
                   {/*</button>*/}
                   <p className="flex mr-4">
-                    <img
-                      src="https://flowbite.s3.amazonaws.com/logo.svg"
-                      className="mr-3 h-8"
-                      alt="FlowBite Logo"
+                    <Image
+                      src="/taskheaven-1.png"
+                      alt="TaskHeaven"
+                      className="w-8 h-8 rounded-full mr-2"
+                      width={32}
+                      height={32}
                     />
+
                     <span className="self-center text-2xl font-bold whitespace-nowrap dark:text-white">
                       TaskHeaven
                     </span>
@@ -161,11 +165,20 @@ const Header = ({name,email}:any) => {
                     aria-expanded="false"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <img
+                    <Image
+                      src={
+                        "/profile-picture.jpg"
+                      }
+                      alt="user photo"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    {/* <img
                       className="w-8 h-8 rounded-full"
                       src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                       alt="user photo"
-                    />
+                    /> */}
                   </button>
                 </div>
               </div>
@@ -387,11 +400,7 @@ const Header = ({name,email}:any) => {
         </>
       ) : (
         <>
-          <LogoutMessage
-            open={open}
-            setOpen={setOpen}
-            gotoLogin={gotoLogin}
-          />
+          <LogoutMessage open={open} setOpen={setOpen} gotoLogin={gotoLogin} />
         </>
       )}
     </div>

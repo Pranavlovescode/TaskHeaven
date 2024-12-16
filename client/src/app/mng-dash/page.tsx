@@ -173,7 +173,7 @@ export default function ManagerDashboard() {
               .name || " "}
           </h1>
           <p className="text-sm text-gray-500">
-            It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
+            It&apos;s {currentDay}, {new Date().getDate()} {currentMonth}{" "}
             {new Date().getUTCFullYear()}
           </p>
         </div>
