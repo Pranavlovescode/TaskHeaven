@@ -16,7 +16,10 @@ import LogoutMessage from "../components/LogoutMessage";
 
 type AdminData = {
   token: string;
-  adminDetails: object;
+  adminDetails: {
+    name: string;
+    admemail: string;
+  };
   loginTimeDetails: object | null;
 };
 
@@ -27,7 +30,10 @@ interface AdminProps {
 const Admin = ({ children }: any) => {
   const [data, setData] = useState<AdminData>({
     token: "",
-    adminDetails: {},
+    adminDetails: {
+      name:"",
+      admemail:""
+    },
     loginTimeDetails: {},
   });
   const [expired, setExpired] = useState<boolean>(false);
