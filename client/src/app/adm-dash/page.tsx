@@ -38,8 +38,10 @@ export default function Page() {
   };
 
   const fetchToken = useCallback(() => {
-    const storedToken = localStorage.getItem("user");
-    setToken(storedToken ? JSON.parse(storedToken).token : null);
+    if (typeof window != "undefined") {
+      const storedToken = localStorage.getItem("user");
+      setToken(storedToken ? JSON.parse(storedToken).token : null);
+    }
   }, []);
 
   const getHRData = useCallback(async () => {

@@ -31,25 +31,26 @@ const Admin = ({ children }: any) => {
   const [data, setData] = useState<AdminData>({
     token: "",
     adminDetails: {
-      name:"",
-      admemail:""
+      name: "",
+      admemail: "",
     },
     loginTimeDetails: {},
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
   const [user, setUser] = useState<any>(null);
-  
-  
+
   const navigate = useRouter();
-    const gotoLogin = () => {
-      setOpen(false);
-      navigate.push("/");
-    };
+  const gotoLogin = () => {
+    setOpen(false);
+    navigate.push("/");
+  };
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    setUser(user);
+    if (typeof window != "undefined") {
+      const user = localStorage.getItem("user");
+      setUser(user);
+    }
     const grabToken = () => {
       if (user) {
         const parsedUser = JSON.parse(user!);
@@ -60,7 +61,7 @@ const Admin = ({ children }: any) => {
         });
       }
     };
-    
+
     grabToken();
     const intervalId = setInterval(() => {
       const user = window.localStorage.getItem("user");
@@ -100,9 +101,12 @@ const Admin = ({ children }: any) => {
         </>
       ) : (
         <>
-          <Header name={data.adminDetails.name} email={data.adminDetails.admemail} />
+          <Header
+            name={data.adminDetails.name}
+            email={data.adminDetails.admemail}
+          />
           {/* <Sidebar /> */}
-         <main>{children}</main> 
+          <main>{children}</main>
         </>
       )}
     </>

@@ -12,6 +12,7 @@ import {
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import LogoutMessage from "./LogoutMessage";
 import Image from "next/image";
+import { type } from "os";
 
 type LogoutData = {
   email: string;
@@ -65,8 +66,10 @@ const Header = ({ name, email }: any) => {
   };
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("user")!);
-    setToken(token);
+    if (typeof window !== "undefined") {
+      const token = JSON.parse(localStorage.getItem("user")!);
+      setToken(token);
+    }
   }, []);
 
   return (
@@ -166,9 +169,7 @@ const Header = ({ name, email }: any) => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <Image
-                      src={
-                        "/profile-picture.jpg"
-                      }
+                      src={"/profile-picture.jpg"}
                       alt="user photo"
                       width={32}
                       height={32}
