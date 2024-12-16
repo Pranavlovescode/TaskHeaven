@@ -124,7 +124,7 @@ export default function EmployeeDashboardPage() {
         </div>
         <div className="mx-auto min-h-screen container py-10">
           <EmployeeDashboard
-            task={JSON.parse(localStorage.getItem("tasks") || "[]") as Tasks[]}
+            task={JSON.parse(localStorage.getItem("tasks") || "[]")}
           />
         </div>
       </main>
