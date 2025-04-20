@@ -99,7 +99,7 @@ export function PayrollTable() {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("user") || "{}").token
+            JSON.parse(window.localStorage.getItem("user") || "{}").token
           }`,
         },
       }
@@ -107,7 +107,7 @@ export function PayrollTable() {
     const data = await response.data;
     console.log("Payroll data:", data);
     setPayrolls(data);
-    localStorage.setItem("payrolls", JSON.stringify(data));
+    window.localStorage.setItem("payrolls", JSON.stringify(data));
   };
 
   useEffect(() => {

@@ -42,33 +42,39 @@ const Header = ({ name, email }: any) => {
   };
 
   const logoutUser = async () => {
-    localStorage.removeItem("user");
-    try {
-      const response: AxiosResponse = await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
-        {
-          email: email,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token.token}`,
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+
+      try {
+        const response: AxiosResponse = await axios.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+          {
+            email: email,
           },
-          withCredentials: true, // Required for cookies & sessions
-        }
-      );
-      const data = await response.data;
-      console.log(data);
-      navigate.push("/");
-    } catch (e) {
-      console.log(e);
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token.token}`,
+            },
+            withCredentials: true, // Required for cookies & sessions
+          }
+        );
+        const data = await response.data;
+        console.log(data);
+        navigate.push("/");
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = JSON.parse(localStorage.getItem("user")!);
-      setToken(token);
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        const userData = JSON.parse(userStr);
+        setToken(userData);
+      }
     }
   }, []);
 
@@ -80,28 +86,6 @@ const Header = ({ name, email }: any) => {
             <nav className="bg-gray-800 border-gray-200 px-4 lg:px-6 py-2.5 fixed w-full z-50 top-0 text-gray-100">
               <div className="flex flex-wrap justify-between items-center">
                 <div className="flex justify-start items-center ">
-                  {/*<button*/}
-                  {/*  id="toggleSidebar"*/}
-                  {/*  aria-expanded="true"*/}
-                  {/*  aria-controls="sidebar"*/}
-                  {/*  className="p-2 hidden mr-3 right-0.5 text-gray-600 rounded cursor-pointer lg:inline hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"*/}
-                  {/*>*/}
-                  {/*  <svg*/}
-                  {/*    className="w-5 h-5"*/}
-                  {/*    aria-hidden="true"*/}
-                  {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                  {/*    fill="none"*/}
-                  {/*    viewBox="0 0 16 12"*/}
-                  {/*  >*/}
-                  {/*    <path*/}
-                  {/*      stroke="currentColor"*/}
-                  {/*      strokeLinecap={"round"}*/}
-                  {/*      strokeLinejoin={"round"}*/}
-                  {/*      strokeWidth={2}*/}
-                  {/*      d="M1 1h14M1 6h14M1 11h7"*/}
-                  {/*    />*/}
-                  {/*  </svg>*/}
-                  {/*</button>*/}
                   <p className="flex mr-4">
                     <Image
                       src="/taskheaven-1.png"
@@ -175,11 +159,6 @@ const Header = ({ name, email }: any) => {
                       height={32}
                       className="w-8 h-8 rounded-full"
                     />
-                    {/* <img
-                      className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                      alt="user photo"
-                    /> */}
                   </button>
                 </div>
               </div>
@@ -396,8 +375,6 @@ const Header = ({ name, email }: any) => {
               </div>
             )}
           </div>
-
-          {/*<div className="text-center text-6xl font-extrabold mt-4">Welcome {token.adminDetails.name}</div>*/}
         </>
       ) : (
         <>

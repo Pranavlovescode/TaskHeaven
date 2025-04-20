@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -23,15 +23,17 @@ type Form = {
 
 export default function Home() {
   console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
-  const[isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formInput, setFormInput] = useState<Form>({
     email: "",
     password: "",
   });
   const toast = useToast();
   const navigate = useRouter();
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
@@ -45,37 +47,43 @@ export default function Home() {
       );
       const user = response.data;
       console.log(user);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      // Debugging purpose
-      // console.log("User data is as follows",JSON.parse(localStorage.getItem('user')!));
+
+      // Safely store user data in localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+
       if (user.hasOwnProperty("adminDetails")) {
         toast.toast({
           title: "Welcome Admin",
-          description: "You have successfully logged in",          
-        })
+          description: "You have successfully logged in",
+        });
         navigate.push("/adm-dash");
       } else if (user.hasOwnProperty("employeeDetails")) {
         toast.toast({
           title: "Welcome Employee",
-          description: "You have successfully logged in",          
-        })
+          description: "You have successfully logged in",
+        });
         navigate.push("/emp-dash");
       } else {
         toast.toast({
           title: "Welcome Manager",
           description: "You have successfully logged in",
-        })
+        });
         navigate.push("/mng-dash");
       }
     } catch (e) {
       console.log(e);
       toast.toast({
         title: "Error",
-        description: "Invalid email or password",        
+        description: "Invalid email or password",
       });
       setFormInput({ email: "", password: "" });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <main className="bg-gray-200 flex h-screen w-full items-center justify-center px-4">
@@ -121,7 +129,10 @@ export default function Home() {
                   required
                 />
               </div>
-              <Button className="w-full bg-gray-800 hover:bg-gray-600 duration-500" type="submit">
+              <Button
+                className="w-full bg-gray-800 hover:bg-gray-600 duration-500"
+                type="submit"
+              >
                 {isSubmitting ? "Logging in..." : "Login"}
               </Button>
               {/* <Button variant="outline" className="w-full">

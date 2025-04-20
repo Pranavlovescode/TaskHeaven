@@ -69,7 +69,7 @@ export function AddPayrollForm({ onClose }: { onClose: () => void }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}").token}`,
+            Authorization: `Bearer ${JSON.parse(window.localStorage.getItem("user") || "{}").token}`,
           },
           params: { emp_id: values.emp_id },
         }

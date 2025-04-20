@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -41,7 +41,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { start } from "repl";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -62,8 +61,17 @@ const formSchema = z.object({
 
 export default function LeaveRequestPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
   const router = useRouter();
+
+  // Get user data safely after component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(userData);
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,6 +82,15 @@ export default function LeaveRequestPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "User data not available",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const formData = {
@@ -95,14 +112,11 @@ export default function LeaveRequestPage() {
         },
         {
           headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}").token
-            }`,
+            Authorization: `Bearer ${user.token || ""}`,
             "Content-Type": "application/json",
           },
           params: {
-            email: JSON.parse(localStorage.getItem("user") || "{}")
-              .employeeDetails.email,
+            email: user.employeeDetails?.email || "",
           },
         }
       );
@@ -117,7 +131,6 @@ export default function LeaveRequestPage() {
         });
         router.push("/emp-dash");
       }
-      //   const data = await response.json();
     } catch (error) {
       toast({
         title: "Error",

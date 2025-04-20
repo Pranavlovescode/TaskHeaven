@@ -50,10 +50,22 @@ type Form = {
 
 function EmpRegistration() {
   const toast = useToast();
-  const token = localStorage.getItem("user");
-  const tokenParse = token ? JSON.parse(token) : null;
+  const [token, setToken] = useState<string | null>(null);
+  const [tokenParse, setTokenParse] = useState<any>(null);
   const [open, setOpen] = React.useState<boolean>(true);
   const navigate = useRouter();
+
+  // Get user data safely after component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("user");
+      setToken(storedToken);
+      if (storedToken) {
+        setTokenParse(JSON.parse(storedToken));
+      }
+    }
+  }, []);
+
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
@@ -90,29 +102,29 @@ function EmpRegistration() {
         );
         console.log(response);
         if (response.status === 201) {
-          alert("User Created Successfully");
           toast.toast({
             title: "User Created Successfully",
             description: "We are happy to have you on board",
           });
           navigate.push("/");
         }
-        alert("User Created Successfully");
+        toast.toast({
+          title: "User Created Successfully",
+          description: "Welcome aboard!",
+        });
         navigate.push("/");
       } catch (e) {
-        alert("User Creation Failed");
         toast.toast({
           title: "User Creation Failed",
           description: "Please try again later"
-        })
+        });
         console.log(e);
       }
     } else {
-      alert("Password and Confirm Password does not match");
       toast.toast({
-        title: "Password and Confirm Password does not match",
+        title: "Password and Confirm Password do not match",
         description: "Please try again"
-      })
+      });
     }
   };
 

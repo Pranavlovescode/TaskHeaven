@@ -44,7 +44,7 @@ export default function TaskList({ teamId }: { teamId: string }) {
             team_id: teamId,
           },
           headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}")?.token}`,
+            Authorization: `Bearer ${JSON.parse(window.localStorage.getItem("user") || "{}")?.token}`,
             "Content-Type": "application/json",
           },
         }

@@ -30,41 +30,52 @@ const Employee = ({ children }: any) => {
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
-  const user = localStorage.getItem("user");
-  const grabToken = () => {
-    if (user) {
-      const parsedUser = JSON.parse(user!);
-      setData({
-        token: parsedUser.token,
-        employeeDetails: parsedUser.employeeDetails,
-        loginTimeDetails: parsedUser.loginTimeDetails,
-      });
-    }
-  };
+  const [userString, setUserString] = useState<string | null>(null);
+  
   const navigate = useRouter();
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
   };
 
+  // Safely get user data from localStorage after component mounts
   useEffect(() => {
-    grabToken();
-    const intervalId = setInterval(() => {
-      const user = window.localStorage.getItem("user");
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      setUserString(user);
+      
       if (user) {
-        const is_expired = jsonwebtoken.decode(JSON.parse(user).token);
-        if (
-          typeof is_expired === "object" &&
-          is_expired !== null &&
-          "exp" in is_expired &&
-          typeof is_expired.exp === "number"
-        ) {
-          if (is_expired.exp < Date.now() / 1000) {
-            console.log("expired");
-            setExpired(true);
-            localStorage.removeItem("user");
-            clearInterval(intervalId);
-            stop();
+        const parsedUser = JSON.parse(user);
+        setData({
+          token: parsedUser.token,
+          employeeDetails: parsedUser.employeeDetails,
+          loginTimeDetails: parsedUser.loginTimeDetails,
+        });
+      }
+    }
+  }, []);
+
+  // Check token expiration
+  useEffect(() => {
+    if (!userString) return;
+    
+    const intervalId = setInterval(() => {
+      if (typeof window !== "undefined") {
+        const user = localStorage.getItem("user");
+        if (user) {
+          const is_expired = jsonwebtoken.decode(JSON.parse(user).token);
+          if (
+            typeof is_expired === "object" &&
+            is_expired !== null &&
+            "exp" in is_expired &&
+            typeof is_expired.exp === "number"
+          ) {
+            if (is_expired.exp < Date.now() / 1000) {
+              console.log("expired");
+              setExpired(true);
+              localStorage.removeItem("user");
+              clearInterval(intervalId);
+            }
           }
         }
       }
@@ -72,14 +83,14 @@ const Employee = ({ children }: any) => {
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  });
+  }, [userString]);
 
   return (
     <>
       {expired ? (
         <>
           <LogoutMessage
-            user={user}
+            user={userString}
             open={open}
             setOpen={setOpen}
             gotoLogin={gotoLogin}

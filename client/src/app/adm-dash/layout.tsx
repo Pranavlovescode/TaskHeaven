@@ -8,12 +8,6 @@ import jsonwebtoken from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 import LogoutMessage from "../components/LogoutMessage";
 
-// type tokenInfo={
-//     exp:number
-//     iat:number
-//     sub:string
-// }
-
 type AdminData = {
   token: string;
   adminDetails: {
@@ -38,7 +32,7 @@ const Admin = ({ children }: any) => {
   });
   const [expired, setExpired] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(true);
-  const [user, setUser] = useState<any>(null);
+  const [userString, setUserString] = useState<string | null>(null);
 
   const navigate = useRouter();
   const gotoLogin = () => {
@@ -46,39 +40,44 @@ const Admin = ({ children }: any) => {
     navigate.push("/");
   };
 
+  // Safely get user data from localStorage after component mounts
   useEffect(() => {
-    if (typeof window != "undefined") {
+    if (typeof window !== "undefined") {
       const user = localStorage.getItem("user");
-      setUser(user);
-    }
-    const grabToken = () => {
+      setUserString(user);
+      
       if (user) {
-        const parsedUser = JSON.parse(user!);
+        const parsedUser = JSON.parse(user);
         setData({
           token: parsedUser.token,
           adminDetails: parsedUser.adminDetails,
           loginTimeDetails: parsedUser.loginTimeDetails,
         });
       }
-    };
+    }
+  }, []);
 
-    grabToken();
+  // Check token expiration
+  useEffect(() => {
+    if (!userString) return;
+    
     const intervalId = setInterval(() => {
-      const user = window.localStorage.getItem("user");
-      if (user) {
-        const is_expired = jsonwebtoken.decode(JSON.parse(user).token);
-        if (
-          typeof is_expired === "object" &&
-          is_expired !== null &&
-          "exp" in is_expired &&
-          typeof is_expired.exp === "number"
-        ) {
-          if (is_expired.exp < Date.now() / 1000) {
-            console.log("expired");
-            setExpired(true);
-            localStorage.removeItem("user");
-            clearInterval(intervalId);
-            stop();
+      if (typeof window !== "undefined") {
+        const user = localStorage.getItem("user");
+        if (user) {
+          const is_expired = jsonwebtoken.decode(JSON.parse(user).token);
+          if (
+            typeof is_expired === "object" &&
+            is_expired !== null &&
+            "exp" in is_expired &&
+            typeof is_expired.exp === "number"
+          ) {
+            if (is_expired.exp < Date.now() / 1000) {
+              console.log("expired");
+              setExpired(true);
+              localStorage.removeItem("user");
+              clearInterval(intervalId);
+            }
           }
         }
       }
@@ -86,14 +85,14 @@ const Admin = ({ children }: any) => {
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
+  }, [userString]);
 
   return (
     <>
       {expired ? (
         <>
           <LogoutMessage
-            user={user}
+            user={userString}
             open={open}
             setOpen={setOpen}
             gotoLogin={gotoLogin}

@@ -72,13 +72,13 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
         },
         {
           params: {
-            mng_id: JSON.parse(localStorage.getItem("user") || "{}")
+            mng_id: JSON.parse(window.localStorage.getItem("user") || "{}")
               .managerDetails?.mng_id,
           },
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}")?.token
+              JSON.parse(window.localStorage.getItem("user") || "{}")?.token
             }`,
           },
         }
@@ -102,7 +102,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("user") || "{}")?.token
+                  JSON.parse(window.localStorage.getItem("user") || "{}")?.token
                 }`,
               },
             }
@@ -143,7 +143,7 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
 
   useEffect(() => {
     const localStorageTeams = JSON.parse(
-      localStorage.getItem("selected-team") || "[]"
+      window.localStorage.getItem("selected-team") || "[]"
     );
     console.log("Team details from local storage", localStorageTeams);
     setTeam(localStorageTeams);

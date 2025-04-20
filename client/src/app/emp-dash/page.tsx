@@ -58,20 +58,37 @@ export default function EmployeeDashboardPage() {
       due_date: new Date(),
     },
   ]);
+  const [user, setUser] = useState<any>(null);
+  const [localTasks, setLocalTasks] = useState<any[]>([]);
+
+  // Get user data safely after component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(userData);
+      // Also get tasks from localStorage if available
+      const savedTasks = localStorage.getItem("tasks");
+      if (savedTasks) {
+        setLocalTasks(JSON.parse(savedTasks));
+      }
+    }
+  }, []);
 
   const fetchTasks = async () => {
+    if (!user?.token || !user?.employeeDetails?.email) {
+      console.error("User data not available");
+      return;
+    }
+
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/team/employee`,
         {
           headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}").token
-            }`,
+            Authorization: `Bearer ${user.token}`,
           },
           params: {
-            email: JSON.parse(localStorage.getItem("user") || "{}")
-              .employeeDetails.email,
+            email: user.employeeDetails.email,
           },
         }
       );
@@ -88,17 +105,21 @@ export default function EmployeeDashboardPage() {
           due_date: task.due_date,
         }))
       );
-      localStorage.setItem("tasks", JSON.stringify(tasks));
+      // Safely store tasks in localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        setLocalTasks(tasks);
+      }
     } catch (error) {
       console.error("Error fetching tasks", error);
     }
   };
 
   useEffect(() => {
-    fetchTasks();
-    // const user = JSON.parse(localStorage.getItem("user") || "{}");
-    // const tasks = user.employeeDetails?.tasks || []; // Safely handle undefined `employeeDetails`
-  }, []);
+    if (user) {
+      fetchTasks();
+    }
+  }, [user]);
 
   console.log("The tasks are ", task);
   return (
@@ -108,8 +129,7 @@ export default function EmployeeDashboardPage() {
           <div>
             <h1 className="text-2xl font-semibold">
               Hello,{" "}
-              {JSON.parse(localStorage.getItem("user") || "{}").employeeDetails
-                .name || " "}
+              {user?.employeeDetails?.name || " "}
             </h1>
             <p className="text-sm text-gray-500">
               It&apos;s {currentDay}, {new Date().getDate()} {currentMonth}{" "}
@@ -124,7 +144,7 @@ export default function EmployeeDashboardPage() {
         </div>
         <div className="mx-auto min-h-screen container py-10">
           <EmployeeDashboard
-            task={JSON.parse(localStorage.getItem("tasks") || "[]")}
+            task={localTasks}
           />
         </div>
       </main>

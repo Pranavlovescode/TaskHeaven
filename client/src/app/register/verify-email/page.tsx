@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
       );
       const data = response.data;
       console.log(data);
-      // localStorage.setItem("auth_data", JSON.stringify(data));
+      // window.localStorage.setItem("auth_data", JSON.stringify(data));
       alert("Email Verified Successfully");
       toast.toast({
         title: "Email Verified Successfully",

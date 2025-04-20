@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Dialog,
@@ -19,13 +19,25 @@ import LogoutMessage from "./LogoutMessage";
 
 function Sidebar() {
   const [toggleSidebar, setToggleSidebar] = React.useState<boolean>(false);
-  const tokenParsed = JSON.parse(localStorage.getItem("user")!);
+  const [tokenParsed, setTokenParsed] = useState<any>(null);
   const [open, setOpen] = React.useState<boolean>(true);
   const navigate = useRouter();
+
+  // Safely get user data from localStorage after component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        setTokenParsed(JSON.parse(userStr));
+      }
+    }
+  }, []);
+
   const gotoLogin = () => {
     setOpen(false);
     navigate.push("/");
   };
+
   return (
     <>
       {tokenParsed ? (

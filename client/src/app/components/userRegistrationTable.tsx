@@ -48,7 +48,7 @@ const mockUsers: User[] = [
 
 export function UserRegistrationTable({ employeeData }: any) {
   console.log(employeeData);
-  const token = localStorage.getItem("user");
+  const token = window.localStorage.getItem("user");
   const dataToken = token ? JSON.parse(token) : null;
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [verifiedData, setVerifiedData] = useState<any>();
