@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -26,11 +26,20 @@ type EmailData = {
 
 export default function MailingInterface() {
   const toast = useToast();
+  const [user, setUser] = useState<any>(null);
   const [emailData, setEmailData] = useState<EmailData>({
     to: "",
     subject: "",
     body: "",
   });
+
+  // Get user data safely after component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(userData);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
@@ -50,9 +59,7 @@ export default function MailingInterface() {
           emailData,
           {
             headers: {
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("user") || "{}")?.token
-              }`,
+              Authorization: `Bearer ${user?.token || ""}`,
             },
           }
         );
@@ -75,14 +82,18 @@ export default function MailingInterface() {
   };
 
   return (
-    <div  className="mt-[52px]">
-       <Link href="/mng-dash">
-            <Button variant="ghost" size="sm" className="mb-4 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Teams
-            </Button>
-          </Link> 
-      <Card  className="bg-gray-50">
+    <div className="mt-[52px]">
+      <Link href="/mng-dash">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mb-4 text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Teams
+        </Button>
+      </Link>
+      <Card className="bg-gray-50">
         <CardHeader>
           <CardTitle>Send Email</CardTitle>
           <CardDescription>

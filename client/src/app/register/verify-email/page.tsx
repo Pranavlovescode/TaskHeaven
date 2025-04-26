@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 
 
 
-export default function page() {
+export default function VerifyEmailPage() {
   // const [otp, setOtp] = useState("");
   const toast = useToast();
   const [inputOtp, setInputOtp] = useState<string>("");
@@ -44,7 +44,7 @@ export default function page() {
       );
       const data = response.data;
       console.log(data);
-      // localStorage.setItem("auth_data", JSON.stringify(data));
+      // window.localStorage.setItem("auth_data", JSON.stringify(data));
       alert("Email Verified Successfully");
       toast.toast({
         title: "Email Verified Successfully",

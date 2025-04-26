@@ -49,11 +49,11 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
   const [team, setTeam] = useState<TeamDetails | null>(null);
   console.log(teamId);             // For debugging purposes
   useEffect(() => {
-    const localStorageTeams = JSON.parse(localStorage.getItem("teams") || "[]");
+    const localStorageTeams = JSON.parse(window.localStorage.getItem("teams") || "[]");
     const teamDetails = getTeamDetails(teamId, localStorageTeams);
     console.log("Team details",teamDetails);      // For debugging purposes
     setTeam(teamDetails);
-    localStorage.setItem("selected-team", JSON.stringify(teamDetails));
+    window.localStorage.setItem("selected-team", JSON.stringify(teamDetails));
   }, [teamId]);
 
   if (!team) {

@@ -19,28 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employeemanagement.manage_employee.ManageEmployeeApplication;
 import com.employeemanagement.manage_employee.entity.ManagerDetails;
 import com.employeemanagement.manage_employee.entity.TaskDetails;
-import com.employeemanagement.manage_employee.repository.AdminInfo;
-import com.employeemanagement.manage_employee.repository.EmployeeInfo;
 import com.employeemanagement.manage_employee.repository.ManagerInfo;
 import com.employeemanagement.manage_employee.repository.TaskInfo;
-import com.employeemanagement.manage_employee.repository.TeamInfo;
 import com.employeemanagement.manage_employee.response.TaskAssignmentResponse;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/add-task")
 public class TaskController {
-    Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
+    static final Logger logger = Logger.getLogger(ManageEmployeeApplication.class.getName());
     @Autowired
     private TaskInfo taskInfo;
     @Autowired
     private ManagerInfo manager;
-    @Autowired
-    private EmployeeInfo employee;
-    @Autowired
-    private AdminInfo admin;
-    @Autowired
-    private TeamInfo teamInfo;
+    // @Autowired
+    // private EmployeeInfo employee;
+    // @Autowired
+    // private AdminInfo admin;
+    // @Autowired
+    // private TeamInfo teamInfo;
 
     // Adding task to the database along with reference to manager
     @PostMapping()
@@ -48,7 +45,7 @@ public class TaskController {
         try {
             Date date = new Date();
             taskDetails.setAlloted_time(new Timestamp(date.getTime()));
-            ManagerDetails mng = manager.findById(mng_id).get();            
+            ManagerDetails mng = manager.findById(mng_id).get();
 
             taskDetails.setManagerDetails(mng);
             taskInfo.save(taskDetails);
@@ -70,14 +67,22 @@ public class TaskController {
 
     // Update task status
     @PutMapping("/update")
+    @SuppressWarnings("StringEquality")
     public ResponseEntity<?> updateTaskStatus(@RequestParam String task_id, @RequestParam String status) {
         try {
             TaskDetails task = taskInfo.findById(task_id).get();
             if (task != null) {
-                task.setStatus(status);
+                if ("COMPLETED".equals(status)) {
+                    Date date = new Date();
+                    task.setCompletion_time(new Timestamp(date.getTime()));
+                    task.setStatus(status);
+                    
+                } else {
+                    task.setStatus(status);
+                }
                 taskInfo.save(task);
                 logger.log(Level.INFO, "Task status updated successfully");
-                return ResponseEntity.status(200).body("Task status updated successfully"+task);
+                return ResponseEntity.status(200).body("Task status updated successfully " + task);
             } else {
                 logger.log(Level.WARNING, "Task not found");
                 return ResponseEntity.status(404).body("Task not found");

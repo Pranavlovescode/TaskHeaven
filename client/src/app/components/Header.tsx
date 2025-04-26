@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import {
@@ -11,13 +11,16 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import LogoutMessage from "./LogoutMessage";
+import Image from "next/image";
+import { type } from "os";
 
 type LogoutData = {
   email: string;
 };
 
-const Header = ({name,email}:any) => {
-  const token = JSON.parse(localStorage.getItem("user")!);
+const Header = ({ name, email }: any) => {
+  const [token, setToken] = useState<any>(null);
+
   const navigate = useRouter();
   const [toggle, setToggle] = useState<boolean>(false);
   const [open, setOpen] = React.useState(true);
@@ -39,28 +42,42 @@ const Header = ({name,email}:any) => {
   };
 
   const logoutUser = async () => {
-    localStorage.removeItem("user");
-    try {
-      const response: AxiosResponse = await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
-        {
-          email: email,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token.token}`,
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+
+      try {
+        const response: AxiosResponse = await axios.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+          {
+            email: email,
           },
-          withCredentials: true, // Required for cookies & sessions
-        },
-      );
-      const data = await response.data;
-      console.log(data);
-      navigate.push("/");
-    } catch (e) {
-      console.log(e);
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token.token}`,
+            },
+            withCredentials: true, // Required for cookies & sessions
+          }
+        );
+        const data = await response.data;
+        console.log(data);
+        navigate.push("/");
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        const userData = JSON.parse(userStr);
+        setToken(userData);
+      }
+    }
+  }, []);
+
   return (
     <div>
       {token ? (
@@ -69,34 +86,15 @@ const Header = ({name,email}:any) => {
             <nav className="bg-gray-800 border-gray-200 px-4 lg:px-6 py-2.5 fixed w-full z-50 top-0 text-gray-100">
               <div className="flex flex-wrap justify-between items-center">
                 <div className="flex justify-start items-center ">
-                  {/*<button*/}
-                  {/*  id="toggleSidebar"*/}
-                  {/*  aria-expanded="true"*/}
-                  {/*  aria-controls="sidebar"*/}
-                  {/*  className="p-2 hidden mr-3 right-0.5 text-gray-600 rounded cursor-pointer lg:inline hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"*/}
-                  {/*>*/}
-                  {/*  <svg*/}
-                  {/*    className="w-5 h-5"*/}
-                  {/*    aria-hidden="true"*/}
-                  {/*    xmlns="http://www.w3.org/2000/svg"*/}
-                  {/*    fill="none"*/}
-                  {/*    viewBox="0 0 16 12"*/}
-                  {/*  >*/}
-                  {/*    <path*/}
-                  {/*      stroke="currentColor"*/}
-                  {/*      strokeLinecap={"round"}*/}
-                  {/*      strokeLinejoin={"round"}*/}
-                  {/*      strokeWidth={2}*/}
-                  {/*      d="M1 1h14M1 6h14M1 11h7"*/}
-                  {/*    />*/}
-                  {/*  </svg>*/}
-                  {/*</button>*/}
                   <p className="flex mr-4">
-                    <img
-                      src="https://flowbite.s3.amazonaws.com/logo.svg"
-                      className="mr-3 h-8"
-                      alt="FlowBite Logo"
+                    <Image
+                      src="/taskheaven-1.png"
+                      alt="TaskHeaven"
+                      className="w-8 h-8 rounded-full mr-2"
+                      width={32}
+                      height={32}
                     />
+
                     <span className="self-center text-2xl font-bold whitespace-nowrap dark:text-white">
                       TaskHeaven
                     </span>
@@ -154,10 +152,12 @@ const Header = ({name,email}:any) => {
                     aria-expanded="false"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    <Image
+                      src={"/profile-picture.jpg"}
                       alt="user photo"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 rounded-full"
                     />
                   </button>
                 </div>
@@ -375,16 +375,10 @@ const Header = ({name,email}:any) => {
               </div>
             )}
           </div>
-
-          {/*<div className="text-center text-6xl font-extrabold mt-4">Welcome {token.adminDetails.name}</div>*/}
         </>
       ) : (
         <>
-          <LogoutMessage
-            open={open}
-            setOpen={setOpen}
-            gotoLogin={gotoLogin}
-          />
+          <LogoutMessage open={open} setOpen={setOpen} gotoLogin={gotoLogin} />
         </>
       )}
     </div>

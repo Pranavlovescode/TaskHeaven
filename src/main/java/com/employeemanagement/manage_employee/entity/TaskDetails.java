@@ -28,6 +28,7 @@ public class TaskDetails {
     private Timestamp alloted_time;
     private Timestamp completion_time;
     private String status;
+    private Timestamp due_date;
 
 
 

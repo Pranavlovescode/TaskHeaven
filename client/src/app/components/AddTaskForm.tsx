@@ -12,6 +12,15 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import axios from "axios";
 
 type Team = {
@@ -21,12 +30,14 @@ type Team = {
     {
       id: string;
       name: string;
-    },
+    }
   ];
+  due_date: Date;
 };
 
 export default function AddTaskForm({ teamId }: { teamId: string }) {
-  const toast = useToast(); 
+  const toast = useToast();
+  const [date, setDate] = useState<Date>()
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("PENDING");
@@ -41,13 +52,14 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
         name: "",
       },
     ],
+    due_date: new Date(),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    console.log("New task:", { teamId,title, description, status });
-  
+
+    console.log("New task:", { teamId, title, description, status });
+
     try {
       // Add task to the database
       const taskAddingToDatabaseResponse = await axios.post(
@@ -56,23 +68,26 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
           task_name: title,
           task_description: description,
           status: status,
+          due_date: date? new Date(date).toISOString() : null
         },
         {
           params: {
-            mng_id: JSON.parse(localStorage.getItem("user") || "{}")
+            mng_id: JSON.parse(window.localStorage.getItem("user") || "{}")
               .managerDetails?.mng_id,
           },
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}")?.token}`,
+            Authorization: `Bearer ${
+              JSON.parse(window.localStorage.getItem("user") || "{}")?.token
+            }`,
           },
         }
       );
-  
+
       console.log("Task added to database:", taskAddingToDatabaseResponse.data);
-  
+
       const taskId = taskAddingToDatabaseResponse.data.taskDetails?.task_id;
-  
+      
       if (taskId) {
         // Assign the task to the employee
         try {
@@ -86,40 +101,49 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
               },
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "{}")?.token}`,
+                Authorization: `Bearer ${
+                  JSON.parse(window.localStorage.getItem("user") || "{}")?.token
+                }`,
               },
             }
           );
-  
-          console.log("Task assigned to employee:", taskAssigningToEmployee.data);
+
+          console.log(
+            "Task assigned to employee:",
+            taskAssigningToEmployee.data
+          );
         } catch (error) {
-          console.error("Error occurred while assigning task to employee:", error);
+          console.error(
+            "Error occurred while assigning task to employee:",
+            error
+          );
         }
       }
-  
+
       // Show success notification
       toast.toast({
         title: "Task added",
         description: `New task "${title}" has been assigned to ${assignee}.`,
       });
-  
+
       // Reset form fields
       setTitle("");
       setDescription("");
       setAssignee("");
+      setDate(undefined);
     } catch (error) {
       console.error("Error adding task to database:", error);
       // Show error notification
       toast.toast({
         title: "Error adding task",
-        description:"An error occurred while adding the task.",
+        description: "An error occurred while adding the task.",
       });
     }
   };
-  
+
   useEffect(() => {
     const localStorageTeams = JSON.parse(
-      localStorage.getItem("selected-team") || "[]"
+      window.localStorage.getItem("selected-team") || "[]"
     );
     console.log("Team details from local storage", localStorageTeams);
     setTeam(localStorageTeams);
@@ -169,13 +193,43 @@ export default function AddTaskForm({ teamId }: { teamId: string }) {
               <SelectContent>
                 {/* Mapping the members in a team */}
                 {team.members &&
-                  team.members.map((member) => (
-                    <SelectItem value={member.id}>{member.name}</SelectItem>
+                  team.members.map((member,index) => (
+                    <SelectItem key={index} value={member.id}>{member.name}</SelectItem>
                   ))}
               </SelectContent>
             </Select>
           </div>
-          <Button type="submit" className="w-full bg-gray-800 hover:bg-gray-600 duration-300">
+          <div>
+            <label htmlFor="assignee" className="text-sm font-medium">
+              Due Date
+            </label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus                  
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <Button
+            type="submit"
+            className="w-full bg-gray-800 hover:bg-gray-600 duration-300"
+          >
             Add Task
           </Button>
         </form>

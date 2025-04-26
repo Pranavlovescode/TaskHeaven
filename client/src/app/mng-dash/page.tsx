@@ -118,47 +118,61 @@ export default function ManagerDashboard() {
   ];
 
   const [getTeams, setTeams] = React.useState<Team>([]);
+  const [user, setUser] = React.useState<any>(null);
 
   const currentDay = dayNames[new Date().getDay()];
   const currentMonth = monthNames[new Date().getMonth()];
 
-  // Code for fetching teams
-
+  // Get user data safely
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(userData);
+    }
+  }, []);
+
+  // Code for fetching teams
+  useEffect(() => {
+    if (!user?.token) return;
+
     const fetchTeams = async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/team`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}").token || " "
-            }`,
-          },
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/team`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token || ""}`,
+            },
+          }
+        );
+        const data = response.data;
+        if (typeof window !== "undefined") {
+          localStorage.setItem("teams", JSON.stringify(data));
         }
-      );
-      const data = response.data;
-      localStorage.setItem("teams", JSON.stringify(data));
-      setTeams(
-        data.map(
-          (team: {
-            team_id: string;
-            team_name: string;
-            team_members: string[];
-            managerDetails: { mng_id: string };
-            mng_id: string;
-          }) => ({
-            team_id: team.team_id,
-            team_name: team.team_name,
-            members: team.team_members,
-            mng_id: team.managerDetails.mng_id,
-          })
-        )
-      );
-      console.log("Teams", data);
+        setTeams(
+          data.map(
+            (team: {
+              team_id: string;
+              team_name: string;
+              team_members: string[];
+              managerDetails: { mng_id: string };
+              mng_id: string;
+            }) => ({
+              team_id: team.team_id,
+              team_name: team.team_name,
+              members: team.team_members,
+              mng_id: team.managerDetails.mng_id,
+            })
+          )
+        );
+        console.log("Teams", data);
+      } catch (error) {
+        console.error("Error fetching teams", error);
+      }
     };
     fetchTeams();
-  }, []);
+  }, [user]);
 
   // console.log(getTeams);
 
@@ -169,11 +183,10 @@ export default function ManagerDashboard() {
         <div>
           <h1 className="text-2xl font-semibold">
             Hello,{" "}
-            {JSON.parse(localStorage.getItem("user") || "{}").managerDetails
-              .name || " "}
+            {user?.managerDetails?.name || " "}
           </h1>
           <p className="text-sm text-gray-500">
-            It's {currentDay}, {new Date().getDate()} {currentMonth}{" "}
+            It&apos;s {currentDay}, {new Date().getDate()} {currentMonth}{" "}
             {new Date().getUTCFullYear()}
           </p>
         </div>
@@ -218,12 +231,11 @@ export default function ManagerDashboard() {
                   {getTeams
                     .filter(
                       (team) =>
-                        team.mng_id ===
-                          JSON.parse(localStorage.getItem("user") || "{}")
-                            .managerDetails.mng_id || " "
+                        team.mng_id === user?.managerDetails?.mng_id || " "
                     )
-                    .map((team) => (
+                    .map((team,index) => (
                       <Link
+                        key={index}
                         href={`mng-dash/team-info/${team.team_id}`}
                         className="w-full"
                       >

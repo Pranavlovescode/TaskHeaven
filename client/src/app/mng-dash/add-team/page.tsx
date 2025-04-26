@@ -33,6 +33,15 @@ export default function CreateTeam() {
   const [members, setMembers] = useState<string[]>([]);
   const [team, setTeam] = useState<Team>();
   const [employee, setEmployees] = useState<{ label: string; value: string }[]>([]);
+  const [user, setUser] = useState<any>(null);
+
+  // Get user data safely
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      setUser(userData);
+    }
+  }, []);
 
   const addMember = () => {
     if (memberEmail && !members.includes(memberEmail)) {
@@ -49,28 +58,22 @@ export default function CreateTeam() {
         team_members: members,
       };
       console.log("Team data", team);
-      console.log(
-        "token",
-        JSON.parse(localStorage.getItem("user") || "{}")?.token
-      );
+      
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/team/create?mng_id=${
-          JSON.parse(localStorage.getItem("user") || "{}").managerDetails
-            ?.mng_id || ""
+          user?.managerDetails?.mng_id || ""
         }`,
         team,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}")?.token || ""
-            }`,
+            Authorization: `Bearer ${user?.token || ""}`,
           },
         }
       );
       const teamData = response.data;
       console.log("Response data", teamData);
-      // alert("Team created successfully");
+      
       toast.toast({
         title: "Team created successfully",
         description: "You can now assign tasks to your team members",
@@ -80,7 +83,6 @@ export default function CreateTeam() {
       setMembers([]);      
     } catch (error) {
       console.error("Error creating team", error);
-      // alert("Error creating team");
       toast.toast({
         title: "Error creating team",
         description: "Please try again",
@@ -90,15 +92,15 @@ export default function CreateTeam() {
 
   // Route for fetching the employees data
   const fetchEmployees = async () => {
+    if (!user?.token) return;
+    
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/add-employee/all`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("user") || "{}")?.token || ""
-            }`,
+            Authorization: `Bearer ${user?.token || ""}`,
           },
         }
       );
@@ -119,10 +121,13 @@ export default function CreateTeam() {
   const removeMember = (email: string) => {
     setMembers(members.filter((member) => member !== email));
   };
+  
   useEffect(() => {
-    fetchEmployees();
-    // console.log(employee)
-  }, []);
+    if (user) {
+      fetchEmployees();
+    }
+  }, [user]);
+  
   console.log(employee);
 
   return (
