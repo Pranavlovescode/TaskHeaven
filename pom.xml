@@ -27,7 +27,8 @@
         <url/>
     </scm>
     <properties>
-        <java.version>22</java.version>
+        <!-- If there is any error regarding java version just change this java version -->
+        <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -155,6 +156,16 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <!-- If there is any error regarding java version just change this java version -->
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>21</source>
+                <target>21</target>
+                <release>21</release>
+            </configuration>
+        </plugin>
         </plugins>
     </build>
 
