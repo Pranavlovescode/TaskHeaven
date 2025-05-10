@@ -21,9 +21,10 @@ class ManageEmployeeApplicationTests {
 	@Test
 	void sendEmailTest(){
 		emailSerivce.sendEmail(
-				"pranavtitambe04@gmail.com",
-				"This is the email for testing",
-				"This is the test email which is send by Pranav to test system performance"
+					"recipient@example.com",
+					"Test Subject",
+					"Test Body",
+					null
 		);
 	}
 
