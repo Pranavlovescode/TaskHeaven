@@ -1,5 +1,5 @@
 # Use Eclipse Temurin's Java 21 image as the base image
-FROM docker.io/library/eclipse-temurin:21-jdk-alpine as build
+FROM docker.io/library/eclipse-temurin:17-jdk-alpine as build
 
 # Set the working directory in the container
 WORKDIR /app

@@ -23,7 +23,7 @@ public class CookieUtils {
         jwtCookie.setSecure(false);  // Enable this for production
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
-        jwtCookie.setDomain("localhost");
+        // jwtCookie.setDomain("localhost");
         // jwtCookie.setSameSite(Cookie.SameSite.LAX);
         return jwtCookie;
     }
@@ -32,7 +32,7 @@ public class CookieUtils {
             cookie.setValue("");
             cookie.setPath("/");
             cookie.setMaxAge(0);
-            cookie.setDomain("localhost");
+            // cookie.setDomain("localhost");
             response.addCookie(cookie);
             return cookie;
         }
