@@ -10,13 +10,13 @@ import {
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 type AdminData = {
   token: string;
   adminDetails: object;
   loginTimeDetails: object | null;
 };
-export default function LogoutMessage({open, setOpen,gotoLogin}:any ) {
-  
+export default function LogoutMessage({ open, setOpen, gotoLogin }: any) {
   return (
     <>
       <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -57,22 +57,26 @@ export default function LogoutMessage({open, setOpen,gotoLogin}:any ) {
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                  type="button"
-                  onClick={gotoLogin}
-                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  data-autofocus="true"
-                  onClick={() => setOpen(true)}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 
+                <Link href={"/"}>
+                  <button
+                    type="button"
+                    onClick={gotoLogin}
+                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                  >
+                    Login
+                  </button>
+                </Link>
+                <Link href={"/"}>
+                  <button
+                    type="button"
+                    data-autofocus="true"
+                    onClick={() => setOpen(true)}
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 
                   sm:mt-0 sm:w-auto"
-                >
-                  Cancel
-                </button>
+                  >
+                    Cancel
+                  </button>
+                </Link>
               </div>
             </DialogPanel>
           </div>
