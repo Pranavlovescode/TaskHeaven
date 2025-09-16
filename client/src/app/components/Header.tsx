@@ -13,6 +13,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import LogoutMessage from "./LogoutMessage";
 import Image from "next/image";
 import { type } from "os";
+import { Button } from "@/components/ui/button";
 
 type LogoutData = {
   email: string;
@@ -43,24 +44,25 @@ const Header = ({ name, email }: any) => {
 
   const logoutUser = async () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("user");
+      
 
       try {
         const response: AxiosResponse = await axios.put(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token.loginTimeDetails.time_id}/${token.token}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout/${token}`,
           {
             email: email,
           },
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token.token}`,
+              Authorization: `Bearer ${token}`,
             },
             withCredentials: true, // Required for cookies & sessions
           }
         );
         const data = await response.data;
         console.log(data);
+        localStorage.removeItem("user");
         navigate.push("/");
       } catch (e) {
         console.log(e);
@@ -72,7 +74,7 @@ const Header = ({ name, email }: any) => {
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem("user");
       if (userStr) {
-        const userData = JSON.parse(userStr);
+        const userData = JSON.parse(userStr).token;
         setToken(userData);
       }
     }
@@ -204,12 +206,7 @@ const Header = ({ name, email }: any) => {
                   aria-labelledby="dropdown"
                 >
                   <li>
-                    <a
-                      onClick={logoutUser}
-                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Sign out
-                    </a>
+                    <Button onClick={logoutUser}>Sign out</Button>
                   </li>
                 </ul>
               </div>

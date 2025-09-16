@@ -17,25 +17,35 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @Component
 public class CookieUtils {
-    public Cookie createCookie(String token,String name) {
+
+    public Cookie createCookie(String token, String name, HttpServletRequest request) {
         Cookie jwtCookie = new Cookie(name, token);
-        jwtCookie.setMaxAge(60 * 60 * 24); // 24 hour
-        jwtCookie.setSecure(false);  // Enable this for production
+        jwtCookie.setMaxAge(60 * 60 * 24); // 24 hours
+        jwtCookie.setSecure(!"localhost".equals(request.getServerName())); // Secure true only in prod
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath("/");
-        jwtCookie.setDomain("pranavtitambe.in");
-        // jwtCookie.setSameSite(Cookie.SameSite.LAX);
+
+        // Set domain only in production
+        String serverName = request.getServerName();
+        if (!"localhost".equals(serverName)) {
+            jwtCookie.setDomain("pranavtitambe.in");
+        }
+
         return jwtCookie;
     }
 
-        public Cookie deleteCookie(Cookie cookie,HttpServletResponse response) {
-            cookie.setValue("");
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
+    public Cookie deleteCookie(Cookie cookie, HttpServletResponse response, HttpServletRequest request) {
+        cookie.setValue("");
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+
+        if (!"localhost".equals(request.getServerName())) {
             cookie.setDomain("pranavtitambe.in");
-            response.addCookie(cookie);
-            return cookie;
         }
+
+        response.addCookie(cookie);
+        return cookie;
+    }
 
     public Cookie getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -48,6 +58,4 @@ public class CookieUtils {
         }
         return null;
     }
-
-
 }

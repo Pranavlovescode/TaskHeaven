@@ -43,14 +43,12 @@ public class SecurityConfig {
                         .requestMatchers("/add-employee/**").hasAnyRole("MANAGER", "ADMIN", "EMPLOYEE")
                         .requestMatchers("/add-manager/**").hasRole("ADMIN")
                         .requestMatchers("/add-admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .formLogin(login -> login.loginPage("https://taskheaven.pranavtitambe.in")
-                        .permitAll())
+                        .anyRequest().authenticated())                
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(corsCustomizer -> {
                     corsCustomizer.configurationSource(request -> {
                         var cors = new org.springframework.web.cors.CorsConfiguration();
-                        cors.setAllowedOrigins(java.util.List.of("https://taskheaven.pranavtitambe.in"));
+                        cors.setAllowedOrigins(java.util.List.of("http://localhost:3000","https://taskheaven.pranavtitambe.in"));
                         cors.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE"));
                         cors.setAllowCredentials(true);
                         cors.setAllowedHeaders(java.util.List.of("*"));

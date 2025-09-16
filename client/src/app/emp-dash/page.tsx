@@ -66,10 +66,17 @@ export default function EmployeeDashboardPage() {
     if (typeof window !== "undefined") {
       const userData = JSON.parse(localStorage.getItem("user") || "{}");
       setUser(userData);
-      // Also get tasks from localStorage if available
+
+      // Get tasks safely
       const savedTasks = localStorage.getItem("tasks");
       if (savedTasks) {
-        setLocalTasks(JSON.parse(savedTasks));
+        try {
+          setLocalTasks(JSON.parse(savedTasks));
+        } catch (err) {
+          console.error("Invalid tasks JSON in localStorage:", savedTasks, err);
+          localStorage.removeItem("tasks"); // reset if corrupted
+          setLocalTasks([]);
+        }
       }
     }
   }, []);
@@ -93,7 +100,7 @@ export default function EmployeeDashboardPage() {
         }
       );
       console.log("The response is ", response.data);
-      const tasks = response.data.tasks;
+      const tasks = response.data.tasks || [];
       setTask(() =>
         tasks.map((task: Tasks) => ({
           task_id: task.task_id,
@@ -128,8 +135,7 @@ export default function EmployeeDashboardPage() {
         <div className="container flex flex-row justify-between items-center">
           <div>
             <h1 className="text-2xl font-semibold">
-              Hello,{" "}
-              {user?.employeeDetails?.name || " "}
+              Hello, {user?.employeeDetails?.name || " "}
             </h1>
             <p className="text-sm text-gray-500">
               It&apos;s {currentDay}, {new Date().getDate()} {currentMonth}{" "}
@@ -143,9 +149,7 @@ export default function EmployeeDashboardPage() {
           </div>
         </div>
         <div className="mx-auto min-h-screen container py-10">
-          <EmployeeDashboard
-            task={localTasks}
-          />
+          <EmployeeDashboard task={localTasks} />
         </div>
       </main>
     </>

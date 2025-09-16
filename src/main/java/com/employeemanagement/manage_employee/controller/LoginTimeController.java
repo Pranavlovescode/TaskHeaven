@@ -104,13 +104,13 @@ public class LoginTimeController {
             String jwtToken = jwt.generateToken(loginRequest.getEmail());
             request.getSession().setAttribute("employee_jwt", jwtToken);
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken, "employee_jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken, "employee_jwt",request));
             // response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(employeeDetails.getEmail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
             loginTimeDetails.setPassword(bcrypt.encode(loginRequest.getPassword()));
             loginTimeDetails.setRole("EMPLOYEE");
-            loginTimeInfo.save(loginTimeDetails);
+            // loginTimeInfo.save(loginTimeDetails);
             EmployeeResponse empResponse = new EmployeeResponse(jwtToken, employeeDetails, loginTimeDetails);
             logger.info("Employee Logged in Successfully!!!");
             return new ResponseEntity<>(empResponse, HttpStatus.OK);
@@ -124,7 +124,7 @@ public class LoginTimeController {
 
             request.getSession().setAttribute("admin_jwt", jwtToken);
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken, "admin_jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken, "admin_jwt",request));
             // response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(adminDetails.getAdmemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -133,7 +133,7 @@ public class LoginTimeController {
 
             // Giving custom response to the user
 
-            loginTimeInfo.save(loginTimeDetails);
+            // loginTimeInfo.save(loginTimeDetails);
             AdminResponse admResponse = new AdminResponse(jwtToken, adminDetails, loginTimeDetails);
             logger.info("Admin Logged in Successfully!!!");
             return new ResponseEntity<>(admResponse, HttpStatus.OK);
@@ -149,7 +149,7 @@ public class LoginTimeController {
             // Adding jwt token to the response
             request.getSession().setAttribute("manager_jwt", jwtToken);
             // Adding jwt token to the response
-            response.addCookie(cookieKUtils.createCookie(jwtToken, "manager_jwt"));
+            response.addCookie(cookieKUtils.createCookie(jwtToken, "manager_jwt",request));
             // response.setHeader("jwt-cookie", jwtToken);
             loginTimeDetails.setEmail(managerDetails.getMngemail());
             loginTimeDetails.setLogin_time(new Timestamp(System.currentTimeMillis()));
@@ -166,33 +166,32 @@ public class LoginTimeController {
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }    
 
-    @PutMapping("auth/logout/{time_id}/{token}")
+    @PutMapping("auth/logout/{token}")
     public ResponseEntity<?> createLogoutTime(HttpServletRequest request,
-            @PathVariable String time_id,
             @PathVariable String token, HttpServletResponse response) {
 
-        LoginTimeDetails loginTimeDetails = loginTimeInfo.findById(time_id).orElse(null);
+        // LoginTimeDetails loginTimeDetails = loginTimeInfo.findById(time_id).orElse(null);
 
-        if (loginTimeDetails != null) {
-            loginTimeDetails.setLogout_time(new Timestamp(System.currentTimeMillis()));
-            loginTimeInfo.save(loginTimeDetails);
+        if (token != null) {
+            // loginTimeDetails.setLogout_time(new Timestamp(System.currentTimeMillis()));
+            // loginTimeInfo.save(loginTimeDetails);
 
             Cookie employeeCookie = cookieKUtils.getCookie(request, "employee_jwt");
             Cookie adminCookie = cookieKUtils.getCookie(request, "admin_jwt");
             Cookie managerCookie = cookieKUtils.getCookie(request, "manager_jwt");
 
             if (employeeCookie != null) {
-                cookieKUtils.deleteCookie(employeeCookie, response);
+                cookieKUtils.deleteCookie(employeeCookie, response,request);
                 jwt.addBlackListToken(token);
                 logger.log(Level.INFO, "{0} is blacklisted and Employee logged out successfully", token);
                 return new ResponseEntity<>("Employee Logged out Successfully!!!", HttpStatus.OK);
             } else if (adminCookie != null) {
-                cookieKUtils.deleteCookie(adminCookie, response);
+                cookieKUtils.deleteCookie(adminCookie, response,request);
                 jwt.addBlackListToken(token);
                 logger.log(Level.INFO, "{0} is blacklisted and Admin logged out successfully", token);
                 return new ResponseEntity<>("Admin Logged out Successfully!!!", HttpStatus.OK);
             } else if(managerCookie != null) {
-                cookieKUtils.deleteCookie(managerCookie, response);
+                cookieKUtils.deleteCookie(managerCookie, response,request);
                 jwt.addBlackListToken(token);
                 logger.log(Level.INFO, "{0} is blacklisted and Manager logged out successfully", token);
                 return new ResponseEntity<>("Manager Logged out Successfully!!!", HttpStatus.OK);

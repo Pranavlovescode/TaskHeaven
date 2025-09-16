@@ -65,6 +65,8 @@ export function UserRegistrationTable({ employeeData }: any) {
 
   const verifyUser = async (data: any) => {
     console.log(dataToken.adminDetails.adm_id);
+    console.log(data.hr_role);
+    console.log(data.hrId);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/verify/${data.hr_role}/${data.hrId}/${dataToken.adminDetails.adm_id}`,
