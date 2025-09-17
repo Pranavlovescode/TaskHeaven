@@ -5,6 +5,7 @@
 
 package com.employeemanagement.manage_employee.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +14,7 @@ import lombok.Setter;
  * @author pranavtitambe
  */
 
-@Getter
-@Setter
+@Data
 public class CustomEmailEntity {
 
     private String to;

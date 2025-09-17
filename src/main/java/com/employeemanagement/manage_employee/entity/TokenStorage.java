@@ -2,13 +2,13 @@ package com.employeemanagement.manage_employee.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Entity
 @Table(name = "token_checker")
-@Getter
-@Setter
 public class TokenStorage {
 
     @Id
