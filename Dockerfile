@@ -1,35 +1,32 @@
-# Use Eclipse Temurin's Java 21 image as the base image
-FROM docker.io/library/eclipse-temurin:17-jdk-alpine as build
-
-# Set the working directory in the container
+# Build stage
+FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /app
 
 # Install Maven
 RUN apk add --no-cache maven
 
-# Copy the Maven pom.xml file
+# Copy pom.xml and download dependencies
 COPY pom.xml .
-
-# Download dependencies (this will be cached if pom.xml doesn't change)
 RUN mvn dependency:go-offline -B
 
-# Copy the source code
+# Copy source and build
 COPY src ./src
-
-# Package the application with tests explicitly disabled
 RUN mvn clean package -Dmaven.test.skip=true
 
-# Use Eclipse Temurin's Java 21 JRE for the runtime image
-FROM docker.io/library/eclipse-temurin:21-jre-alpine
-
-# Set the working directory
+# Runtime stage
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copy the built jar from the build stage
+# Copy built jar
 COPY --from=build /app/target/manage-employee-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the port the app will run on
+# Expose app port
 EXPOSE 8080
 
-# Command to run the application
-CMD ["java", "-jar", "app.jar"]
+# Default environment variables (can be overridden at runtime)
+ENV SPRING_PROFILES_ACTIVE=prod \
+    SERVER_PORT=8080 \
+    JAVA_OPTS=""
+
+# Run the app
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
