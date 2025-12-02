@@ -1,32 +1,36 @@
-# Build stage
-FROM eclipse-temurin:17-jdk-alpine as build
+# -------------------------------
+# 🔨 Build Stage (with Maven)
+# -------------------------------
+FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
 # Install Maven
 RUN apk add --no-cache maven
 
-# Copy pom.xml and download dependencies
+# Copy pom.xml first (cache dependencies)
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+RUN mvn -B dependency:go-offline
 
-# Copy source and build
+# Copy entire source
 COPY src ./src
-RUN mvn clean package -Dmaven.test.skip=true
 
-# Runtime stage
+# Build application
+RUN mvn -B clean package -DskipTests
+
+# -------------------------------
+# 🚀 Runtime Stage (JDK 21 slim)
+# -------------------------------
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copy built jar
-COPY --from=build /app/target/manage-employee-0.0.1-SNAPSHOT.jar app.jar
+# Copy the jar from build stage
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose app port
+# Render will inject PORT dynamically
 EXPOSE 8080
 
-# Default environment variables (can be overridden at runtime)
 ENV SPRING_PROFILES_ACTIVE=prod \
     SERVER_PORT=8080 \
     JAVA_OPTS=""
 
-# Run the app
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
