@@ -78,7 +78,7 @@ export default function Home() {
         title: "Error",
         description: "Invalid email or password",
       });
-      setFormInput({ email: "", password: "" });
+      // setFormInput({ email: "", password: "" });
     } finally {
       setIsSubmitting(false);
     }

@@ -34,7 +34,7 @@ public class SecurityConfig {
                         // .requestMatchers("/add-employee/register",
                         // "/add-manager/register").hasRole("ADMIN")
                         .requestMatchers("/api/**", "/add-admin/register", "/add-employee/register",
-                                "/add-manager/register")
+                                "/add-manager/register","/actuator/**")
                         .permitAll()
                         // .requestMatchers("/socket.io/**").permitAll()
                         .requestMatchers("/add-employee/register", "/add-manager/register",
